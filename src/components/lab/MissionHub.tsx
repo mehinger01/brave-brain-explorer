@@ -3,8 +3,17 @@ import type { View } from "./NavBar";
 import { useState } from "react";
 
 export function MissionHub({ setView }: { setView: (v: View) => void }) {
-  const { state } = useLab();
+  const { state, reset } = useLab();
+  const [justReset, setJustReset] = useState(false);
   const totalMissions = Object.values(state.missionsSolved).reduce((a, b) => a + b, 0);
+
+  function handleReset() {
+    if (window.confirm("Start fresh for a new student? This will clear all progress, badges, and notes.")) {
+      reset();
+      setJustReset(true);
+      setTimeout(() => setJustReset(false), 2000);
+    }
+  }
 
   return (
     <div className="space-y-6">
