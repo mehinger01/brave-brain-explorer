@@ -44,106 +44,174 @@ const initial: LabState = {
   bossDone: false,
 };
 
-function load(): LabState {
-  if (typeof window === "undefined") return initial;
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (!raw) return initial;
-    return { ...initial, ...JSON.parse(raw) };
-  } catch { return initial; }
-}
+// ---------- module-level store (client-only) ----------
 
 let listeners: Array<() => void> = [];
-let state: LabState = initial;
+let _state: LabState = { ...initial };
 let hydrated = false;
 
-function persist() {
-  if (typeof window !== "undefined") localStorage.setItem(KEY, JSON.stringify(state));
+function isClient() {
+  return typeof window !== "undefined";
+}
+
+function load(): LabState {
+  if (!isClient()) return { ...initial };
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return { ...initial };
+    return { ...initial, ...JSON.parse(raw) };
+  } catch {
+    return { ...initial };
+  }
+}
+
+function persist(s: LabState) {
+  if (!isClient()) return;
+  try {
+    localStorage.setItem(KEY, JSON.stringify(s));
+  } catch { /* quota exceeded — silent */ }
+}
+
+function notify() {
   listeners.forEach((l) => l());
 }
 
+/** Immutably update state, persist, and notify React subscribers. */
 function setState(updater: (s: LabState) => LabState) {
-  state = updater(state);
-  persist();
+  if (!isClient()) return; // no-op during SSR
+  _state = updater(_state);
+  persist(_state);
+  notify();
 }
 
+// ---------- helpers (run inside setState so they see up-to-date state) ----------
+
+function clamp(n: number) {
+  return Math.max(0, Math.min(100, n));
+}
+
+function withBump(s: LabState, delta: number): LabState {
+  return { ...s, braveBrain: clamp(s.braveBrain + delta) };
+}
+
+function withLog(s: LabState, entry: Omit<LogEntry, "ts">): LabState {
+  return { ...s, log: [{ ts: Date.now(), ...entry }, ...s.log].slice(0, 200) };
+}
+
+function withBadge(s: LabState, badge: string): LabState {
+  if (s.badges.includes(badge)) return s;
+  return { ...s, badges: [...s.badges, badge] };
+}
+
+// ---------- hook ----------
+
 export function useLab() {
+  // Single counter to force re-renders when store changes.
   const [, force] = useState(0);
+
   useEffect(() => {
-    if (!hydrated) { state = load(); hydrated = true; }
+    // Hydrate from localStorage exactly once on the client.
+    if (!hydrated) {
+      _state = load();
+      hydrated = true;
+    }
     const l = () => force((n) => n + 1);
     listeners.push(l);
+    // Trigger an immediate render with the loaded state.
     l();
-    return () => { listeners = listeners.filter((x) => x !== l); };
+    return () => {
+      listeners = listeners.filter((x) => x !== l);
+    };
   }, []);
 
+  // ---------- actions ----------
+
   const bump = useCallback((delta: number) => {
-    setState((s) => ({ ...s, braveBrain: Math.max(0, Math.min(100, s.braveBrain + delta)) }));
+    setState((s) => withBump(s, delta));
   }, []);
 
   const logEvent = useCallback((entry: Omit<LogEntry, "ts">) => {
-    setState((s) => ({ ...s, log: [{ ts: Date.now(), ...entry }, ...s.log].slice(0, 200) }));
+    setState((s) => withLog(s, entry));
   }, []);
 
-  const addBadge = useCallback((b: string) => {
-    setState((s) => s.badges.includes(b) ? s : ({ ...s, badges: [...s.badges, b] }));
+  const addBadge = useCallback((badge: string) => {
+    setState((s) => withBadge(s, badge));
   }, []);
 
   const recordReset = useCallback((k: ResetKey, name: string) => {
-    setState((s) => ({ ...s, resetsUsed: { ...s.resetsUsed, [k]: s.resetsUsed[k] + 1 } }));
-    logEvent({ type: "reset", payload: name });
-    bump(8);
-    if (state.resetsUsed.turtle + state.resetsUsed.shake + state.resetsUsed.balloon >= 3) {
-      addBadge("Reset Ranger");
-    }
-  }, [logEvent, bump, addBadge]);
+    setState((s) => {
+      let next = { ...s, resetsUsed: { ...s.resetsUsed, [k]: s.resetsUsed[k] + 1 } };
+      next = withLog(next, { type: "reset", payload: name });
+      next = withBump(next, 8);
+      const totalResets = next.resetsUsed.turtle + next.resetsUsed.shake + next.resetsUsed.balloon;
+      if (totalResets >= 3) next = withBadge(next, "Reset Ranger");
+      return next;
+    });
+  }, []);
 
   const recordClue = useCallback((k: ClueKey, label: string) => {
-    setState((s) => ({ ...s, cluesNoticed: { ...s.cluesNoticed, [k]: s.cluesNoticed[k] + 1 } }));
-    logEvent({ type: "clue", payload: label });
-    bump(4);
-    addBadge("Body Detective");
-  }, [logEvent, bump, addBadge]);
+    setState((s) => {
+      let next = { ...s, cluesNoticed: { ...s.cluesNoticed, [k]: s.cluesNoticed[k] + 1 } };
+      next = withLog(next, { type: "clue", payload: label });
+      next = withBump(next, 4);
+      next = withBadge(next, "Body Detective");
+      return next;
+    });
+  }, []);
 
   const solveMission = useCallback((id: string, label: string) => {
-    setState((s) => ({
-      ...s,
-      missionsSolved: { ...s.missionsSolved, [id]: (s.missionsSolved[id] ?? 0) + 1 },
-    }));
-    logEvent({ type: "mission-solved", payload: label });
-    bump(10);
-    const totals = Object.values(state.missionsSolved).reduce((a, b) => a + b, 0);
-    if (totals >= 1) addBadge("First Find");
-    if (totals >= 5) addBadge("Mission Pro");
-  }, [logEvent, bump, addBadge]);
+    setState((s) => {
+      let next = {
+        ...s,
+        missionsSolved: { ...s.missionsSolved, [id]: (s.missionsSolved[id] ?? 0) + 1 },
+      };
+      next = withLog(next, { type: "mission-solved", payload: label });
+      next = withBump(next, 10);
+      const total = Object.values(next.missionsSolved).reduce((a, b) => a + b, 0);
+      if (total >= 1) next = withBadge(next, "First Find");
+      if (total >= 5) next = withBadge(next, "Mission Pro");
+      return next;
+    });
+  }, []);
 
   const markTricky = useCallback((label: string) => {
-    logEvent({ type: "mission-tricky", payload: label });
-    bump(2);
-    addBadge("Tricky Spotter");
-  }, [logEvent, bump, addBadge]);
+    setState((s) => {
+      let next = withLog(s, { type: "mission-tricky", payload: label });
+      next = withBump(next, 2);
+      next = withBadge(next, "Tricky Spotter");
+      return next;
+    });
+  }, []);
 
   const tinyStep = useCallback((label: string) => {
-    logEvent({ type: "tiny-step", payload: label });
-    bump(3);
-    addBadge("Tiny Step Hero");
-  }, [logEvent, bump, addBadge]);
+    setState((s) => {
+      let next = withLog(s, { type: "tiny-step", payload: label });
+      next = withBump(next, 3);
+      next = withBadge(next, "Tiny Step Hero");
+      return next;
+    });
+  }, []);
 
   const completeBoss = useCallback(() => {
-    setState((s) => ({ ...s, bossDone: true }));
-    logEvent({ type: "boss-done", payload: "Stuck Zone Boss" });
-    bump(20);
-    addBadge("Stuck Zone Champion");
-  }, [logEvent, bump, addBadge]);
+    setState((s) => {
+      let next = { ...s, bossDone: true };
+      next = withLog(next, { type: "boss-done", payload: "Stuck Zone Boss" });
+      next = withBump(next, 20);
+      next = withBadge(next, "Stuck Zone Champion");
+      return next;
+    });
+  }, []);
 
   const updateReflection = useCallback((patch: Partial<LabState["reflection"]>) => {
     setState((s) => ({ ...s, reflection: { ...s.reflection, ...patch } }));
   }, []);
 
-  const reset = useCallback(() => { setState(() => initial); }, []);
+  const reset = useCallback(() => {
+    setState(() => ({ ...initial }));
+  }, []);
 
   return {
-    state,
+    state: _state,
     bump, logEvent, addBadge,
     recordReset, recordClue, solveMission, markTricky, tinyStep,
     completeBoss, updateReflection, reset,

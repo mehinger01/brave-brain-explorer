@@ -1,4 +1,14 @@
 import { useLab } from "@/lib/labStore";
+import type { LabState } from "@/lib/labStore";
+
+type ReflectionKey = keyof LabState["reflection"];
+
+const FIELDS: { k: ReflectionKey; label: string; ph: string }[] = [
+  { k: "hard",     label: "Something that felt hard",  ph: "Like… a tricky pattern, or…" },
+  { k: "clue",     label: "My body clue was",          ph: "Like… I wanted to stop, or…" },
+  { k: "reset",    label: "Reset I used",              ph: "Turtle, Shake-Out, Balloon Breath…" },
+  { k: "comeback", label: "How I came back",           ph: "I took 3 breaths and tried one tiny step…" },
+];
 
 export function Reflection() {
   const { state, updateReflection } = useLab();
@@ -12,17 +22,12 @@ export function Reflection() {
       </header>
 
       <div className="pop-card p-6 space-y-5">
-        {[
-          { k: "hard", label: "Something that felt hard", ph: "Like… a tricky pattern, or…" },
-          { k: "clue", label: "My body clue was", ph: "Like… I wanted to stop, or…" },
-          { k: "reset", label: "Reset I used", ph: "Turtle, Shake-Out, Balloon Breath…" },
-          { k: "comeback", label: "How I came back", ph: "I took 3 breaths and tried one tiny step…" },
-        ].map((f) => (
+        {FIELDS.map((f) => (
           <label key={f.k} className="block">
             <div className="text-sm font-bold mb-1">{f.label}</div>
             <textarea
-              value={(r as any)[f.k]}
-              onChange={(e) => updateReflection({ [f.k]: e.target.value } as any)}
+              value={typeof r[f.k] === "string" ? (r[f.k] as string) : ""}
+              onChange={(e) => updateReflection({ [f.k]: e.target.value })}
               placeholder={f.ph}
               rows={2}
               className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card focus:border-primary outline-none text-sm"
@@ -34,7 +39,9 @@ export function Reflection() {
           <div className="text-sm font-bold mb-2">Brave Brain rating</div>
           <div className="flex gap-2">
             {[1, 2, 3, 4, 5].map((n) => (
-              <button key={n} onClick={() => updateReflection({ stars: n })}
+              <button
+                key={n}
+                onClick={() => updateReflection({ stars: n })}
                 className={`w-12 h-12 rounded-2xl text-2xl border-2 transition ${
                   n <= r.stars ? "bg-accent border-accent-foreground/40 scale-105" : "bg-card border-border"
                 }`}

@@ -10,14 +10,20 @@ export function BodyDetective() {
   const [plan, setPlan] = useState<string>("");
   const [saved, setSaved] = useState(false);
 
+  const anyCluePicked = Object.values(picked).some(Boolean);
+  const canSave = anyCluePicked && plan !== "";
+
   function toggle(k: ClueKey, label: string) {
+    const wasOff = !picked[k];
     setPicked((p) => ({ ...p, [k]: !p[k] }));
-    if (!picked[k]) recordClue(k, label);
+    // Only fire the log event when turning ON (not off).
+    if (wasOff) recordClue(k, label);
   }
 
   function savePlan() {
+    if (!canSave) return;
     setSaved(true);
-    setTimeout(() => setSaved(false), 1500);
+    setTimeout(() => setSaved(false), 1800);
   }
 
   return (
@@ -35,7 +41,9 @@ export function BodyDetective() {
           {CLUES.map((c) => {
             const on = picked[c.key];
             return (
-              <button key={c.key} onClick={() => toggle(c.key, c.label)}
+              <button
+                key={c.key}
+                onClick={() => toggle(c.key, c.label)}
                 className={`p-4 rounded-2xl border-2 text-left transition-all font-bold ${
                   on
                     ? "bg-accent border-accent-foreground/30 scale-[1.02] shadow-[var(--shadow-soft)]"
@@ -45,36 +53,60 @@ export function BodyDetective() {
                 <div className="text-2xl mb-1">{c.emoji}</div>
                 <div className="text-sm">{c.label}</div>
                 {state.cluesNoticed[c.key] > 0 && (
-                  <div className="text-xs text-muted-foreground mt-1 font-normal">caught {state.cluesNoticed[c.key]}×</div>
+                  <div className="text-xs text-muted-foreground mt-1 font-normal">
+                    caught {state.cluesNoticed[c.key]}×
+                  </div>
                 )}
               </button>
             );
           })}
         </div>
+        {!anyCluePicked && (
+          <p className="mt-3 text-sm text-muted-foreground italic">
+            Tap at least one clue above to unlock your plan 👆
+          </p>
+        )}
       </section>
 
-      <section className="pop-card p-6">
+      <section className={`pop-card p-6 transition-opacity ${anyCluePicked ? "opacity-100" : "opacity-40 pointer-events-none"}`}>
         <h2 className="font-bold text-lg mb-3">When I notice that clue, I can…</h2>
         <div className="grid sm:grid-cols-2 gap-2">
           {CLUE_PLANS.map((p) => (
-            <button key={p} onClick={() => setPlan(p)}
+            <button
+              key={p}
+              onClick={() => setPlan(p)}
               className={`px-4 py-3 rounded-xl text-left text-sm font-semibold border-2 transition ${
-                plan === p ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border hover:border-primary/40"
+                plan === p
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-card border-border hover:border-primary/40"
               }`}
             >
               {p}
             </button>
           ))}
         </div>
+
         {plan && (
-          <div className="mt-4 p-4 rounded-2xl border-2 border-jungle/30" style={{ background: "var(--gradient-sun)" }}>
+          <div
+            className="mt-4 p-4 rounded-2xl border-2 border-jungle/30"
+            style={{ background: "var(--gradient-sun)" }}
+          >
             <div className="text-xs font-bold uppercase">My plan</div>
             <div className="font-bold text-ink">{plan}</div>
-            <button onClick={savePlan}
-              className="mt-3 px-4 py-2 rounded-full bg-ink text-background text-sm font-bold">
-              {saved ? "🎉 Saved!" : "Lock in my plan"}
+            <button
+              onClick={savePlan}
+              disabled={!canSave}
+              className="mt-3 px-4 py-2 rounded-full bg-ink text-background text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {saved ? "🎉 Locked in!" : "Lock in my plan"}
             </button>
           </div>
+        )}
+
+        {anyCluePicked && !plan && (
+          <p className="mt-3 text-sm text-muted-foreground italic">
+            Now pick a plan from above 👆
+          </p>
         )}
       </section>
     </div>

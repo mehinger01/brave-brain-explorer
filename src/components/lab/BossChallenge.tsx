@@ -1,16 +1,31 @@
 import { useState } from "react";
 import { BOSS_CLUES, RESETS } from "@/lib/missions";
 import { useLab } from "@/lib/labStore";
+import type { ResetKey } from "@/lib/labStore";
 
 export function BossChallenge() {
   const { state, completeBoss, recordReset } = useLab();
-  const [step, setStep] = useState(0); // 0..3
-  const [usedReset, setUsedReset] = useState(false);
+  const [step, setStep] = useState(0); // 0..BOSS_CLUES.length
+  const [showResetPicker, setShowResetPicker] = useState(false);
+  const [chosenReset, setChosenReset] = useState<(typeof RESETS)[number] | null>(null);
   const done = step >= BOSS_CLUES.length;
 
   function solve() {
-    if (step < BOSS_CLUES.length - 1) setStep(step + 1);
-    else { setStep(step + 1); if (!state.bossDone) completeBoss(); }
+    // Dismiss any open reset panel before advancing.
+    setShowResetPicker(false);
+    setChosenReset(null);
+    if (step < BOSS_CLUES.length - 1) {
+      setStep(step + 1);
+    } else {
+      setStep(step + 1);
+      if (!state.bossDone) completeBoss();
+    }
+  }
+
+  function pickReset(r: (typeof RESETS)[number]) {
+    setChosenReset(r);
+    recordReset(r.key as ResetKey, `Boss: ${r.title}`);
+    setShowResetPicker(false);
   }
 
   if (done) {
@@ -24,7 +39,10 @@ export function BossChallenge() {
             You noticed when it was hard, you reset your brain, and you came BACK to finish.
             That is the bravest brain move there is. 🧠💪
           </p>
-          <button onClick={() => setStep(0)} className="mt-5 px-5 py-3 rounded-full bg-ink text-background font-bold">
+          <button
+            onClick={() => { setStep(0); setChosenReset(null); setShowResetPicker(false); }}
+            className="mt-5 px-5 py-3 rounded-full bg-ink text-background font-bold"
+          >
             Play again
           </button>
         </div>
@@ -46,9 +64,10 @@ export function BossChallenge() {
       </header>
 
       <div className="pop-card p-6">
+        {/* Progress bar */}
         <div className="flex items-center gap-2 mb-3">
           {BOSS_CLUES.map((_, i) => (
-            <div key={i} className={`h-2 flex-1 rounded-full ${i <= step ? "bg-primary" : "bg-secondary"}`} />
+            <div key={i} className={`h-2 flex-1 rounded-full ${i < step ? "bg-primary" : i === step ? "bg-primary/50" : "bg-secondary"}`} />
           ))}
         </div>
         <div className="text-xs font-bold text-muted-foreground">CLUE {step + 1} OF {BOSS_CLUES.length}</div>
@@ -59,27 +78,65 @@ export function BossChallenge() {
         </details>
 
         <div className="mt-5 grid sm:grid-cols-2 gap-3">
-          <button onClick={solve}
-            className="px-4 py-3 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90">
+          <button
+            onClick={solve}
+            className="px-4 py-3 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90"
+          >
             ✅ I solved it
           </button>
           <button
-            onClick={() => { setUsedReset(true); recordReset("balloon", "Boss: Balloon Breath"); }}
+            onClick={() => { setShowResetPicker((v) => !v); setChosenReset(null); }}
             className="px-4 py-3 rounded-xl bg-card border-2 border-border font-bold hover:border-primary/40"
           >
-            🎈 Use a reset
+            🧰 Use a reset
           </button>
         </div>
 
-        {usedReset && (
-          <div className="mt-4 p-4 rounded-2xl border-2 border-border" style={{ background: "var(--gradient-sun)" }}>
-            <div className="font-bold text-ink">Nice reset! 🌬️</div>
-            <div className="text-sm text-ink/80">
-              Try Balloon Breath: belly in… belly out… 3 times. Then come back to the clue. You can do this.
+        {/* Reset picker */}
+        {showResetPicker && !chosenReset && (
+          <div className="mt-4 p-4 rounded-2xl border-2 border-border bg-secondary/60">
+            <div className="font-bold mb-3 text-ink">Pick your reset:</div>
+            <div className="grid gap-2">
+              {RESETS.map((r) => (
+                <button
+                  key={r.key}
+                  onClick={() => pickReset(r)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl bg-card border-2 border-border font-bold text-left hover:border-primary/40 transition"
+                >
+                  <span className="text-2xl">{r.emoji}</span>
+                  <div>
+                    <div className="text-sm font-bold">{r.title}</div>
+                    <div className="text-xs text-muted-foreground font-normal">{r.when}</div>
+                  </div>
+                </button>
+              ))}
             </div>
-            <div className="mt-2 text-xs text-ink/70">Other resets: {RESETS.map(r => r.title).join(" · ")}</div>
-            <button onClick={() => setUsedReset(false)} className="mt-3 px-4 py-2 rounded-full bg-ink text-background text-sm font-bold">
-              I'm back — keep going
+          </div>
+        )}
+
+        {/* Chosen reset steps */}
+        {chosenReset && (
+          <div
+            className="mt-4 p-5 rounded-2xl border-2 border-border"
+            style={{ background: chosenReset.color }}
+          >
+            <div className="text-2xl mb-1">{chosenReset.emoji}</div>
+            <div className="font-extrabold text-ink text-lg">{chosenReset.title}</div>
+            <ol className="mt-3 space-y-2">
+              {chosenReset.steps.map((s, i) => (
+                <li key={i} className="flex gap-2 text-sm text-ink">
+                  <span className="w-6 h-6 shrink-0 rounded-full bg-ink/10 flex items-center justify-center font-bold text-xs">
+                    {i + 1}
+                  </span>
+                  <span>{s}</span>
+                </li>
+              ))}
+            </ol>
+            <button
+              onClick={() => setChosenReset(null)}
+              className="mt-4 px-4 py-2 rounded-full bg-ink text-background text-sm font-bold"
+            >
+              I'm back — keep going 💪
             </button>
           </div>
         )}
