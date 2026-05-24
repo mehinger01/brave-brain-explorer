@@ -109,6 +109,16 @@ export function MissionHub({ setView }: { setView: (v: View) => void }) {
           </button>
         ))}
       </section>
+
+      {/* Start Fresh */}
+      <div className="flex justify-end">
+        <button
+          onClick={handleReset}
+          className="text-xs font-bold text-muted-foreground hover:text-coral underline decoration-dotted transition-colors"
+        >
+          {justReset ? "✅ Progress cleared!" : "Start fresh for new student"}
+        </button>
+      </div>
     </div>
   );
 }
