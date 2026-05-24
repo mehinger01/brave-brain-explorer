@@ -75,9 +75,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Brave Brain Adventure Lab" },
       { name: "description", content: "A playful EF coaching tool that helps kids notice stuck feelings, reset their brain, and come back to finish." },
       { property: "og:title", content: "Brave Brain Adventure Lab" },
-      { property: "og:description", content: "Adventure puzzles for focus, resets, and brave brain growth." },
+      { property: "og:description", content: "A playful EF coaching tool that helps kids notice stuck feelings, reset their brain, and come back to finish." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Brave Brain Adventure Lab" },
+      { name: "twitter:description", content: "A playful EF coaching tool that helps kids notice stuck feelings, reset their brain, and come back to finish." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d07586dc-a924-4cca-80b3-ca7ecc866be5/id-preview-b99755bf--2fd44732-40d0-4485-b161-ae309bff8174.lovable.app-1779630647389.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d07586dc-a924-4cca-80b3-ca7ecc866be5/id-preview-b99755bf--2fd44732-40d0-4485-b161-ae309bff8174.lovable.app-1779630647389.png" },
     ],
     links: [
       {
