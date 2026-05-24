@@ -1,5 +1,6 @@
 import { useLab } from "@/lib/labStore";
 import type { View } from "./NavBar";
+import { useState } from "react";
 
 export function MissionHub({ setView }: { setView: (v: View) => void }) {
   const { state } = useLab();
