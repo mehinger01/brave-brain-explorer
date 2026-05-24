@@ -4,19 +4,31 @@ import { CLUES, RESETS } from "@/lib/missions";
 
 function buildNotes(state: ReturnType<typeof useLab>["state"]): string {
   const date = new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+
   const resetLines = RESETS
     .filter((r) => state.resetsUsed[r.key] > 0)
     .map((r) => `  • ${r.title}: ${state.resetsUsed[r.key]}×`)
     .join("\n") || "  • (none logged this session)";
+
   const clueLines = CLUES
     .filter((c) => state.cluesNoticed[c.key] > 0)
     .map((c) => `  • ${c.label} (noticed ${state.cluesNoticed[c.key]}×)`)
     .join("\n") || "  • (none logged this session)";
+
   const missionLines = Object.entries(state.missionsSolved)
     .filter(([, n]) => n > 0)
     .map(([id, n]) => `  • ${id}: ${n} challenge${n === 1 ? "" : "s"} solved`)
     .join("\n") || "  • (no missions completed this session)";
-  const returnEvidence = state.log.filter((l) => l.type === "tiny-step" || l.type === "mission-solved").length;
+
+  const brainChecks = state.log.filter((l) => l.type === "clue" && l.payload.startsWith("Brain Check:"));
+  const brainCheckLines = brainChecks.length > 0
+    ? brainChecks.map((l) => `  • ${l.payload}`).join("\n")
+    : "  • (no brain checks triggered)";
+
+  const returnEvidence = state.log.filter(
+    (l) => l.type === "tiny-step" || l.type === "mission-solved"
+  ).length;
+
   const ref = state.reflection;
 
   return [
@@ -29,8 +41,11 @@ function buildNotes(state: ReturnType<typeof useLab>["state"]): string {
     `Resets Used:`,
     resetLines,
     ``,
-    `Frustration / Stuck Clues Noticed:`,
+    `Body Clues Noticed (self-reported):`,
     clueLines,
+    ``,
+    `Mid-Mission Brain Checks:`,
+    brainCheckLines,
     ``,
     `Missions Engaged:`,
     missionLines,
@@ -59,9 +74,9 @@ function buildNotes(state: ReturnType<typeof useLab>["state"]): string {
 
 export function CoachNotes() {
   const { state, reset } = useLab();
+  const [tick, setTick] = useState(0);
   const [copied, setCopied] = useState(false);
-  const [generated, setGenerated] = useState(false);
-  const notes = useMemo(() => buildNotes(state), [state, generated]);
+  const notes = useMemo(() => buildNotes(state), [state, tick]);
 
   async function copy() {
     try {
@@ -76,22 +91,30 @@ export function CoachNotes() {
       <header className="pop-card p-6">
         <h1 className="text-3xl font-extrabold">📝 Coach Notes</h1>
         <p className="text-muted-foreground mt-1">
-          A plain-text summary of today's session. Copy and paste into an email.
+          A plain-text summary of today's session. Copy and paste into an email or your notes app.
         </p>
       </header>
 
       <div className="pop-card p-6">
         <div className="flex flex-wrap gap-2 mb-4">
-          <button onClick={() => setGenerated((g) => !g)}
-            className="px-4 py-2 rounded-full bg-primary text-primary-foreground font-bold hover:opacity-90">
-            🔄 Generate session notes
+          <button
+            onClick={() => setTick((t) => t + 1)}
+            className="px-4 py-2 rounded-full bg-primary text-primary-foreground font-bold hover:opacity-90"
+          >
+            🔄 Refresh notes
           </button>
-          <button onClick={copy}
-            className="px-4 py-2 rounded-full bg-card border-2 border-border font-bold hover:border-primary/40">
+          <button
+            onClick={copy}
+            className="px-4 py-2 rounded-full bg-card border-2 border-border font-bold hover:border-primary/40"
+          >
             {copied ? "✅ Copied!" : "📋 Copy to clipboard"}
           </button>
-          <button onClick={() => { if (confirm("Start a fresh session? This clears today's progress.")) reset(); }}
-            className="px-4 py-2 rounded-full bg-card border-2 border-border font-bold text-destructive hover:border-destructive/40 ml-auto">
+          <button
+            onClick={() => {
+              if (confirm("Start a fresh session? This clears today's progress.")) reset();
+            }}
+            className="px-4 py-2 rounded-full bg-card border-2 border-border font-bold text-destructive hover:border-destructive/40 ml-auto"
+          >
             🧹 Clear session
           </button>
         </div>

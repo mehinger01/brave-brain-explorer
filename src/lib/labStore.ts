@@ -7,7 +7,7 @@ export type ClueKey =
 
 export interface LogEntry {
   ts: number;
-  type: "reset" | "clue" | "mission-solved" | "mission-tricky" | "tiny-step" | "boss-done";
+  type: "reset" | "clue" | "mission-solved" | "mission-tricky" | "tiny-step" | "boss-done" | "brain-check";
   payload: string;
 }
 
