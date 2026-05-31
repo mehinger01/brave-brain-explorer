@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zach's Session</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: 'Nunito', sans-serif; background: #0d1b2a; color: #fff; overflow: hidden; }
+:root {
+  --bg-deep: #0d1b2a; --bg-card: #16213e; --bg-surface: #1a2a4a;
+  --border: #1f3a6a; --accent-teal: #4ecdc4; --accent-yellow: #f7c948;
+  --accent-coral: #ff6b6b; --text-main: #ffffff; --text-muted: #8aadcc; --text-dim: #4a6a8a;
+}
+body { display: flex; flex-direction: column; height: 100vh; }
+
+#top-bar { background: #111827; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--border); flex-shrink: 0; z-index: 10; }
+.session-title { font-size: 16px; font-weight: 900; color: #d0eaff; letter-spacing: 0.5px; }
+.stars-badge { background: var(--accent-yellow); color: #3a2800; font-size: 14px; font-weight: 900; padding: 5px 14px; border-radius: 20px; cursor: pointer; user-select: none; transition: transform 0.2s; }
+.stars-badge:active { transform: scale(0.95); }
+
+#progress-bar { background: #111827; padding: 10px 20px 12px; display: flex; align-items: center; justify-content: center; gap: 6px; flex-shrink: 0; border-bottom: 1px solid var(--border); }
+.p-dot { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; transition: all 0.3s; }
+.p-dot.done { background: var(--accent-yellow); color: #3a2800; }
+.p-dot.active { background: var(--accent-teal); color: #003333; box-shadow: 0 0 0 4px rgba(78,205,196,0.25); }
+.p-dot.future { background: #1a2a4a; color: #3a5a7a; border: 2px dashed #2a4a7a; }
+.p-connector { width: 20px; height: 3px; background: #1a2a4a; border-radius: 2px; }
+.p-connector.done { background: var(--accent-yellow); }
+
+#main { flex: 1; overflow-y: auto; padding: 20px 20px 80px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+.screen { display: none; width: 100%; max-width: 620px; flex-direction: column; align-items: center; gap: 16px; }
+.screen.active { display: flex; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+.step-card { background: var(--bg-card); border: 2px solid var(--border); border-radius: 20px; padding: 22px 26px; width: 100%; text-align: center; }
+.step-label { font-size: 11px; font-weight: 800; color: #5a9adf; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 6px; }
+.step-title { font-size: 26px; font-weight: 900; color: #fff; margin-bottom: 10px; }
+.step-desc { font-size: 15px; color: var(--text-muted); line-height: 1.65; margin-bottom: 14px; }
+.why-box { background: #0f2a4a; border-radius: 12px; padding: 12px 16px; font-size: 13px; color: #90c0e8; display: flex; gap: 8px; align-items: flex-start; text-align: left; }
+.why-icon { font-size: 20px; flex-shrink: 0; }
+
+/* CHALLENGE GRID */
+.challenge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+.challenge-option { background: var(--bg-card); border: 2px solid var(--border); border-radius: 16px; padding: 16px; cursor: pointer; transition: all 0.2s; text-align: center; }
+.challenge-option:hover { border-color: var(--accent-teal); background: #1a3055; transform: translateY(-2px); }
+.challenge-option.selected { border-color: var(--accent-teal); background: #0d2a3a; box-shadow: 0 0 0 3px rgba(78,205,196,0.2); }
+.challenge-letter { font-size: 22px; font-weight: 900; color: var(--accent-teal); margin-bottom: 4px; }
+.challenge-name { font-size: 14px; font-weight: 800; color: #d0e8ff; margin-bottom: 6px; }
+.challenge-preview { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+/* CHALLENGE DETAIL */
+.challenge-detail { background: var(--bg-card); border: 2px solid var(--accent-teal); border-radius: 20px; padding: 20px 24px; width: 100%; }
+.challenge-detail-title { font-size: 20px; font-weight: 900; color: var(--accent-teal); margin-bottom: 14px; }
+.problems-list { display: flex; flex-direction: column; gap: 8px; }
+.prob-item { background: #0f2a4a; border-radius: 10px; padding: 10px 14px; font-weight: 700; font-size: 15px; color: #fff; }
+.prob-number { font-size: 11px; font-weight: 800; color: #5a8acf; letter-spacing: 1px; margin-bottom: 2px; }
+.stretch-box { background: #1a3a2a; border-radius: 12px; padding: 12px 16px; margin-top: 12px; }
+.stretch-title { font-size: 11px; font-weight: 800; color: #4ecda4; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+.stretch-q { font-size: 13px; color: #90e0b8; margin-bottom: 4px; }
+
+/* MOVEMENT */
+.movement-card { background: var(--bg-card); border: 2px solid #ff6b6b44; border-radius: 20px; padding: 20px; width: 100%; }
+.movement-options { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.move-btn { background: #2a1a1a; border: 2px solid #ff6b6b44; border-radius: 14px; padding: 10px 16px; color: #ffaaaa; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.2s; }
+.move-btn:hover { background: #3a2222; border-color: var(--accent-coral); color: #fff; }
+
+/* REFLECTION */
+.reflection-card { background: var(--bg-card); border: 2px solid #f7c94844; border-radius: 20px; padding: 22px 24px; width: 100%; }
+.reflection-q { font-size: 15px; font-weight: 800; color: var(--accent-yellow); margin-bottom: 8px; }
+.reflection-input { width: 100%; background: #0f2030; border: 1.5px solid #2a4a7a; border-radius: 10px; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 14px; color: #d0e8ff; resize: none; margin-bottom: 14px; }
+.reflection-input:focus { outline: none; border-color: var(--accent-yellow); }
+
+/* TURTLE */
+.turtle-box { background: #0a2a1a; border: 2px solid #1a4a2a; border-radius: 16px; padding: 16px 20px; width: 100%; }
+.turtle-title { font-size: 15px; font-weight: 900; color: #4ecda4; margin-bottom: 8px; }
+.turtle-steps { list-style: none; counter-reset: turtle; }
+.turtle-steps li { counter-increment: turtle; font-size: 14px; color: #90e0b8; padding: 6px 0 6px 30px; position: relative; border-bottom: 1px solid #1a3a2a; }
+.turtle-steps li:last-child { border-bottom: none; }
+.turtle-steps li::before { content: counter(turtle); position: absolute; left: 0; top: 6px; background: #1a4a2a; color: #4ecda4; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; }
+
+/* BUTTONS */
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; width: 100%; }
+.btn-main { background: var(--accent-teal); color: #003333; border: none; border-radius: 16px; padding: 14px 36px; font-size: 17px; font-weight: 900; cursor: pointer; font-family: 'Nunito', sans-serif; transition: transform 0.1s, box-shadow 0.2s; }
+.btn-main:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(78,205,196,0.3); }
+.btn-main:active { transform: scale(0.97); }
+.btn-secondary { background: transparent; color: var(--text-muted); border: 2px solid var(--border); border-radius: 16px; padding: 14px 28px; font-size: 15px; font-weight: 800; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+.btn-secondary:hover { border-color: #4a7aaa; color: #d0e8ff; }
+.btn-star { background: var(--accent-yellow); color: #3a2800; border: none; border-radius: 16px; padding: 12px 24px; font-size: 15px; font-weight: 900; cursor: pointer; font-family: 'Nunito', sans-serif; transition: transform 0.15s; }
+.btn-star:hover { transform: scale(1.05); }
+
+/* CELEBRATION BAR */
+#celeb-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #090f1a; border-top: 2px solid #1a2a4a; padding: 8px 16px; display: flex; align-items: center; gap: 8px; justify-content: center; z-index: 100; flex-wrap: wrap; }
+.celeb-label { font-size: 10px; font-weight: 800; color: #3a5a7a; letter-spacing: 1.5px; text-transform: uppercase; margin-right: 4px; }
+.celeb-btn { background: #16213e; border: 1.5px solid #2a4a7a; border-radius: 12px; padding: 6px 14px; font-size: 14px; font-weight: 800; cursor: pointer; color: #d0e4ff; font-family: 'Nunito', sans-serif; display: flex; align-items: center; gap: 5px; transition: all 0.15s; white-space: nowrap; }
+.celeb-btn:hover { background: #1f3060; border-color: #5a8ad0; }
+.celeb-btn:active { transform: scale(0.95); }
+
+/* OVERLAY */
+#celeb-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 999; overflow: hidden; }
+.celeb-particle { position: absolute; animation: fall linear forwards; pointer-events: none; }
+@keyframes fall { 0% { transform: translateY(-60px) rotate(0deg) scale(0.5); opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg) scale(1.2); opacity: 0; } }
+
+/* DONE */
+.done-screen { text-align: center; padding: 20px; }
+.done-title { font-size: 40px; font-weight: 900; color: var(--accent-yellow); margin-bottom: 10px; }
+.done-sub { font-size: 18px; color: var(--text-muted); margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<div id="top-bar">
+  <div class="session-title">🎮 Zach's Session</div>
+  <div class="stars-badge" id="stars-badge">⭐ <span id="star-count">0</span> Stars</div>
+</div>
+<div id="progress-bar">
+  <div class="p-dot active" id="pd-1">1</div><div class="p-connector" id="pc-1"></div>
+  <div class="p-dot future" id="pd-2">2</div><div class="p-connector" id="pc-2"></div>
+  <div class="p-dot future" id="pd-3">3</div><div class="p-connector" id="pc-3"></div>
+  <div class="p-dot future" id="pd-4">4</div><div class="p-connector" id="pc-4"></div>
+  <div class="p-dot future" id="pd-5">5</div><div class="p-connector" id="pc-5"></div>
+  <div class="p-dot future" id="pd-6">🏆</div>
+</div>
+
+<div id="main">
+
+<!-- SCREEN 1 -->
+<div class="screen active" id="screen-1">
+  <div class="step-card">
+    <div class="step-label">Step 1 of 6</div>
+    <div class="step-title">Welcome &amp; Check-In 👋</div>
+    <div class="step-desc">Let's talk about your week and share something awesome that happened!</div>
+    <div class="why-box"><span class="why-icon">🧠</span><span>Starting with something great helps your brain get ready for learning and problem-solving.</span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-star" onclick="addStar()">⭐ Give a Star</button>
+    <button class="btn-main" onclick="goTo(2)">Ready! Let's Go →</button>
+  </div>
+</div>
+
+<!-- SCREEN 2 -->
+<div class="screen" id="screen-2">
+  <div class="step-card">
+    <div class="step-label">Step 2 of 6</div>
+    <div class="step-title">🐢 Turtle Strategy</div>
+    <div class="step-desc">Practice the Turtle Reset and talk about any times you used it this week.</div>
+    <div class="why-box"><span class="why-icon">💪</span><span>The more we practice when things are calm, the easier it is to use when frustration shows up!</span></div>
+  </div>
+  <div class="turtle-box">
+    <div class="turtle-title">🐢 Turtle Reset Steps</div>
+    <ol class="turtle-steps">
+      <li>Notice the feeling — are you getting frustrated?</li>
+      <li>Say "I need a turtle moment."</li>
+      <li>Take a slow, deep breath in... and out.</li>
+      <li>Count to 5 in your head.</li>
+      <li>Ask yourself: "What can I try next?"</li>
+    </ol>
+  </div>
+  <div class="btn-row">
+    <button class="btn-secondary" onclick="goTo(1)">← Back</button>
+    <button class="btn-star" onclick="addStar()">⭐ Give a Star</button>
+    <button class="btn-main" onclick="goTo(3)">Challenge Time! →</button>
+  </div>
+</div>
+
+<!-- SCREEN 3 -->
+<div class="screen" id="screen-3">
+  <div class="step-card">
+    <div class="step-label">Step 3 of 6 — Round 1</div>
+    <div class="step-title">Pick Your Challenge 🎯</div>
+    <div class="step-desc">Choose one challenge. The goal isn't getting every answer right — it's practicing not giving up!</div>
+    <div class="why-box"><span class="why-icon">🔥</span><span>Learning happens when things are just a little bit hard. You've got this!</span></div>
+  </div>
+  <div class="challenge-grid" id="challenge-grid-1">
+    <div class="challenge-option" onclick="selectChallenge('A',this)"><div class="challenge-letter">A</div><div class="challenge-name">Pattern Detective</div><div class="challenge-preview">Find what comes next in the pattern!</div></div>
+    <div class="challenge-option" onclick="selectChallenge('B',this)"><div class="challenge-letter">B</div><div class="challenge-name">Logic Grid</div><div class="challenge-preview">Use the clues to figure out the order!</div></div>
+    <div class="challenge-option" onclick="selectChallenge('C',this)"><div class="challenge-letter">C</div><div class="challenge-name">Mystery Box</div><div class="challenge-preview">I'm thinking of a number... guess it!</div></div>
+    <div class="challenge-option" onclick="selectChallenge('D',this)"><div class="challenge-letter">D</div><div class="challenge-name">Tower Challenge</div><div class="challenge-preview">Build the tallest tower in 3 minutes!</div></div>
+    <div class="challenge-option" onclick="selectChallenge('E',this)"><div class="challenge-letter">E</div><div class="challenge-name">Spot the Rule</div><div class="challenge-preview">What rule is hiding in the pattern?</div></div>
+    <div class="challenge-option" onclick="selectChallenge('F',this)"><div class="challenge-letter">F</div><div class="challenge-name">Mini Escape</div><div class="challenge-preview">Crack the secret code to escape!</div></div>
+  </div>
+  <div id="challenge-detail-1" style="display:none; width:100%;"></div>
+  <div class="btn-row">
+    <button class="btn-secondary" onclick="goTo(2)">← Back</button>
+    <button class="btn-star" onclick="addStar()">⭐ Give a Star</button>
+    <button class="btn-main" id="btn-r1-next" style="display:none;" onclick="goTo(4)">Movement Break! →</button>
+  </div>
+</div>
+
+<!-- SCREEN 4 -->
+<div class="screen" id="screen-4">
+  <div class="step-card">
+    <div class="step-label">Step 4 of 6</div>
+    <div class="step-title">Movement Break 🏃</div>
+    <div class="step-desc">Time to move! Pick one or do them all.</div>
+    <div class="why-box"><span class="why-icon">⚡</span><span>Movement resets your attention and gets you ready for the next challenge!</span></div>
+  </div>
+  <div class="movement-card">
+    <div class="movement-options">
+      <button class="move-btn">🦘 10 Jumping Jacks</button>
+      <button class="move-btn">🕺 Dance for 30 seconds</button>
+      <button class="move-btn">🐻 Bear crawl across the room</button>
+      <button class="move-btn">🌪️ Spin 5 times</button>
+      <button class="move-btn">🐸 Frog jumps down the hall</button>
+      <button class="move-btn">🧘 Shake it all out!</button>
+      <button class="move-btn">🏋️ 10 Push-ups</button>
+      <button class="move-btn">🚀 Run in place for 20 seconds</button>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-secondary" onclick="goTo(3)">← Back</button>
+    <button class="btn-star" onclick="addStar()">⭐ Give a Star</button>
+    <button class="btn-main" onclick="goTo(5)">Round 2 Let's Go! →</button>
+  </div>
+</div>
+
+<!-- SCREEN 5 -->
+<div class="screen" id="screen-5">
+  <div class="step-card">
+    <div class="step-label">Step 5 of 6 — Round 2</div>
+    <div class="step-title">Level Up! ⬆️</div>
+    <div class="step-desc">Same challenge — but harder. You already know you can do it!</div>
+    <div class="why-box"><span class="why-icon">🚀</span><span>Once you experience success, you can stretch your thinking even further!</span></div>
+  </div>
+  <div id="challenge-detail-2" style="width:100%;"></div>
+  <div class="btn-row">
+    <button class="btn-secondary" onclick="goTo(4)">← Back</button>
+    <button class="btn-star" onclick="addStar()">⭐ Give a Star</button>
+    <button class="btn-main" onclick="goTo(6)">Reflection Time →</button>
+  </div>
+</div>
+
+<!-- SCREEN 6 -->
+<div class="screen" id="screen-6">
+  <div class="step-card">
+    <div class="step-label">Step 6 of 6</div>
+    <div class="step-title">Reflection &amp; Celebration 🏆</div>
+    <div class="step-desc">Let's talk about what worked, what was hard, and what strategies helped you!</div>
+    <div class="why-box"><span class="why-icon">🧠</span><span>Thinking back on what you did helps your brain learn and makes you stronger next time!</span></div>
+  </div>
+  <div class="reflection-card">
+    <div class="reflection-q">What did you do well today?</div>
+    <textarea class="reflection-input" rows="2" placeholder="Type or tell your coach..."></textarea>
+    <div class="reflection-q">What was the hardest part?</div>
+    <textarea class="reflection-input" rows="2" placeholder="Type or tell your coach..."></textarea>
+    <div class="reflection-q">Which strategy helped you most?</div>
+    <textarea class="reflection-input" rows="2" placeholder="Turtle Reset? Flexible thinking? Taking a breath?"></textarea>
+  </div>
+  <div class="btn-row">
+    <button class="btn-secondary" onclick="goTo(5)">← Back</button>
+    <button class="btn-star" onclick="addStar()">⭐ Give a Star</button>
+    <button class="btn-main" onclick="finishSession()">Finish Session! 🎉</button>
+  </div>
+</div>
+
+<!-- SCREEN 7 -->
+<div class="screen" id="screen-7">
+  <div class="step-card done-screen">
+    <div style="font-size:64px; margin-bottom:10px;">🌟</div>
+    <div class="done-title">Amazing Work, Zach!</div>
+    <div class="done-sub">You completed the whole session!</div>
+    <div style="font-size:22px; font-weight:900; color:var(--accent-yellow); margin:10px 0;">You earned <span id="final-stars">0</span> ⭐ Stars!</div>
+    <div style="font-size:14px; color:var(--text-muted); margin-top:12px; line-height:1.7;">The key thing today wasn't getting every answer right.<br>It was staying in the game when things felt hard. 💪</div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-main" onclick="restartSession()">Start a New Session 🔄</button>
+  </div>
+</div>
+
+</div>
+
+<div id="celeb-bar">
+  <span class="celeb-label">Celebrate!</span>
+  <button class="celeb-btn" onclick="celebrate('dino')">🦕 Dinos</button>
+  <button class="celeb-btn" onclick="celebrate('bug')">🐛 Bugs</button>
+  <button class="celeb-btn" onclick="celebrate('ninja')">🥷 Ninjas</button>
+  <button class="celeb-btn" onclick="celebrate('robot')">🤖 Robots</button>
+</div>
+<div id="celeb-overlay"></div>
+
+<script>
+var currentScreen = 1;
+var stars = 0;
+var selectedChallenge = null;
+
+var celebEmojis = {
+  dino:  ['🦕','🦖','🐉','🌿','🦕','🦖'],
+  bug:   ['🐛','🦋','🐝','🐞','🦗','🕷️'],
+  ninja: ['🥷','⚔️','🌟','💥','🥷','🌪️'],
+  robot: ['🤖','⚙️','🔩','💡','🤖','🔋']
+};
+
+var challenges = {
+  A: {
+    name: 'Pattern Detective',
+    easy: [
+      '2, 4, 6, 8, ___',
+      '5, 10, 15, 20, ___',
+      '1, 3, 5, 7, ___',
+      '10, 20, 30, 40, ___',
+      '3, 6, 9, 12, ___',
+      '1, 2, 4, 8, ___',
+      '100, 90, 80, 70, ___',
+      '2, 4, 8, 16, ___',
+      '1, 5, 9, 13, ___',
+      'A, B, C, D, ___',
+      '🔴, 🔵, 🔴, 🔵, ___',
+      'Monday, Tuesday, Wednesday, ___',
+      '1, 4, 7, 10, ___',
+      '50, 45, 40, 35, ___',
+      '🌕, 🌖, 🌗, 🌘, ___'
+    ],
+    easyStretch: [
+      'How did you figure it out?',
+      'Can you make your own pattern for your coach to solve?',
+      'What would the 10th number in the pattern be?'
+    ],
+    hard: [
+      '3, 6, 12, 24, ___',
+      '1, 4, 9, 16, 25, ___',
+      '2, 5, 10, 17, 26, ___',
+      '1, 1, 2, 3, 5, 8, ___',
+      '0, 1, 3, 6, 10, ___',
+      '2, 6, 12, 20, 30, ___',
+      '81, 27, 9, 3, ___',
+      '1, 8, 27, 64, ___',
+      '2, 3, 5, 7, 11, 13, ___',
+      'A, C, F, J, ___',
+      '1, 2, 4, 7, 11, 16, ___',
+      '3, 5, 8, 13, 21, ___',
+      '256, 64, 16, 4, ___',
+      '1, 3, 7, 13, 21, ___',
+      '2, 5, 11, 23, 47, ___'
+    ],
+    hardStretch: [
+      'Can you explain the rule in one sentence?',
+      'Create a pattern nobody else could solve easily.',
+      'What would the 20th number be?'
+    ]
+  },
+  B: {
+    name: 'Logic Grid',
+    easy: [
+      'The dog is not first. The cat is before the rabbit. The rabbit is last.\n→ Who is 1st, 2nd, 3rd?',
+      'Sam is taller than Joe. Joe is taller than Maya.\n→ Who is tallest? Who is shortest?',
+      'The red block is not on top. The blue block is above the green block.\n→ What order are they in?',
+      'Amy has more stickers than Ben. Ben has more than Chloe.\n→ Who has the most? The least?',
+      'The apple is not in the middle. The banana is to the right of the apple. The orange is first.\n→ What order are the fruits?',
+      'Tom is faster than Leo. Leo is faster than Mia.\n→ Who wins the race?',
+      'The small box is not on the bottom. The big box is below the medium box.\n→ Top to bottom: big, medium, small — in what order?',
+      'Zoe has fewer pets than Jake. Jake has fewer than Emma.\n→ Who has the most pets?',
+      'The lion is not last. The tiger is before the lion. The bear is first.\n→ What is the order?',
+      'Book A has more pages than Book B. Book C has fewer pages than Book B.\n→ Put the books in order from most to fewest pages.',
+      'The yellow car is not first or last. The red car is before the yellow car. There are 3 cars.\n→ What is the order?',
+      'Lucy scored higher than Raj. Raj scored higher than Kim.\n→ Who scored highest? Who scored lowest?',
+      'The dog bowl is not on the left. The cat bowl is between the dog bowl and the bird bowl.\n→ What order are the bowls?',
+      'Pizza was ordered before sushi. Sushi was ordered before tacos.\n→ Which came first? Which came last?',
+      'The biggest number is not 9. One number is 5. One is double 5.\n→ What are the three numbers in order from least to greatest?'
+    ],
+    easyStretch: [
+      'How did you figure out the order?',
+      'Could there be another answer? Why or why not?',
+      'Can you make up your own logic puzzle?'
+    ],
+    hard: [
+      'Alex, Ben, and Chloe each have a dog, fish, or cat. Alex does not own the dog. Ben owns neither the fish nor the dog. Who owns what?',
+      'Three kids ran a race: first place is not Dan. Dan beat Sam. Sam came in second.\n→ Who was 1st, 2nd, 3rd?',
+      'Ava, Ben, Cal each like a different color: red, blue, green. Ava does not like red. Ben does not like blue or red.\n→ Who likes what color?',
+      'Four animals stand in a line: frog, duck, pig, cow. The frog is not next to the cow. The duck is between the pig and the cow. The pig is first.\n→ What is the order?',
+      'Three friends each play a different sport: soccer, tennis, swimming. Jo does not swim. Mo does not play tennis or soccer.\n→ Who plays what?',
+      'Five numbers: 2, 4, 6, 8, 10. The 3rd number is not 6. The 1st number is not 2. The 5th number is 10. The 2nd number is larger than the 4th.\n→ What is the order?',
+      'Mia, Noah, and Lily each bring a snack: apple, chips, cookie. Mia does not bring chips. Noah does not bring apple or cookie.\n→ Who brings what?',
+      'Red, blue, yellow, and green cubes are stacked. Blue is directly above red. Green is on top. Yellow is not on the bottom.\n→ What is the order from top to bottom?',
+      'Four kids sit in a row: Ann, Bob, Cal, Dan. Ann is not next to Bob. Cal sits between Ann and Dan. Bob is at one end.\n→ What is the seating order?',
+      'Three boxes weigh different amounts. Box A is not the heaviest. Box C is lighter than Box B. Box B is not the lightest.\n→ Order from lightest to heaviest.',
+      'Five students got scores: 70, 75, 80, 85, 90. The highest score is not 90. The middle score is 80. The lowest score is not 70.\n→ What are the five scores in order?',
+      'Kai, Lee, and Max each chose a fruit: mango, kiwi, or pear. Kai does not like kiwi. Max does not like mango or pear.\n→ Who chose what?',
+      'Six shapes are in a row: circle, square, triangle, hexagon, oval, star. The triangle is not 3rd. The hexagon is right after the square. The circle is first.\n→ What is the order?',
+      'Four friends live on the same street. The person with the green house is not at either end. The red house is next to the blue house. The yellow house is last.\n→ What order are the houses?',
+      'Anna, Bella, and Cara finish a puzzle. Anna does not finish first or last. Cara finishes before Anna. Bella does not finish second.\n→ What is the finishing order?'
+    ],
+    hardStretch: [
+      'Can you explain how you eliminated wrong answers?',
+      'Could there be more than one answer? How do you know?',
+      'Make up your own logic puzzle with 3 clues!'
+    ]
+  },
+  C: {
+    name: 'Mystery Box',
+    easy: [
+      'Greater than 5, less than 10, even. What numbers could it be?',
+      'Greater than 10, less than 20, odd. What numbers could it be?',
+      'Less than 15, greater than 8, even. What numbers could it be?',
+      'Greater than 3, less than 8. What numbers could it be?',
+      'Even, greater than 14, less than 22. What numbers could it be?',
+      'Odd, greater than 20, less than 30. What numbers could it be?',
+      'A number you say when you count by 5s. Less than 30. What numbers could it be?',
+      'Greater than 1, less than 10, odd. What numbers could it be?',
+      'Even, less than 12, greater than 6. What numbers could it be?',
+      'A number you say when you count by 2s. Greater than 10, less than 18. What numbers could it be?',
+      'Greater than 15, less than 25, even. What numbers could it be?',
+      'Odd, greater than 30, less than 40. What numbers could it be?',
+      'Greater than 5, less than 15. Digits add up to 9. What is it?',
+      'Even, less than 20, greater than 12. Not 14. What could it be?',
+      'Greater than 4, less than 9, not 6. What could it be?'
+    ],
+    easyStretch: [
+      'How did you figure out which numbers to eliminate?',
+      'Is there more than one answer? How do you know?',
+      'Can you give me three clues for a number and have me guess?'
+    ],
+    hard: [
+      'Greater than 20, less than 50, multiple of 3, odd, digits add to 9. What is it?',
+      'Greater than 30, less than 60, even, multiple of 4, digits add to 8. What is it?',
+      'A two-digit number. Both digits are the same. Greater than 30. Less than 70. What could it be?',
+      'Less than 100, greater than 50, multiple of 7, even. What numbers could it be?',
+      'Greater than 40, less than 80, odd, multiple of 5, digits add to more than 10. What is it?',
+      'Two-digit number. Tens digit is 3 more than the ones digit. Greater than 50. What could it be?',
+      'Multiple of 6. Greater than 24. Less than 50. Digits add up to less than 10. What is it?',
+      'Three-digit number. All digits are different. Digits add up to 6. Each digit less than 5. What numbers could it be?',
+      'Greater than 100, less than 200, multiple of 9, even. What numbers could it be?',
+      'A two-digit number. It is a perfect square. It is greater than 20. What numbers could it be?',
+      'Odd, greater than 45, less than 65, multiple of 9. What is it?',
+      'Multiple of both 3 and 4. Greater than 20, less than 50. What numbers could it be?',
+      'Two-digit number. Ones digit is twice the tens digit. Greater than 10. What numbers could it be?',
+      'Greater than 50, less than 100, prime, ends in 7. What numbers could it be?',
+      'A three-digit number. Hundreds digit is 1. Tens and ones digits are the same. Number is greater than 140. What could it be?'
+    ],
+    hardStretch: [
+      'Can you explain how you eliminated possibilities step by step?',
+      'Give me a mystery number with 4 clues — make it tricky!',
+      'What would happen if you changed one of the clues?'
+    ]
+  },
+  D: {
+    name: 'Tower Challenge',
+    easy: [
+      'Build the tallest tower you can in 3 minutes. Must stand for 10 seconds.',
+      'Build a tower using only 10 pieces. Make it as tall as possible.',
+      'Build a tower that can hold a small toy on top without falling.',
+      'Build a tower using alternating colors or sizes.',
+      'Build the widest tower you can — as wide as your arms can reach.',
+      'Build a tower that looks like a real building (has floors!).',
+      'Build a tower using only round or curved pieces.',
+      'Build a tower that has exactly 5 levels.',
+      'Build a tower using the fewest pieces possible. Must be taller than your hand.',
+      'Build a tower that has a door or opening in the middle.',
+      'Build a tower that leans — but does not fall over for 15 seconds.',
+      'Build a bridge between two stacks — no middle support allowed.',
+      'Build a tower only using flat pieces.',
+      'Build two towers the exact same height without measuring.',
+      'Build a tower that can survive a gentle tap without falling.'
+    ],
+    easyStretch: [
+      'What made your tower strong or weak?',
+      'What would you change if you built it again?',
+      'What is the tallest real building in the world?'
+    ],
+    hard: [
+      'Build the tallest tower — must support a small object on top, stand 20 seconds, only one hand.',
+      'Build a tower using only one hand. No leaning on anything.',
+      'Build a tower in under 90 seconds. Must stand for 30 seconds.',
+      'Build a tower using 15 pieces or fewer that is taller than your head.',
+      'Build a freestanding arch — no walls allowed, only the arch.',
+      'Build a tower that supports the weight of a book for 10 seconds.',
+      'Build a tower with your non-dominant hand only.',
+      'Build a tower blindfolded (or with eyes closed) — coach confirms when time is up.',
+      'Build a tower that is exactly as tall as your forearm — no measuring tools.',
+      'Build a structure that can hold the most weight on top before collapsing.',
+      'Build a tower using only 5 pieces. Must stand taller than a water bottle.',
+      'Build a tower with a hollow inside — something small must fit through it.',
+      'Build a tower that can be knocked down and rebuilt in under 60 seconds.',
+      'Build a tower with 3 distinct sections — each section a different shape.',
+      'Build a tower that is taller when lying on its side than when standing. (Explain why!)'
+    ],
+    hardStretch: [
+      'What engineering principle did you use?',
+      'How would you improve your design for a round 3?',
+      'What real-world structure does your tower remind you of?'
+    ]
+  },
+  E: {
+    name: 'Spot the Rule',
+    easy: [
+      'Red, Blue, Red, Blue, Red, ___',
+      'Circle, Square, Circle, Square, ___',
+      'Clap, Stomp, Clap, Stomp, ___',
+      'Big, Small, Big, Small, ___',
+      '🌞, 🌙, 🌞, 🌙, ___',
+      'A, A, B, A, A, B, ___',
+      'Fast, Slow, Slow, Fast, Slow, Slow, ___',
+      '1, 2, 2, 1, 2, 2, ___',
+      'Up, Down, Down, Up, Down, Down, ___',
+      '🔴, 🔴, 🔵, 🔴, 🔴, 🔵, ___',
+      'Snap, Clap, Snap, Clap, ___',
+      'Cat, Dog, Bird, Cat, Dog, Bird, ___',
+      'X, O, O, X, O, O, ___',
+      'Short, Short, Long, Short, Short, Long, ___',
+      'In, Out, In, Out, In, ___'
+    ],
+    easyStretch: [
+      'What was the rule?',
+      'Can you create your own rule pattern for your coach to guess?',
+      'How many steps before the pattern repeats?'
+    ],
+    hard: [
+      '2, 4, 8, 16, ___ (Rule: ×2 each time)',
+      '1, 3, 6, 10, 15, ___ (Rule: +2, +3, +4, +5...)',
+      'A, C, F, J, ___ (Rule: skip 1, skip 2, skip 3...)',
+      '1, 4, 2, 8, 4, 16, ___ (Two patterns woven together!)',
+      'Z, Y, X, W, ___ (Rule: alphabet backwards)',
+      '1, 2, 4, 7, 11, ___ (Rule: +1, +2, +3, +4...)',
+      '3, 6, 9, 3, 6, 9, ___ and 1, 4, 9, 16, 25 ___ — what is DIFFERENT about these two rules?',
+      '2, 5, 14, 41, ___ (Rule: ×3 − 1)',
+      '1, 1, 2, 3, 5, 8, ___ (Each number = sum of the two before it)',
+      'A1, B2, C3, D4, ___ (Letters and numbers together!)',
+      '1, 2, 1, 3, 1, 4, 1, ___ (What is the hidden rule?)',
+      '100, 50, 25, 12.5, ___ (Rule: ÷2 each time)',
+      'Triangle, Square, Pentagon, Hexagon, ___ (How many sides each time?)',
+      '🌑, 🌒, 🌓, 🌔, ___ (What comes next in the moon cycle?)',
+      'Invent a rule that takes at least 4 clues before someone can identify it.'
+    ],
+    hardStretch: [
+      'Can you explain the rule in one sentence?',
+      'Invent a rule that takes at least 4 clues to identify.',
+      'What would the 100th item in the pattern be?'
+    ]
+  },
+  F: {
+    name: 'Mini Escape',
+    easy: [
+      'First digit is 4. Last digit is 2. Middle digit is 1 more than the first. 🔐 What is the code?',
+      'All three digits are the same. They add up to 9. 🔐 What is the code?',
+      'The code is an even number between 100 and 200. All digits are the same. 🔐 What is the code?',
+      'First digit is 3. Middle digit is double the first. Last digit is 1. 🔐 What is the code?',
+      'The digits are 1, 2, and 3. They are in order from smallest to largest. 🔐 What is the code?',
+      'All digits add up to 10. The first digit is 5. The last digit is 3. 🔐 What is the code?',
+      'The code has no repeated digits. All digits are less than 4. 🔐 What are the possible codes?',
+      'First digit is the same as the last. Middle digit is 0. First digit is 7. 🔐 What is the code?',
+      'The code is even. First digit is 2. Digits add up to 8. Last digit is 4. 🔐 What is the code?',
+      'Middle digit is 5. First digit is half of the middle. Last digit is 1 more than the middle. 🔐 What is the code?',
+      'All digits are odd. They are in decreasing order. First digit is 9. 🔐 What could the code be?',
+      'The code reads the same forwards and backwards. Middle digit is 4. 🔐 What could it be?',
+      'No digit is greater than 3. The digits add up to 6. All digits are different. 🔐 What is the code?',
+      'First digit equals last digit. Middle digit is 0. The number is less than 400. 🔐 What could the code be?',
+      'The code is a three-digit number. It is a multiple of 10. The hundreds digit is 3. 🔐 What is the code?'
+    ],
+    easyStretch: [
+      'How did you crack the code?',
+      'Can you create a code puzzle for your coach to solve?',
+      'What clue was most helpful?'
+    ],
+    hard: [
+      'Hundreds digit is twice the tens digit. Tens digit is one less than the ones digit. All digits are different. Digits add to 15. 🔐 What is the code?',
+      'Three-digit number. Each digit is a prime number. Digits add up to 13. No digit repeats. First digit is larger than the last. 🔐 What is the code?',
+      'Four-digit code. First two digits are the same. Last two digits are the reverse of the first two. All digits add to 12. 🔐 What is the code?',
+      'The code is a three-digit perfect square. The sum of its digits is 9. The hundreds digit is odd. 🔐 What could it be?',
+      'A four-digit code. Each digit is one more than the previous. Starts with 2. 🔐 What is the code?',
+      'Three-digit code. Hundreds digit is 3 times the ones digit. Tens digit is the average of the other two. Digits add to 12. 🔐 What is the code?',
+      'A five-digit code. Alternates odd and even. First digit is 3. Last digit is 4. Middle digit is 7. 🔐 What is the code?',
+      'Three-digit code. No digit is repeated. Digits are all factors of 12. Sum of digits is 10. 🔐 What is the code?',
+      'The ones digit is the square of the tens digit. The tens digit is 2. The hundreds digit is the sum of the other two. 🔐 What is the code?',
+      'Four-digit code. First and last digits multiply to 12. Middle two digits add to 7. All four digits are different. 🔐 What could the code be?',
+      'Three-digit code. It is a multiple of both 3 and 4. All digits are different. It is greater than 200 and less than 300. 🔐 What numbers fit?',
+      'A three-digit number where removing the first digit gives you a two-digit perfect square. The first digit is 1. The two-digit square is greater than 25. 🔐 What is the code?',
+      'Six-digit code split into two groups of three. The first group is 1-2-3. The second group is the first reversed. 🔐 What is the code?',
+      'A four-digit code. Each digit is double the previous one. Starts with 1. 🔐 What is the code?',
+      'Three-digit code. Hundreds × Tens = Ones. Hundreds digit is 2. Tens digit is 4. 🔐 What is the code?'
+    ],
+    hardStretch: [
+      'Can you explain how you eliminated wrong answers?',
+      'Make your own 3-clue code puzzle for your coach to crack.',
+      'What math idea did you use to solve it?'
+    ]
+  }
+};
+
+function buildProblems(list, stretch) {
+  var html = '<div class="problems-list">';
+  list.forEach(function(p, i) {
+    html += '<div class="prob-item"><div class="prob-number">PROBLEM ' + (i+1) + '</div>' + p.replace(/\n/g, '<br>') + '</div>';
+  });
+  html += '</div>';
+  if (stretch && stretch.length) {
+    html += '<div class="stretch-box"><div class="stretch-title">🤔 Stretch Questions</div>';
+    stretch.forEach(function(q){ html += '<div class="stretch-q">• ' + q + '</div>'; });
+    html += '</div>';
+  }
+  return html;
+}
+
+function selectChallenge(letter, el) {
+  selectedChallenge = letter;
+  document.querySelectorAll('#challenge-grid-1 .challenge-option').forEach(function(o){ o.classList.remove('selected'); });
+  el.classList.add('selected');
+  var ch = challenges[letter];
+  var detail = document.getElementById('challenge-detail-1');
+  detail.style.display = 'block';
+  detail.innerHTML = '<div class="challenge-detail"><div class="challenge-detail-title">Option ' + letter + ': ' + ch.name + '</div>' + buildProblems(ch.easy, ch.easyStretch) + '</div>';
+  document.getElementById('btn-r1-next').style.display = 'inline-block';
+  document.getElementById('main').scrollTop = 9999;
+}
+
+function renderHardChallenge() {
+  if (!selectedChallenge) return;
+  var ch = challenges[selectedChallenge];
+  document.getElementById('challenge-detail-2').innerHTML = '<div class="challenge-detail"><div class="challenge-detail-title">Option ' + selectedChallenge + ': ' + ch.name + ' — Level Up! ⬆️</div>' + buildProblems(ch.hard, ch.hardStretch) + '</div>';
+}
+
+function goTo(n) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('screen-' + n).classList.add('active');
+  document.getElementById('main').scrollTop = 0;
+  for (var i = 1; i <= 6; i++) {
+    document.getElementById('pd-' + i).className = 'p-dot ' + (i < n ? 'done' : i === n ? 'active' : 'future');
+    var conn = document.getElementById('pc-' + i);
+    if (conn) conn.className = 'p-connector' + (i < n ? ' done' : '');
+  }
+  currentScreen = n;
+  if (n === 5 && selectedChallenge) renderHardChallenge();
+}
+
+function addStar() {
+  stars++;
+  document.getElementById('star-count').textContent = stars;
+  var b = document.getElementById('stars-badge');
+  b.style.transform = 'scale(1.3)';
+  b.style.transition = 'transform 0.15s';
+  setTimeout(function(){ b.style.transform = 'scale(1)'; }, 200);
+}
+
+function celebrate(type) {
+  var overlay = document.getElementById('celeb-overlay');
+  var emojis = celebEmojis[type];
+  for (var i = 0; i < 30; i++) {
+    (function(idx){
+      setTimeout(function(){
+        var el = document.createElement('div');
+        el.className = 'celeb-particle';
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.left = (Math.random() * 100) + '%';
+        el.style.fontSize = (24 + Math.random() * 28) + 'px';
+        var dur = 1.8 + Math.random() * 1.4;
+        el.style.animation = 'fall ' + dur + 's linear forwards';
+        overlay.appendChild(el);
+        setTimeout(function(){ el.remove(); }, dur * 1000);
+      }, idx * 55);
+    })(i);
+  }
+  addStar();
+}
+
+function finishSession() {
+  document.getElementById('final-stars').textContent = stars;
+  goTo(7);
+  celebrate('dino');
+  setTimeout(function(){ celebrate('robot'); }, 700);
+}
+
+function restartSession() {
+  stars = 0;
+  selectedChallenge = null;
+  document.getElementById('star-count').textContent = '0';
+  document.getElementById('challenge-detail-1').style.display = 'none';
+  document.getElementById('btn-r1-next').style.display = 'none';
+  document.querySelectorAll('.challenge-option').forEach(function(el){ el.classList.remove('selected'); });
+  document.querySelectorAll('.reflection-input').forEach(function(el){ el.value = ''; });
+  goTo(1);
+}
+</script>
+</body>
+</html>
