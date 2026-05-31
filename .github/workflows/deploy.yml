@@ -27,9 +27,30 @@ jobs:
 
       - run: bun run build
 
+      - name: Prepare static site folder
+        run: |
+          rm -rf site
+          mkdir site
+          echo "Build output folders:"
+          find . -maxdepth 3 -type f -name "index.html" -print
+
+          if [ -f "dist/index.html" ]; then
+            cp -R dist/* site/
+          elif [ -f "dist/client/index.html" ]; then
+            cp -R dist/client/* site/
+          elif [ -f ".output/public/index.html" ]; then
+            cp -R .output/public/* site/
+          else
+            echo "No deployable index.html found. Build output:" 
+            find . -maxdepth 3 -type d -print
+            exit 1
+          fi
+
+          touch site/.nojekyll
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./site
 
   deploy:
     environment:
