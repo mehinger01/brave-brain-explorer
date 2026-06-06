@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,52 +16,52 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: oven-sh/setup-bun@v2
-
-      - run: bun install
-
-      - run: bun run build
-
-      - name: Prepare static site folder
-        run: |
-          rm -rf site
-          mkdir site
-          echo "Build output folders:"
-          find . -maxdepth 3 -type f -name "index.html" -print
-
-          if [ -f "dist/index.html" ]; then
-            cp -R dist/* site/
-          elif [ -f "dist/client/index.html" ]; then
-            cp -R dist/client/* site/
-          elif [ -f ".output/public/index.html" ]; then
-            cp -R .output/public/* site/
-          else
-            echo "No deployable index.html found. Build output:" 
-            find . -maxdepth 3 -type d -print
-            exit 1
-          fi
-
-          touch site/.nojekyll
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./site
-
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
-    needs: build
-
     runs-on: ubuntu-latest
 
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
-      - id: deployment
+      - uses: actions/checkout@v4
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Prepare static site folder
+        run: |
+          rm -rf site
+          mkdir -p site
+
+          # Copy top-level static HTML tools.
+          find . -maxdepth 1 -type f -name "*.html" -exec cp {} site/ \;
+
+          # Copy common static asset folders if they exist.
+          for dir in assets public images css js; do
+            if [ -d "$dir" ]; then
+              cp -R "$dir" site/
+            fi
+          done
+
+          echo "Deploying these files:"
+          find site -maxdepth 3 -type f -print
+
+          if [ ! -f "site/index.html" ]; then
+            echo "No site/index.html found. GitHub Pages needs a top-level index.html."
+            exit 1
+          fi
+
+          touch site/.nojekyll
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
