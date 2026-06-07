@@ -7,20 +7,22 @@
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial Rounded MT Bold,Comic Sans MS,system-ui,sans-serif;background:radial-gradient(circle at 15% 10%,#263f9b 0,#111a3c 35%,#071024 75%);color:#fff;min-height:100vh;overflow-x:hidden}
-.wrap{max-width:1180px;margin:auto;padding:14px}
+.wrap{max-width:1180px;margin:auto;padding:10px 14px}
 .top{position:sticky;top:0;z-index:20;background:rgba(7,16,36,.94);backdrop-filter:blur(10px);border-bottom:3px solid rgba(255,255,255,.15)}
 .topInner{display:flex;justify-content:space-between;align-items:center;gap:14px}
-h1{font-size:clamp(2rem,6vw,4.3rem);line-height:.95;margin:8px 0;text-shadow:0 6px 0 rgba(0,0,0,.28)}
-h2{font-size:clamp(1.35rem,4vw,2.25rem);margin:0 0 10px}
-.sub{font-size:1.1rem;color:#d9ecff}
-.badges{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.badge{background:#ffd166;color:#302000;border-radius:999px;padding:10px 14px;border:4px solid #fff;box-shadow:0 5px 0 rgba(0,0,0,.25);font-weight:900;white-space:nowrap}
+h1{font-size:clamp(1rem,2.8vw,1.55rem);line-height:1;margin:0;text-shadow:0 2px 0 rgba(0,0,0,.22)}
+h2{font-size:clamp(1.25rem,3.4vw,2rem);margin:0 0 10px}
+.sub{font-size:.78rem;color:#d9ecff}
+.top{padding:0}
+.topInner{padding-top:4px!important;padding-bottom:4px!important}
+.badges{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.badge{background:#ffd166;color:#302000;border-radius:999px;padding:4px 8px;border:2px solid #fff;box-shadow:0 2px 0 rgba(0,0,0,.25);font-weight:900;white-space:nowrap;font-size:.78rem}
 .comebackBadge{background:#68ff9c;color:#053617}
-.panel{background:rgba(255,255,255,.11);border:3px solid rgba(255,255,255,.22);border-radius:28px;padding:16px;margin:14px 0;box-shadow:0 18px 35px rgba(0,0,0,.25)}
-.hero{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:16px;align-items:center}
-.sidekick{font-size:6rem;text-align:center;animation:float 1.8s infinite ease-in-out}
+.panel{background:rgba(255,255,255,.11);border:3px solid rgba(255,255,255,.22);border-radius:24px;padding:12px;margin:8px 0;box-shadow:0 14px 28px rgba(0,0,0,.22)}
+.hero{display:none}
+.sidekick{font-size:2rem;text-align:center;animation:float 1.8s infinite ease-in-out}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
-.bigBtn{border:0;border-radius:24px;padding:16px;min-height:126px;cursor:pointer;color:#08213a;font-weight:900;font-size:1.08rem;background:linear-gradient(180deg,#fff,#bff3ff);box-shadow:0 8px 0 #4ba7c2,0 18px 30px rgba(0,0,0,.25);transition:.12s transform}
+.bigBtn{border:0;border-radius:24px;padding:14px;min-height:110px;cursor:pointer;color:#08213a;font-weight:900;font-size:1.08rem;background:linear-gradient(180deg,#fff,#bff3ff);box-shadow:0 8px 0 #4ba7c2,0 18px 30px rgba(0,0,0,.25);transition:.12s transform}
 .bigBtn:active,.action:active,.cell:active,.mazeCell:active{transform:translateY(5px)}
 .bigBtn .emoji{display:block;font-size:3rem;margin-bottom:8px}
 .green{background:linear-gradient(180deg,#e2ffe9,#84f59a)!important;box-shadow:0 8px 0 #35a84f!important}
@@ -34,15 +36,15 @@ h2{font-size:clamp(1.35rem,4vw,2.25rem);margin:0 0 10px}
 .action.warn{background:#ffd166;box-shadow:0 6px 0 #bd831d}
 .action.red{background:#ff8a8a;box-shadow:0 6px 0 #bd4343}
 .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center}
-.comebackBar{height:18px;border-radius:999px;background:rgba(255,255,255,.2);overflow:hidden;border:2px solid rgba(255,255,255,.25);margin-top:10px}
+.comebackBar{height:8px;border-radius:999px;background:rgba(255,255,255,.2);overflow:hidden;border:1px solid rgba(255,255,255,.25);margin-top:2px}
 .comebackBar div{height:100%;width:0;background:linear-gradient(90deg,#68ff9c,#ffd166);transition:.3s}
-.card{background:#fff;color:#10233a;border-radius:28px;padding:16px;border:7px solid #84f59a;box-shadow:0 12px 0 #35a84f;overflow:hidden}
+.card{background:#fff;color:#10233a;border-radius:28px;padding:14px;min-height:calc(100vh - 120px);border:7px solid #84f59a;box-shadow:0 12px 0 #35a84f;overflow:hidden}
 .card.gold{border-color:#ffd166;box-shadow:0 12px 0 #c79224}
 .card.pinkBorder{border-color:#ff9eea;box-shadow:0 12px 0 #b94ca3}
 .topLine{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .pill{font-size:1.05rem;font-weight:900;background:#eaf8ff;border-radius:999px;padding:10px 12px;color:#10233a}
 .themeOn{background:#68ff9c!important;box-shadow:0 6px 0 #25a74f!important}
-.wordControls{display:grid;grid-template-columns:repeat(6,minmax(86px,1fr));gap:8px;margin:10px 0}
+.wordControls{display:grid;grid-template-columns:repeat(6,minmax(86px,1fr));gap:8px;margin:8px 0}
 .wordControls .action{font-size:.92rem;padding:10px 8px}
 .playGrid{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:14px;align-items:start}
 .boardWrap{display:flex;justify-content:center;align-items:center;min-width:0;overflow:hidden}
@@ -67,7 +69,7 @@ h2{font-size:clamp(1.35rem,4vw,2.25rem);margin:0 0 10px}
 .mazeCell.turtle{background:#ffd166;box-shadow:0 4px 0 #bd831d}
 .levelBtns{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
 .levelBtns button{min-height:42px;padding:8px}
-.resetDock{position:sticky;bottom:0;background:rgba(7,16,36,.94);backdrop-filter:blur(10px);border-top:2px solid rgba(255,255,255,.15);padding:8px;z-index:10}
+.resetDock{position:sticky;bottom:0;background:rgba(7,16,36,.96);backdrop-filter:blur(10px);border-top:2px solid rgba(255,255,255,.15);padding:8px;z-index:10}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;place-items:center;z-index:30;padding:18px}
 .modal.show{display:grid}
 .pop{background:#fff;color:#10233a;border-radius:32px;max-width:620px;width:100%;padding:24px;text-align:center;border:8px solid #5ee4ff;box-shadow:0 18px 0 #217c94}
@@ -77,6 +79,42 @@ h2{font-size:clamp(1.35rem,4vw,2.25rem);margin:0 0 10px}
 .coach{font-family:Arial,sans-serif;color:#d9ecff}
 .coachGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px}
 .coachBox{background:rgba(0,0,0,.18);border-radius:18px;padding:12px}
+
+
+.launcherPanel{padding:10px}
+.launcherTop{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.launcherTop h2{margin:0;font-size:1.25rem}
+.missionGrid{display:grid;grid-template-columns:repeat(8,minmax(92px,1fr));grid-template-rows:repeat(2,86px);gap:8px}
+.miniGame{border:0;border-radius:18px;padding:8px 6px;cursor:pointer;color:#08213a;font-weight:900;font-size:.82rem;background:linear-gradient(180deg,#fff,#bff3ff);box-shadow:0 5px 0 #4ba7c2,0 12px 20px rgba(0,0,0,.20);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0}
+.miniGame:active{transform:translateY(4px)}
+.miniGame span{font-size:1.8rem;line-height:1}
+.miniGame b{font-size:.82rem;line-height:1.05}
+.miniGame small{font-size:.65rem;line-height:1;color:#27435c}
+@media(max-width:1000px){.missionGrid{grid-template-columns:repeat(4,1fr);grid-template-rows:auto}.miniGame{min-height:78px}}
+@media(max-width:620px){.missionGrid{grid-template-columns:repeat(2,1fr)}}
+
+
+.miniGame{position:relative;overflow:hidden}
+.construction::after{content:"UNDER CONSTRUCTION";position:absolute;left:-38px;bottom:18px;width:185px;transform:rotate(-35deg);background:#ff8a8a;color:#fff;border:2px solid #fff;font-size:.58rem;font-weight:1000;letter-spacing:.04em;padding:4px 0;box-shadow:0 3px 0 rgba(0,0,0,.22)}
+.memoryGrid,.patternChoices{display:grid;gap:10px;justify-content:center;margin:12px auto}
+.memoryGrid{grid-template-columns:repeat(var(--memCols,3), minmax(58px,72px))}
+.memoryTile,.patternChoice{border:0;border-radius:18px;min-height:58px;font-size:2rem;font-weight:900;cursor:pointer;box-shadow:0 5px 0 #9fc7d8;background:#eaf8ff;color:#10233a}
+.memoryTile.target{outline:5px solid #ffd166}
+.memoryTile.correct{background:#68ff9c;box-shadow:0 5px 0 #25a74f}
+.memoryTile.wrong{background:#ffb2b2;box-shadow:0 5px 0 #bd4343}
+.memoryPreview{font-size:1.4rem;font-weight:900;background:#fff8d8;color:#10233a;border-radius:18px;padding:10px;min-height:46px;text-align:center}
+.patternStrip{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;background:#fff8d8;border-radius:18px;padding:14px;margin:10px 0;font-size:2.4rem}
+.patternChoices{grid-template-columns:repeat(auto-fit,minmax(110px,1fr));max-width:620px}
+.patternChoice{min-height:72px}
+
+.resetTab{position:fixed;right:0;top:72px;z-index:25;border:0;border-radius:16px 0 0 16px;padding:10px 8px;background:#ffd166;color:#302000;font-weight:900;box-shadow:0 6px 0 rgba(0,0,0,.25);writing-mode:vertical-rl;cursor:pointer}
+.resetPanel{position:fixed;right:0;top:66px;z-index:26;width:min(250px,82vw);background:rgba(7,16,36,.97);border:3px solid rgba(255,255,255,.22);border-right:0;border-radius:24px 0 0 24px;padding:12px;box-shadow:0 18px 45px rgba(0,0,0,.35);transform:translateX(105%);transition:.2s transform}
+.resetPanel.open{transform:translateX(0)}
+.resetPanel .action{width:100%;margin:5px 0}
+.resetPanel h3{margin:0 0 8px;font-size:1.1rem}
+.closeDrawer{position:absolute;top:6px;right:8px;background:transparent;border:0;color:white;font-size:1.4rem;cursor:pointer}
+@media(max-width:700px){.resetTab{top:62px}.resetPanel{top:56px}}
+
 @keyframes float{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-14px) rotate(5deg)}}
 @keyframes fall{from{transform:translateY(-80px) rotate(0)}to{transform:translateY(110vh) rotate(360deg);opacity:.2}}
 @media(max-width:900px){.playGrid{grid-template-columns:1fr}.wordControls{grid-template-columns:repeat(3,1fr)}.hero{grid-template-columns:1fr 120px}.sidekick{font-size:4.5rem}.sidePanel{align-items:center}}
@@ -86,39 +124,39 @@ h2{font-size:clamp(1.35rem,4vw,2.25rem);margin:0 0 10px}
 <body>
 <div class="celebrate" id="celebrate"></div>
 <header class="top"><div class="wrap topInner">
-  <div><h1>🚀 Mission Control</h1><div class="sub">Turtle Rescue Academy - Phase A Build</div></div>
+  <div><h1>🚀 Mission Control</h1><div class="sub">Turtle Rescue Academy</div></div>
   <div class="badges">
-    <div class="badge">⭐ <span id="stars">0</span> Stars</div>
-    <div class="badge">🐢 <span id="rescued">0</span> Rescued</div>
-    <div class="badge comebackBadge">💪 <span id="comebackPower">0</span>% Comeback</div>
+    <div class="badge">⭐ <span id="stars">0</span></div>
+    <div class="badge">🐢 <span id="rescued">0</span></div>
+    <div class="badge comebackBadge">💪 <span id="comebackPower">0</span>%</div>
   </div>
-</div></header>
+</div>
+<div class="wrap" style="padding-top:0;padding-bottom:3px"><div class="comebackBar"><div id="comebackFill"></div></div></div>
+</header>
 
 <main class="wrap">
-<section class="panel hero">
-  <div><h2>Ready, Captain?</h2><p class="sub">Choose an island. Try hard things. Use a reset. Come back like a champion.</p><div class="comebackBar"><div id="comebackFill"></div></div></div>
-  <div class="sidekick" id="sidekick">🐢</div>
-</section>
-
-<section class="panel">
-  <h2>1. Pick Your Sidekick</h2>
-  <div class="grid">
-    <button class="bigBtn green" onclick="pickSidekick('🐢','Turtle Captain')"><span class="emoji">🐢</span>Turtle Captain</button>
-    <button class="bigBtn yellow" onclick="pickSidekick('🦖','Dino Pilot')"><span class="emoji">🦖</span>Dino Pilot</button>
-    <button class="bigBtn purple" onclick="pickSidekick('🤖','Robot Buddy')"><span class="emoji">🤖</span>Robot Buddy</button>
-    <button class="bigBtn pink" onclick="pickSidekick('🥷','Ninja Star')"><span class="emoji">🥷</span>Ninja Star</button>
+<section class="panel launcherPanel">
+  <div class="launcherTop"><h2>Mission Grid</h2><span class="pill">2 x 8 expansion layout</span></div>
+  <div class="missionGrid">
+    <button class="miniGame green" onclick="openWordSearch()"><span>🏝️🔎</span><b>Search Beach</b><small>Word Search</small></button>
+    <button class="miniGame yellow" onclick="openMaze()"><span>🌲🐢</span><b>Maze Forest</b><small>Turtle Rescue</small></button>
+    <button class="miniGame pink" onclick="openDrawing()"><span>🎨</span><b>Creation Cove</b><small>Draw It</small></button>
+    <button class="miniGame purple" onclick="openMemory()"><span>🧠⛰️</span><b>Memory Mountain</b><small>Remember & rebuild</small></button>
+    <button class="miniGame" onclick="openPattern()"><span>🧩🕵️</span><b>Pattern Cave</b><small>Find the rule</small></button>
+    <button class="miniGame locked construction" onclick="lockedWorld()"><span>🔒🏗️</span><b>Builder Bay</b></button>
+    <button class="miniGame locked construction" onclick="lockedWorld()"><span>🔒👀</span><b>Spotter Reef</b></button>
+    <button class="miniGame locked construction" onclick="lockedWorld()"><span>🔒🎲</span><b>Bonus Island</b></button>
+    <button class="miniGame locked construction" onclick="lockedWorld()"><span>🔒⚡</span><b>Speed Round</b></button>
+    <button class="miniGame locked construction" onclick="lockedWorld()"><span>🔒🗺️</span><b>Map Quest</b></button>
+    <button class="miniGame locked construction" onclick="lockedWorld()"><span>🔒🔤</span><b>Letter Lab</b></button>
+    <button class="miniGame locked construction" onclick="lockedWorld()"><span>🔒🎯</span><b>Target Trail</b></button>
+    <button class="miniGame locked construction" onclick="lockedWorld()"><span>🔒🧪</span><b>Science Dock</b></button>
+    <button class="miniGame locked construction" onclick="lockedWorld()"><span>🔒🦖</span><b>Dino Dig</b></button>
+    <button class="miniGame locked construction" onclick="lockedWorld()"><span>🔒🥷</span><b>Ninja Path</b></button>
   </div>
 </section>
 
-<section class="panel">
-  <h2>2. World Map</h2>
-  <div class="grid">
-    <button class="bigBtn green" onclick="openWordSearch()"><span class="emoji">🏝️🔎</span>Search Beach<br><small>Word Search</small></button>
-    <button class="bigBtn yellow" onclick="openMaze()"><span class="emoji">🌲🐢</span>Maze Forest<br><small>Turtle Rescue</small></button>
-    <button class="bigBtn pink" onclick="openDrawing()"><span class="emoji">🎨</span>Creation Cove<br><small>Draw It</small></button>
-    <button class="bigBtn purple locked" onclick="lockedWorld()"><span class="emoji">🔒🧠</span>Memory Mountain<br><small>Coming soon</small></button>
-  </div>
-</section>
+
 
 <section id="wordPanel" class="hidden">
   <div class="card">
@@ -153,7 +191,9 @@ h2{font-size:clamp(1.35rem,4vw,2.25rem);margin:0 0 10px}
   </div>
 </section>
 
-<section class="panel coach">
+<section class="panel">
+  <button class="action" onclick="document.getElementById('coachDetails').classList.toggle('hidden')">Coach Corner</button>
+  <div id="coachDetails" class="coach hidden">
   <h2>Coach Corner</h2>
   <div class="coachGrid">
     <div class="coachBox">Missions<br><b id="missions">0</b></div>
@@ -162,32 +202,53 @@ h2{font-size:clamp(1.35rem,4vw,2.25rem);margin:0 0 10px}
     <div class="coachBox">Comebacks<br><b id="comebacks">0</b></div>
     <div class="coachBox">Word Finds<br><b id="wordFinds">0</b></div>
     <div class="coachBox">Maze Wins<br><b id="mazeWins">0</b></div>
+    <div class="coachBox">Memory<br><b id="memoryLevelReport">1</b></div>
+    <div class="coachBox">Pattern<br><b id="patternLevelReport">1</b></div>
   </div>
   <p id="coachNote">Session opened.</p>
+  </div>
 </section>
 </main>
 
-<div class="resetDock"><div class="row"><button class="action good" onclick="openReset('Turtle Reset')">🐢 Turtle Reset</button><button class="action" onclick="openReset('Freeze Reset')">🧊 Freeze</button><button class="action warn" onclick="openCheck()">👀 Brain Check</button><button class="action" onclick="showReport()">📋 Report</button></div></div>
+<button class="resetTab" onclick="toggleResetPanel()">RESET</button>
+<div id="resetPanel" class="resetPanel">
+  <button class="closeDrawer" onclick="toggleResetPanel()">×</button>
+  <h3>Tools</h3>
+  <label style="display:block;font-weight:900;margin:6px 0 4px">Sidekick</label>
+  <select id="sidekickSelect" onchange="pickSidekickFromSelect()" style="width:100%;padding:10px;border-radius:14px;border:0;font-weight:900;margin-bottom:8px">
+    <option value="🐢|Turtle Captain">🐢 Turtle Captain</option>
+    <option value="🦖|Dino Pilot">🦖 Dino Pilot</option>
+    <option value="🤖|Robot Buddy">🤖 Robot Buddy</option>
+    <option value="🥷|Ninja Star">🥷 Ninja Star</option>
+  </select>
+  <button class="action good" onclick="openReset('Turtle Reset');toggleResetPanel(false)">🐢 Turtle Reset</button>
+  <button class="action" onclick="openReset('Freeze Reset');toggleResetPanel(false)">🧊 Freeze Reset</button>
+  <button class="action warn" onclick="openCheck();toggleResetPanel(false)">👀 Brain Check</button>
+  <button class="action" onclick="showReport();toggleResetPanel(false)">📋 Report</button>
+</div>
 <div id="modal" class="modal"><div class="pop"><h2 id="modalTitle">Reset</h2><div id="modalBody"></div><button class="action good" onclick="closeModal()">Back to Mission</button></div></div>
 
 <script>
 let state={stars:0,rescued:0,comebackPower:0,missions:0,resets:0,hints:0,comebacks:0,wordFinds:0,mazeWins:0,usedReset:false,sidekick:'🐢'};
 let wordState={themes:['animals'],size:6,grid:[],words:[],found:[],placements:{},dragging:false,path:[],misses:0};
 let mazeState={level:1,size:5,grid:[],turtle:{r:0,c:0},goal:{r:0,c:0},visited:new Set(),misses:0};
+let memoryState={level:1,sequence:[],input:[],showing:false,misses:0};
+let patternState={level:1,answer:null,misses:0,current:null};
 const wordThemes={animals:['CAT','DOG','FOX','OWL','PIG','BEAR','FROG','DUCK','LION','WOLF','HORSE','SNAKE','TURTLE','RABBIT','MONKEY','GIRAFFE','ELEPHANT','KANGAROO'],dinos:['REX','EGG','BONE','ROAR','CLAW','DINO','TAIL','FOSSIL','RAPTOR','VOLCANO','TRICERA','STEGOSAUR','DINOSAUR'],space:['SUN','MOON','STAR','MARS','COMET','ALIEN','ROCKET','PLANET','GALAXY','ASTRO','ORBIT','SATURN','ASTRONAUT','SATELLITE'],ninjas:['STAR','MASK','JUMP','FAST','HIDE','KICK','NINJA','DOJO','SNEAK','SHADOW','DRAGON','SAMURAI','TRAINING'],bugs:['BUG','BEE','ANT','MOTH','WORM','WING','FLY','BEETLE','SPIDER','CRICKET','LADYBUG','BUTTERFLY','CATERPILLAR'],robots:['BOT','CODE','GEAR','BEEP','WIRE','LASER','ROBOT','CIRCUIT','COMPUTER','BATTERY','MACHINE','INVENTION']};
 const drawings=['Draw a turtle using only three shapes.','Draw a robot with one silly mistake and keep going.','Draw a dinosaur without erasing.','Draw a ninja star, then add one tiny detail.','Draw a rocket using circles and triangles.','Draw a bug with too many legs, then call it good.'];
 function el(id){return document.getElementById(id)}
-function hideAll(){['wordPanel','mazePanel','drawingPanel'].forEach(id=>el(id).classList.add('hidden'))}
-function update(){el('stars').textContent=state.stars;el('rescued').textContent=state.rescued;el('comebackPower').textContent=state.comebackPower;el('comebackFill').style.width=state.comebackPower+'%';el('missions').textContent=state.missions;el('resets').textContent=state.resets;el('hints').textContent=state.hints;el('comebacks').textContent=state.comebacks;el('wordFinds').textContent=state.wordFinds;el('mazeWins').textContent=state.mazeWins}
+function hideAll(){['wordPanel','mazePanel','drawingPanel','memoryPanel','patternPanel'].forEach(id=>el(id).classList.add('hidden'))}
+function update(){el('stars').textContent=state.stars;el('rescued').textContent=state.rescued;el('comebackPower').textContent=state.comebackPower;el('comebackFill').style.width=state.comebackPower+'%';el('missions').textContent=state.missions;el('resets').textContent=state.resets;el('hints').textContent=state.hints;el('comebacks').textContent=state.comebacks;el('wordFinds').textContent=state.wordFinds;el('mazeWins').textContent=state.mazeWins;if(el('memoryLevelReport'))el('memoryLevelReport').textContent=memoryState.level;if(el('patternLevelReport'))el('patternLevelReport').textContent=patternState.level}
 function note(t){el('coachNote').textContent=t}
 function sparkle(items){const box=el('celebrate');for(let i=0;i<18;i++){let s=document.createElement('div');s.className='confetti';s.textContent=items[Math.floor(Math.random()*items.length)];s.style.left=Math.random()*100+'vw';s.style.animationDelay=(Math.random()*.35)+'s';box.appendChild(s);setTimeout(()=>s.remove(),1800)}}
 function addComeback(n){state.comebackPower=Math.min(100,state.comebackPower+n)}
 function rescue(extra=false){state.rescued++;state.stars+=extra?12:7;if(state.usedReset){state.comebacks++;addComeback(25);state.usedReset=false}else if(extra){state.comebacks++;addComeback(15)}}
-function pickSidekick(emoji,name){state.sidekick=emoji;el('sidekick').textContent=emoji;state.stars++;note('Sidekick picked: '+name);sparkle([emoji,'⭐','✨']);update()}
-function lockedWorld(){el('modalTitle').textContent='Memory Mountain';el('modalBody').innerHTML='<p>This island is locked for now.</p><p>Rescue more turtles to unlock it later.</p>';el('modal').classList.add('show')}
+function pickSidekick(emoji,name){state.sidekick=emoji;let s=el('sidekick');if(s)s.textContent=emoji;state.stars++;note('Sidekick picked: '+name);update()}
+function pickSidekickFromSelect(){let [emoji,name]=el('sidekickSelect').value.split('|');state.sidekick=emoji;let s=el('sidekick');if(s)s.textContent=emoji;note('Sidekick changed to '+name);update()}
+function lockedWorld(){el('modalTitle').textContent='Memory Mountain';el('modalBody').innerHTML='<p>This island is under construction.</p><p>Try Search Beach, Maze Forest, Memory Mountain, Pattern Cave, or Creation Cove.</p>';el('modal').classList.add('show')}
 
 /* Drawing */
-function openDrawing(){hideAll();state.missions++;el('drawingPanel').classList.remove('hidden');newDrawing();state.stars+=2;note('Started Creation Cove.');update();sparkle(['🎨','⭐'])}
+function openDrawing(){hideAll();state.missions++;el('drawingPanel').classList.remove('hidden');newDrawing();state.stars+=2;note('Started Creation Cove.');update()}
 function newDrawing(){el('drawingPrompt').textContent=drawings[Math.floor(Math.random()*drawings.length)]}
 function doneDrawing(){state.stars+=5;rescue(true);note('Creation Cove completed.');sparkle(['🎉','🐢','⭐']);update()}
 
@@ -195,7 +256,7 @@ function doneDrawing(){state.stars+=5;rescue(true);note('Creation Cove completed
 function wordPlan(size){if(size<=5)return{count:3,max:4};if(size===6)return{count:4,max:5};if(size===7)return{count:6,max:6};if(size===8)return{count:7,max:8};if(size===9)return{count:8,max:9};return{count:10,max:10}}
 function dirsFor(size){if(size<=5)return[[1,0],[0,1]];if(size===6)return[[1,0],[0,1],[1,1]];if(size===7)return[[1,0],[-1,0],[0,1],[1,1]];if(size===8)return[[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1]];return[[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1],[1,-1],[-1,-1]]}
 function chooseWords(size){let p=wordPlan(size),pool=[];wordState.themes.forEach(t=>pool.push(...wordThemes[t]));pool=[...new Set(pool)].filter(w=>w.length<=Math.min(size,p.max));let short=shuffle(pool.filter(w=>w.length<=4)),mid=shuffle(pool.filter(w=>w.length>=5&&w.length<=7)),long=shuffle(pool.filter(w=>w.length>=8));let chosen=[...(size>=8?long.slice(0,2):size>=7?long.slice(0,1):[]),...(size>=6?mid.slice(0,Math.ceil(p.count/2)):mid.slice(0,1)),...short];let rest=shuffle(pool.filter(w=>!chosen.includes(w)));return [...chosen,...rest].slice(0,p.count*3)}
-function openWordSearch(){hideAll();state.missions++;el('wordPanel').classList.remove('hidden');syncThemeButtons();buildWordSearch();state.stars+=2;note('Started Search Beach.');update();sparkle(['🔎','⭐'])}
+function openWordSearch(){hideAll();state.missions++;el('wordPanel').classList.remove('hidden');syncThemeButtons();buildWordSearch();state.stars+=2;note('Started Search Beach.');update()}
 function toggleTheme(theme){let i=wordState.themes.indexOf(theme);if(i>=0&&wordState.themes.length>1)wordState.themes.splice(i,1);else if(i<0){if(wordState.themes.length>=3){el('wordFeedback').textContent='Pick up to 3 themes.';return}else wordState.themes.push(theme)}syncThemeButtons();buildWordSearch()}
 function syncThemeButtons(){Object.keys(wordThemes).forEach(t=>{let b=el('theme-'+t);if(b)b.classList.toggle('themeOn',wordState.themes.includes(t))})}
 function changeSize(d){wordState.size=Math.max(5,Math.min(10,wordState.size+d));buildWordSearch()}
@@ -216,7 +277,7 @@ function showWordHint(){let left=wordState.words.find(w=>!wordState.found.includ
 function wordCell(r,c){return document.querySelector('.cell[data-r="'+r+'"][data-c="'+c+'"]')}
 
 /* Maze */
-function openMaze(){hideAll();state.missions++;el('mazePanel').classList.remove('hidden');buildMaze();state.stars+=2;note('Started Maze Forest.');update();sparkle(['🌲','🐢','⭐'])}
+function openMaze(){hideAll();state.missions++;el('mazePanel').classList.remove('hidden');buildMaze();state.stars+=2;note('Started Maze Forest.');update()}
 function mazeSize(l){return l<3?5:l<5?6:l<7?7:l<9?8:9}
 function changeMazeLevel(d){mazeState.level=Math.max(1,Math.min(10,mazeState.level+d));buildMaze()}
 function buildMaze(){mazeState.size=mazeSize(mazeState.level);mazeState.misses=0;mazeState.visited=new Set();el('mazeLevelLabel').textContent=mazeState.level;let n=mazeState.size,grid=Array.from({length:n},()=>Array(n).fill(1)),stack=[{r:0,c:0}];grid[0][0]=0;while(stack.length){let cur=stack[stack.length-1],moved=false;for(let [dr,dc] of shuffle([[1,0],[-1,0],[0,1],[0,-1]])){let nr=cur.r+dr*2,nc=cur.c+dc*2;if(nr>=0&&nr<n&&nc>=0&&nc<n&&grid[nr][nc]===1){grid[cur.r+dr][cur.c+dc]=0;grid[nr][nc]=0;stack.push({r:nr,c:nc});moved=true;break}}if(!moved)stack.pop()}grid[n-1][n-1]=0;mazeState.grid=grid;mazeState.turtle={r:0,c:0};mazeState.goal={r:n-1,c:n-1};mazeState.visited.add('0,0');renderMaze();el('mazeFeedback').textContent='Rescue the turtle!'}
@@ -226,7 +287,35 @@ function renderMazeLevels(){let box=el('mazeLevelBtns');box.innerHTML='';for(let
 function moveTurtle(r,c){let t=mazeState.turtle;if(Math.abs(t.r-r)+Math.abs(t.c-c)!==1){el('mazeFeedback').textContent='Move one square next to the turtle.';return}if(mazeState.grid[r][c]){mazeState.misses++;state.hints++;el('mazeFeedback').textContent=mazeState.misses>=3?'Dead end. Turtle Reset can help.':'That is a tree. Try another way.';renderMaze();update();return}mazeState.turtle={r,c};mazeState.visited.add(r+','+c);if(r===mazeState.goal.r&&c===mazeState.goal.c){state.mazeWins++;state.stars+=10+mazeState.level;rescue(mazeState.misses>=3);el('mazeFeedback').textContent='Turtle rescued from Maze Forest!';sparkle(['🐢','🎉','⭐','🌲']);if(mazeState.level<10)mazeState.level++}renderMaze();update()}
 function mazeHint(){state.hints++;let t=mazeState.turtle,g=mazeState.goal;el('mazeFeedback').textContent=Math.abs(g.r-t.r)>Math.abs(g.c-t.c)?'Hint: try moving more up or down.':'Hint: try moving more left or right.';update()}
 
+
+/* Memory Mountain */
+const memoryIcons=['🐢','🦖','🤖','🥷','⭐','🚀','🐞','🧪','🎯','🧩','🌙','🔥'];
+function openMemory(){hideAll();state.missions++;el('memoryPanel').classList.remove('hidden');buildMemoryGrid();startMemoryRound();state.stars+=2;note('Started Memory Mountain.');update()}
+function memoryPlan(){let l=memoryState.level;return{tiles:l<3?4:l<6?6:9,length:Math.min(3+Math.floor(l/2),8)}}
+function changeMemoryLevel(d){memoryState.level=Math.max(1,Math.min(10,memoryState.level+d));buildMemoryGrid();startMemoryRound()}
+function buildMemoryGrid(){let plan=memoryPlan();let cols=plan.tiles<=4?2:plan.tiles<=6?3:3;let g=el('memoryGrid');g.style.setProperty('--memCols',cols);g.innerHTML='';for(let i=0;i<plan.tiles;i++){let b=document.createElement('button');b.className='memoryTile';b.textContent=memoryIcons[i];b.dataset.i=i;b.onclick=()=>memoryTap(i);g.appendChild(b)}el('memoryLevelLabel').textContent=memoryState.level}
+function startMemoryRound(){let plan=memoryPlan();memoryState.sequence=[];memoryState.input=[];memoryState.showing=true;memoryState.misses=0;for(let i=0;i<plan.length;i++)memoryState.sequence.push(Math.floor(Math.random()*plan.tiles));el('memoryFeedback').textContent='Watch closely...';showMemorySequence()}
+function showMemorySequence(){let preview=el('memoryPreview');preview.textContent='Watch: '+memoryState.sequence.map(i=>memoryIcons[i]).join('  ');document.querySelectorAll('.memoryTile').forEach(x=>x.classList.remove('target','correct','wrong'));let delay=0;memoryState.sequence.forEach((idx,k)=>{setTimeout(()=>{let tile=document.querySelector('.memoryTile[data-i="'+idx+'"]');if(tile)tile.classList.add('target')},delay);setTimeout(()=>{let tile=document.querySelector('.memoryTile[data-i="'+idx+'"]');if(tile)tile.classList.remove('target')},delay+450);delay+=650});setTimeout(()=>{memoryState.showing=false;preview.textContent='Your turn!';el('memoryFeedback').textContent='Tap the same pattern.'},delay+150)}
+function memoryTap(i){if(memoryState.showing)return;let pos=memoryState.input.length;memoryState.input.push(i);let tile=document.querySelector('.memoryTile[data-i="'+i+'"]');if(i===memoryState.sequence[pos]){tile.classList.add('correct');if(memoryState.input.length===memoryState.sequence.length){state.stars+=8+memoryState.level;rescue(memoryState.misses>=2);el('memoryFeedback').textContent='Memory Mountain climbed! Turtle rescued!';sparkle(['🧠','🐢','🎉','⭐']);if(memoryState.level<10)memoryState.level++;setTimeout(()=>{buildMemoryGrid();startMemoryRound();update()},900)}}else{memoryState.misses++;state.hints++;tile.classList.add('wrong');el('memoryFeedback').textContent=memoryState.misses>=2?'That was tricky. Reset, then try one small chunk.':'Oops. Watch again and try one small chunk.';setTimeout(startMemoryRound,900)}update()}
+function memoryHint(){state.hints++;el('memoryFeedback').textContent='Hint: say the icons out loud before tapping.';update()}
+
+/* Pattern Cave */
+const shapes=['🐢','⭐','🌙','🔥','🦖','🤖','🐞','🚀'];
+function openPattern(){hideAll();state.missions++;el('patternPanel').classList.remove('hidden');newPattern();state.stars+=2;note('Started Pattern Cave.');update()}
+function changePatternLevel(d){patternState.level=Math.max(1,Math.min(10,patternState.level+d));newPattern()}
+function makePattern(){let l=patternState.level;let type=l<3?'AB':l<5?'AAB':l<7?'ABC':l<9?'ABB':'ABCD';let base=shuffle(shapes).slice(0,type==='ABCD'?4:type==='ABC'?3:2);let template={AB:[0,1],AAB:[0,0,1],ABC:[0,1,2],ABB:[0,1,1],ABCD:[0,1,2,3]}[type];let seq=[];while(seq.length<7+Math.floor(l/2))seq.push(...template.map(i=>base[i]));let display=seq.slice(0,Math.min(seq.length-1,7+Math.floor(l/2)));let answer=seq[display.length];return{display,answer,type,base}}
+function newPattern(){patternState.current=makePattern();patternState.answer=patternState.current.answer;patternState.misses=0;el('patternLevelLabel').textContent=patternState.level;el('patternStrip').innerHTML=patternState.current.display.map(x=>'<span>'+x+'</span>').join('')+'<span>❓</span>';let choices=shuffle([patternState.answer,...shuffle(shapes.filter(x=>x!==patternState.answer)).slice(0,3)]);el('patternChoices').innerHTML=choices.map(c=>'<button class="patternChoice" onclick="patternGuess(\\''+c+'\\')">'+c+'</button>').join('');el('patternFeedback').textContent='What comes next?'}
+function patternGuess(choice){if(choice===patternState.answer){state.stars+=7+patternState.level;rescue(patternState.misses>=2);el('patternFeedback').textContent='Pattern solved! Turtle rescued!';sparkle(['🧩','🐢','🎉','⭐']);if(patternState.level<10)patternState.level++;setTimeout(()=>{newPattern();update()},900)}else{patternState.misses++;state.hints++;el('patternFeedback').textContent=patternState.misses>=2?'Look for the repeating chunk. Try a reset if needed.':'Not that one. Find the repeating chunk.';update()}}
+function patternHint(){state.hints++;let t=patternState.current?.type||'AB';el('patternFeedback').textContent='Hint: this pattern is a '+t+' pattern.';update()}
+
 /* Reset/report */
+
+function toggleResetPanel(force){
+  const panel=el('resetPanel');
+  if(force===false){panel.classList.remove('open');return}
+  panel.classList.toggle('open');
+}
+
 function openReset(name){state.resets++;state.stars+=2;state.usedReset=true;addComeback(10);el('modalTitle').textContent=name;el('modalBody').innerHTML='<ol><li>Pull in like a turtle.</li><li>Take one slow breath.</li><li>Say: one small step.</li><li>Try again.</li></ol>';el('modal').classList.add('show');note('Reset opened: '+name);sparkle(['🐢','✨']);update()}
 function openCheck(){el('modalTitle').textContent='Brain Check';el('modalBody').innerHTML='<button class="bigBtn green" onclick="check(\'green\')"><span class="emoji">🟢</span>Ready</button><button class="bigBtn yellow" onclick="check(\'yellow\')"><span class="emoji">🟡</span>Buzzy</button><button class="bigBtn pink" onclick="check(\'red\')"><span class="emoji">🔴</span>Need Reset</button>';el('modal').classList.add('show')}
 function check(color){if(color==='green'){state.stars+=2;note('Brain check: ready.')}if(color==='yellow'){state.stars++;addComeback(5);note('Brain check: buzzy.')}if(color==='red'){state.resets++;state.usedReset=true;addComeback(10);note('Brain check: reset needed.')}closeModal();sparkle(['🧠','⭐']);update()}
