@@ -40,6 +40,15 @@ jobs:
           # Copy top-level static HTML tools.
           find . -maxdepth 1 -type f -name "*.html" -exec cp {} site/ \;
 
+          # Mission Control is the front door for the deployed site.
+          # Preserve the previous homepage as a module underneath Mission Control.
+          if [ -f "mission-control-challenge-lab.html" ]; then
+            if [ -f "index.html" ]; then
+              cp index.html site/zach-session-original.html
+            fi
+            cp mission-control-challenge-lab.html site/index.html
+          fi
+
           # Copy common static asset folders if they exist.
           for dir in assets public images css js; do
             if [ -d "$dir" ]; then
