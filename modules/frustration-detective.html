@@ -177,6 +177,7 @@ h2{font-size:clamp(1.15rem,3vw,1.7rem);margin:0 0 8px}
 
 <div id="nextRow" class="row" style="display:none">
 <button class="action good" onclick="nextCase()" style="font-size:1.1rem;padding:14px 24px">Next Case</button>
+<button class="action purple" onclick="showMissionReport()">Finish Mission</button>
 <button class="action warn" onclick="endSession()">Back to HQ</button>
 </div>
 </div>
@@ -201,12 +202,27 @@ h2{font-size:clamp(1.15rem,3vw,1.7rem);margin:0 0 8px}
 
 <div id="checkinModal" class="modal">
 <div class="checkin-overlay">
-<h2>🔍 Detective Check-In</h2>
-<p style="font-size:1.1rem;font-weight:900">Where is YOUR brain right now?</p>
-<div class="meter-row">
-<button class="meter-btn meter-green" onclick="checkinAnswer('green')"><span style="font-size:2rem">😀</span><b>Green</b></button>
-<button class="meter-btn meter-yellow" onclick="checkinAnswer('yellow')"><span style="font-size:2rem">😬</span><b>Yellow</b></button>
-<button class="meter-btn meter-red" onclick="checkinAnswer('red')"><span style="font-size:2rem">🛑</span><b>Red</b></button>
+<h2>🐢 Commander Turtle Check-In</h2>
+<p style="font-size:1.05rem;font-weight:900">Have you noticed the Trickster trying to do any of these today?</p>
+<div id="tricksterChecks" style="display:grid;gap:8px;margin:12px 0">
+<button class="clue-btn" onclick="toggleTrickCheck(this)" data-val="Rush me">🏃 Rush me</button>
+<button class="clue-btn" onclick="toggleTrickCheck(this)" data-val="Make me quit">🚪 Make me quit</button>
+<button class="clue-btn" onclick="toggleTrickCheck(this)" data-val="Distract me">🌀 Distract me</button>
+<button class="clue-btn" onclick="toggleTrickCheck(this)" data-val="Make me say I can't">🚫 Make me say "I can't"</button>
+<button class="clue-btn" onclick="toggleTrickCheck(this)" data-val="None right now">✅ None right now</button>
+</div>
+<button class="action good" onclick="submitTrickCheckin()" style="font-size:1.1rem;padding:14px 24px">Done</button>
+</div>
+</div>
+
+<div id="reportModal" class="modal">
+<div class="pop" style="border-color:#b49cff">
+<h2>🐢 Commander Turtle Mission Report</h2>
+<div id="reportBody" style="text-align:left;font-weight:900;line-height:1.8"></div>
+<div id="reportClosing" class="feedback-box" style="margin-top:12px"></div>
+<div class="row" style="margin-top:14px">
+<button class="action good" onclick="el('reportModal').classList.remove('show')">Close Report</button>
+<a href="../index.html" class="action blue" style="text-decoration:none">🚀 Mission Control</a>
 </div>
 </div>
 </div>
@@ -310,10 +326,45 @@ var BADGES = [
 var save = {
 xp:0,casesSolved:0,cluesSpotted:0,resetsUsed:0,yellowsCaught:0,resetChoices:0,comebackWins:0,bodyCases:0,checkinsCompleted:0,
 badges:[],ownClues:[],bestStreak:0,lastSession:null,
-catMisses:{other:0,self:0,body:0,action:0},catAttempts:{other:0,self:0,body:0,action:0}
+catMisses:{other:0,self:0,body:0,action:0},catAttempts:{other:0,self:0,body:0,action:0},
+tricksterCheckIns:[]
 };
 
 var session = {current:null,caseIndex:0,level:1,streak:0,usedReset:false,questionsSinceCheckin:0,usedIndices:[]};
+
+var turtleSuccess=[
+'🐢 Commander Turtle says: "Nice detective work. You spotted the clue."',
+'🐢 Commander Turtle says: "You slowed down and checked the evidence."',
+'🐢 Commander Turtle says: "One clue at a time. That is how detectives solve cases."',
+'🐢 Commander Turtle says: "You noticed the signal before it got bigger."',
+'🐢 Commander Turtle says: "You checked the clue before deciding. That is strong thinking."',
+'🐢 Commander Turtle says: "Good catch. That signal can mean it is time for a reset."',
+];
+var turtleCoach=[
+'🐢 Commander Turtle says: "Pause and check the strongest clue."',
+'🐢 Commander Turtle says: "Try again. Which clue shows frustration starting?"',
+'🐢 Commander Turtle says: "The Trickster sometimes makes us rush. Turtle breath, then choose."',
+'🐢 Commander Turtle says: "Look for the body clue or the words clue."',
+'🐢 Commander Turtle says: "A reset can help when the clues turn red."',
+'🐢 Commander Turtle says: "Look again. Which clue shows the strongest signal?"',
+];
+var tricksterLines=[
+'The Trickster sometimes tries to make detectives rush.',
+'The Trickster likes guesses. Detectives use clues.',
+'Spotting frustration early keeps the Trickster from causing confusion.',
+'The Trickster wanted speed. You used strategy.',
+'The Trickster says quit. Commander Turtle says try one step.',
+'When you notice frustration early, the Trickster has less power.',
+];
+function randFrom(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function turtleFeedback(original){
+var prefix=randFrom(turtleSuccess);
+var trickster=Math.random()<0.3?' '+randFrom(tricksterLines):'';
+return prefix+' '+original+trickster;
+}
+function turtleCoachMsg(hint){
+return randFrom(turtleCoach)+' '+hint;
+}
 
 function loadSave(){
 try{var s=localStorage.getItem('fda_save');if(s){var d=JSON.parse(s);for(var k in d)save[k]=d[k]}}catch(e){}
@@ -418,6 +469,7 @@ nextCase();
 }
 
 function endSession(){
+if(session.caseIndex>0)showMissionReport();
 el('startScreen').style.display='block';
 el('gameScreen').style.display='none';
 renderStart();
@@ -472,7 +524,7 @@ showClueStep();
 save.catMisses[cat]=(save.catMisses[cat]||0)+1;
 session.streak=0;
 var hint=s.answer==='green'?'Look for calm signals.':s.answer==='yellow'?'Look for early frustration clues — tight body, sighing, rushing.':'Look for strong signals — refusing, yelling, wanting to quit or destroy.';
-el('feedbackBox').textContent='Good try. '+hint;
+el('feedbackBox').textContent=turtleCoachMsg(hint);
 el('feedbackBox').style.display='block';
 el('stepMeter').style.display='none';
 el('nextRow').style.display='flex';
@@ -545,7 +597,7 @@ if(session.streak>save.bestStreak)save.bestStreak=session.streak;
 if(session.usedReset){save.comebackWins++;session.usedReset=false}
 el('stepClue').style.display='none';
 el('stepAction').style.display='none';
-el('feedbackBox').textContent=text;
+el('feedbackBox').textContent=turtleFeedback(text);
 el('feedbackBox').style.display='block';
 el('nextRow').style.display='flex';
 sparkle(['🔍','⭐','🐢']);
@@ -579,7 +631,7 @@ el('resetFeedback').style.display='none';
 function closeReset(){el('resetModal').classList.remove('show')}
 function doReset(msg){
 save.resetsUsed++;session.usedReset=true;save.xp+=3;
-el('resetFeedback').textContent=msg+' Reset complete. That was a smart detective move.';
+el('resetFeedback').textContent=msg+' 🐢 Commander Turtle says: "Reset complete. That was a smart detective move."';
 el('resetFeedback').style.display='block';
 sparkle(['🐢','💚']);
 checkBadges();persist();
@@ -587,20 +639,27 @@ el('xpCount').textContent=save.xp;
 }
 
 function showCheckin(){
+document.querySelectorAll('#tricksterChecks .clue-btn').forEach(function(b){b.classList.remove('correct')});
 el('checkinModal').classList.add('show');
 }
-function checkinAnswer(color){
-el('checkinModal').classList.remove('show');
-save.checkinsCompleted++;save.xp+=3;
-if(color==='green'){
-el('feedbackBox').textContent='Great. Keep detecting.';
-} else if(color==='yellow'){
-el('feedbackBox').textContent='Good noticing. A quick reset might help.';
-setTimeout(openReset,600);
+function toggleTrickCheck(btn){
+if(btn.dataset.val==='None right now'){
+document.querySelectorAll('#tricksterChecks .clue-btn').forEach(function(b){b.classList.remove('correct')});
+btn.classList.add('correct');
 } else {
-el('feedbackBox').textContent='Strong self-awareness. Let\'s use a reset.';
-setTimeout(openReset,600);
+var noneBtn=document.querySelector('#tricksterChecks .clue-btn[data-val="None right now"]');
+if(noneBtn)noneBtn.classList.remove('correct');
+btn.classList.toggle('correct');
 }
+}
+function submitTrickCheckin(){
+var selected=[];
+document.querySelectorAll('#tricksterChecks .clue-btn.correct').forEach(function(b){selected.push(b.dataset.val)});
+if(selected.length===0)selected=['None right now'];
+save.tricksterCheckIns.push({timestamp:new Date().toISOString(),selected:selected});
+save.checkinsCompleted++;save.xp+=3;
+el('checkinModal').classList.remove('show');
+el('feedbackBox').textContent='🐢 Thanks, Commander. Noticing the Trickster is detective work too.';
 el('feedbackBox').style.display='block';
 el('nextRow').style.display='flex';
 el('stepMeter').style.display='none';
@@ -608,6 +667,23 @@ el('stepClue').style.display='none';
 el('stepAction').style.display='none';
 checkBadges();persist();
 el('xpCount').textContent=save.xp;
+}
+function showMissionReport(){
+var body='📁 Cases Solved: '+save.casesSolved+'<br>';
+body+='🔍 Frustration Clues Spotted: '+save.cluesSpotted+'<br>';
+body+='🐢 Reset Choices Practiced: '+save.resetChoices+'<br>';
+body+='🔔 Check-Ins Completed: '+save.checkinsCompleted+'<br>';
+body+='🔥 Best Streak: '+save.bestStreak+'<br>';
+body+='⭐ Total XP: '+save.xp;
+el('reportBody').innerHTML=body;
+var closings=[
+'🐢 Commander Turtle says: "You noticed frustration clues today. That helps keep the Trickster from causing confusion."',
+'🐢 Commander Turtle says: "Every clue you spot makes you a stronger detective. The Trickster has less power when you pay attention."',
+'🐢 Commander Turtle says: "Good work today. One clue at a time is how detectives solve the big cases."',
+'🐢 Commander Turtle says: "You practiced noticing signals. That is the most important detective skill."',
+];
+el('reportClosing').textContent=randFrom(closings);
+el('reportModal').classList.add('show');
 }
 
 loadSave();
