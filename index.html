@@ -1,127 +1,2078 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mission Control - Zach</title>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:"Arial Rounded MT Bold","Comic Sans MS",system-ui,sans-serif;background:radial-gradient(circle at 10% 0,#273f9b,#111a3c 42%,#071024);color:#fff;min-height:100vh;overflow-x:hidden}.wrap{max-width:1200px;margin:auto;padding:10px 14px}header{position:sticky;top:0;z-index:20;background:rgba(7,16,36,.97);border-bottom:2px solid rgba(255,255,255,.15)}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:5px 14px}h1{font-size:clamp(1rem,2.7vw,1.55rem);margin:0}h2{font-size:clamp(1.25rem,3.5vw,2rem);margin:0 0 10px}.sub{color:#d9ecff;font-size:.82rem}.badges{display:flex;gap:5px;flex-wrap:wrap}.badge{background:#ffd166;color:#302000;border:2px solid #fff;border-radius:999px;padding:4px 8px;font-size:.8rem;font-weight:900}.zoneBadge{background:#68ff9c}.bar{height:8px;background:rgba(255,255,255,.2);border-radius:999px;overflow:hidden;margin:0 14px 4px}.bar div{height:100%;width:0;background:linear-gradient(90deg,#68ff9c,#ffd166)}.panel{background:rgba(255,255,255,.11);border:3px solid rgba(255,255,255,.22);border-radius:24px;padding:12px;margin:8px 0}.pill{background:#eaf8ff;color:#10233a;border-radius:999px;padding:7px 10px;font-size:.85rem;font-weight:900}.launcherTop,.topLine{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.missionGrid{display:grid;grid-template-columns:repeat(8,minmax(92px,1fr));grid-template-rows:repeat(2,86px);gap:8px}.tile{position:relative;overflow:hidden;border:0;border-radius:18px;padding:7px;color:#08213a;font-weight:900;background:linear-gradient(180deg,#fff,#bff3ff);box-shadow:0 5px 0 #4ba7c2;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.tile span{font-size:1.8rem}.tile b{font-size:.82rem;line-height:1.05}.tile small{font-size:.65rem;color:#27435c}.tile:active,.action:active,.cell:active,.memoryTile:active,.choice:active{transform:translateY(4px)}.green{background:linear-gradient(180deg,#e2ffe9,#84f59a)!important;box-shadow:0 5px 0 #35a84f!important}.yellow{background:linear-gradient(180deg,#fff8d8,#ffd166)!important;box-shadow:0 5px 0 #c79224!important}.pink{background:linear-gradient(180deg,#ffe2fb,#ff9eea)!important;box-shadow:0 5px 0 #b94ca3!important}.purple{background:linear-gradient(180deg,#efe7ff,#b49cff)!important;box-shadow:0 5px 0 #725fd1!important}.locked{opacity:.7;filter:grayscale(.25)}.construction::after{content:"UNDER CONSTRUCTION";position:absolute;left:-38px;bottom:18px;width:185px;transform:rotate(-35deg);background:#ff8a8a;color:#fff;border:2px solid #fff;font-size:.58rem;font-weight:1000;padding:4px 0}.hidden{display:none!important}.card{background:#fff;color:#10233a;border-radius:28px;padding:14px;min-height:calc(100vh - 125px);border:7px solid #84f59a;box-shadow:0 12px 0 #35a84f;overflow:hidden}.card.gold{border-color:#ffd166;box-shadow:0 12px 0 #c79224}.card.pinkBorder{border-color:#ff9eea;box-shadow:0 12px 0 #b94ca3}.card.purpleBorder{border-color:#b49cff;box-shadow:0 12px 0 #725fd1}.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;margin:8px 0}.action{border:0;border-radius:18px;padding:11px 14px;min-height:44px;background:#5ee4ff;color:#052334;font-weight:900;cursor:pointer;box-shadow:0 5px 0 #2391ad}.action.good{background:#68ff9c;box-shadow:0 5px 0 #25a74f}.action.warn{background:#ffd166;box-shadow:0 5px 0 #bd831d}.action.red{background:#ff8a8a;box-shadow:0 5px 0 #bd4343}.themeOn{background:#68ff9c!important}.playGrid{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:14px;align-items:start}.boardWrap{display:flex;justify-content:center;align-items:center;overflow:hidden}.feedback{font-size:1.12rem;font-weight:900;color:#10233a;min-height:32px;text-align:center;background:#fff8d8;border-radius:18px;padding:10px}.progress{height:16px;border-radius:999px;background:#d7ecf5;overflow:hidden}.progress div{height:100%;width:0;background:#68ff9c}.wordControls{display:grid;grid-template-columns:repeat(6,minmax(86px,1fr));gap:8px;margin:8px 0}.wordControls .action{font-size:.92rem;padding:9px 7px}.wordGrid{display:grid;gap:6px;justify-content:center;margin:6px auto;touch-action:none;user-select:none}.cell{width:var(--cell,48px);height:var(--cell,48px);border:0;border-radius:11px;font-size:calc(var(--cell,48px)*.44);font-weight:900;background:#eaf8ff;color:#10233a;box-shadow:0 4px 0 #9fc7d8;cursor:pointer;line-height:1;touch-action:none}.cell.path{background:#ffd166}.cell.bad{background:#ffb2b2}.cell.found{background:#68ff9c}.cell.hint{outline:5px solid #ff8a8a}.wordList{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.wordChip{background:#efe7ff;color:#10233a;border-radius:999px;padding:9px 12px;font-weight:900}.wordChip.done{text-decoration:line-through;background:#68ff9c}.memoryGrid,.patternChoices{display:grid;gap:10px;justify-content:center;margin:12px auto}.memoryGrid{grid-template-columns:repeat(var(--memCols,3),minmax(58px,72px))}.memoryTile,.choice{border:0;border-radius:18px;min-height:58px;font-size:2rem;font-weight:900;cursor:pointer;background:#eaf8ff;color:#10233a;box-shadow:0 5px 0 #9fc7d8}.memoryTile.correct{background:#68ff9c}.memoryTile.wrong{background:#ffb2b2}.preview,.memoryRows{font-size:1.4rem;font-weight:900;background:#fff8d8;color:#10233a;border-radius:18px;padding:10px;text-align:center}.memoryLabel{font-size:.9rem;font-weight:1000;margin:4px 0}.memoryRow{font-size:2rem;min-height:48px;margin-bottom:8px}.patternStrip{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;background:#fff8d8;border-radius:18px;padding:14px;margin:10px 0;font-size:2.4rem}.patternChoices{grid-template-columns:repeat(auto-fit,minmax(110px,1fr));max-width:700px}.choice{min-height:72px}.dotCanvas{width:min(760px,100%);height:520px;max-height:58vh;background:#f8fbff;border:5px solid #b49cff;border-radius:24px;touch-action:none}.ruleBox{background:#fff8d8;border-radius:18px;padding:12px;font-weight:900}.drawerTab{position:fixed;right:0;top:62px;z-index:25;border:0;border-radius:16px 0 0 16px;padding:10px 8px;background:#ffd166;color:#302000;font-weight:900;writing-mode:vertical-rl;cursor:pointer}.drawer{position:fixed;right:0;top:56px;z-index:26;width:min(270px,84vw);background:rgba(7,16,36,.97);border:3px solid rgba(255,255,255,.22);border-right:0;border-radius:24px 0 0 24px;padding:12px;transform:translateX(105%);transition:.2s}.drawer.open{transform:translateX(0)}.drawer .action{width:100%;margin:5px 0}.closeDrawer{position:absolute;top:6px;right:8px;background:transparent;border:0;color:white;font-size:1.4rem;cursor:pointer}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;place-items:center;z-index:30;padding:18px}.modal.show{display:grid}.pop{background:#fff;color:#10233a;border-radius:32px;max-width:680px;width:100%;padding:24px;text-align:center;border:8px solid #5ee4ff}.popGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}.celebrate{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:40}.confetti{position:absolute;font-size:2.4rem;animation:fall 1.6s linear forwards}.coach{font-family:Arial,sans-serif;color:#d9ecff}.coachGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px}.coachBox{background:rgba(0,0,0,.18);border-radius:18px;padding:12px}.debriefGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:8px}.debriefBox{background:rgba(0,0,0,.18);border-radius:14px;padding:10px}
-.missionBoard{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.missionCard{background:rgba(255,255,255,.13);border:2px solid rgba(255,255,255,.25);border-radius:18px;padding:10px}
-.missionCard h3{margin:0 0 8px;font-size:1.05rem}
-.goalList{display:grid;gap:6px}
-.goalItem{background:rgba(0,0,0,.18);border-radius:12px;padding:8px;font-weight:900}
-.goalItem.done{background:#68ff9c;color:#063817}
-@media(max-width:760px){.missionBoard{grid-template-columns:1fr}}
-@keyframes fall{from{transform:translateY(-80px) rotate(0)}to{transform:translateY(110vh) rotate(360deg);opacity:.2}}@media(max-width:1000px){.missionGrid{grid-template-columns:repeat(4,1fr);grid-template-rows:auto}.tile{min-height:78px}.playGrid{grid-template-columns:1fr}.wordControls{grid-template-columns:repeat(3,1fr)}}@media(max-width:620px){.missionGrid{grid-template-columns:repeat(2,1fr)}.wordControls{grid-template-columns:repeat(2,1fr)}.top{display:block}.dotCanvas{height:430px}}
-</style>
-</head>
-<body>
-<div id="celebrate" class="celebrate"></div>
-<header><div class="top"><div><h1>🚀 Mission Control</h1><div class="sub">Turtle Rescue Academy</div></div><div class="badges"><div class="badge">⭐ <span id="stars">0</span></div><div class="badge">🐢 <span id="rescued">0</span></div><button class="badge zoneBadge" onclick="cycleZone()">🧠 Zone: <span id="zoneEmoji">😀</span></button><div class="badge">💪 <span id="comebackPower">0</span>%</div></div></div><div class="bar"><div id="comebackFill"></div></div></header>
-<main class="wrap">
-<section class="panel"><div class="launcherTop"><h2>Mission Grid</h2><span class="pill">Built for productive frustration</span></div><div class="missionGrid">
-<button class="tile purple" onclick="openDotLab()"><span>✏️🔵</span><b>Dot Lab</b><small>One-stroke puzzles</small></button>
-<button class="tile green" onclick="openWordSearch()"><span>🏝️🔎</span><b>Search Beach</b><small>Word Search</small></button>
-<button class="tile yellow" onclick="openMemory()"><span>🧠⛰️</span><b>Memory Mountain</b><small>Remember</small></button>
-<button class="tile" onclick="openPattern()"><span>🧩🕵️</span><b>Pattern Cave</b><small>Rule detective</small></button>
-<button class="tile pink" onclick="openDrawing()"><span>🎨</span><b>Creation Cove</b><small>Draw It</small></button>
-<button class="tile locked construction" onclick="lockedWorld()"><span>🔒🏗️</span><b>Builder Bay</b></button><button class="tile purple" onclick="window.location.href='modules/frustration-detective.html'"><span>🔍🧠</span><b>Detective Agency</b><small>Spot frustration clues</small></button><button class="tile locked construction" onclick="lockedWorld()"><span>🔒⭐</span><b>Boss Gate</b></button>
-<button class="tile locked construction" onclick="lockedWorld()"><span>🔒🎲</span><b>Bonus Island</b></button><button class="tile locked construction" onclick="lockedWorld()"><span>🔒⚡</span><b>Speed Round</b></button><button class="tile locked construction" onclick="lockedWorld()"><span>🔒🗺️</span><b>Map Quest</b></button><button class="tile locked construction" onclick="lockedWorld()"><span>🔒🧪</span><b>Science Dock</b></button><button class="tile locked construction" onclick="lockedWorld()"><span>🔒🦖</span><b>Dino Dig</b></button><button class="tile locked construction" onclick="lockedWorld()"><span>🔒🥷</span><b>Ninja Path</b></button><button class="tile locked construction" onclick="lockedWorld()"><span>🔒🔤</span><b>Letter Lab</b></button><button class="tile locked construction" onclick="lockedWorld()"><span>🔒🎯</span><b>Target Trail</b></button>
-</div>
-<div class="missionBoard">
-  <div class="missionCard">
-    <h3>🚀 Today’s Mission Board</h3>
-    <div id="missionGoals" class="goalList"></div>
-  </div>
-  <div class="missionCard">
-    <h3>🌟 Daily Challenge</h3>
-    <div id="dailyChallenge" class="goalItem">Loading challenge...</div>
-  </div>
-</div>
-</section>
-<section id="dotPanel" class="hidden"><div class="card purpleBorder"><div class="topLine"><div><h2>✏️ Dot Challenge Lab</h2><p class="sub" style="color:#38506b">Connect dots under tricky rules. The goal is noticing frustration, not perfection.</p></div><span class="pill">Level <span id="dotLevelLabel">1</span></span></div><div class="row"><button class="action warn" onclick="changeDotLevel(-1)">Easier</button><button class="action warn" onclick="changeDotLevel(1)">Harder</button><button class="action good" onclick="newDotPuzzle()">New Puzzle</button><button class="action" onclick="undoDot()">Undo</button><button class="action red" onclick="clearDotPath()">Clear</button></div><div class="playGrid"><div class="boardWrap"><canvas id="dotCanvas" class="dotCanvas" width="760" height="520"></canvas></div><div><div id="dotRules" class="ruleBox"></div><div id="dotFeedback" class="feedback" style="margin-top:10px">Tap dots to build a path.</div><div class="row"><button class="action good" onclick="finishDotPuzzle()">Done / Check</button><button class="action warn" onclick="openDebrief('Dot Lab')">Debrief</button></div></div></div></div></section>
-<section id="wordPanel" class="hidden"><div class="card"><div class="topLine"><div><h2>🏝️ Search Beach</h2><p class="sub" style="color:#38506b">Pick 1 to 3 themes. Drag across words.</p></div><span class="pill">Grid: <span id="gridSizeLabel">6</span> x <span id="gridSizeLabel2">6</span></span></div><div class="wordControls"><button id="theme-animals" class="action themeOn" onclick="toggleTheme('animals')">🐢 Animals</button><button id="theme-dinos" class="action" onclick="toggleTheme('dinos')">🦖 Dinos</button><button id="theme-space" class="action" onclick="toggleTheme('space')">🚀 Space</button><button id="theme-ninjas" class="action" onclick="toggleTheme('ninjas')">🥷 Ninjas</button><button id="theme-bugs" class="action" onclick="toggleTheme('bugs')">🐞 Bugs</button><button id="theme-robots" class="action" onclick="toggleTheme('robots')">🤖 Robots</button></div><div class="row"><button class="action warn" onclick="changeSize(-1)">Smaller</button><button class="action warn" onclick="changeSize(1)">Bigger</button><button class="action good" onclick="buildWordSearch()">New Puzzle</button><button class="action" onclick="showWordHint()">Hint</button><button class="action warn" onclick="openDebrief('Search Beach')">Debrief</button></div><div class="playGrid"><div class="boardWrap"><div id="wordGrid" class="wordGrid"></div></div><div><div class="progress"><div id="wordProgress"></div></div><div id="wordList" class="wordList"></div><div id="wordFeedback" class="feedback">Find a word, captain!</div></div></div></div></section>
-<section id="memoryPanel" class="hidden"><div class="card gold"><div class="topLine"><div><h2>🧠 Memory Mountain</h2><p class="sub" style="color:#38506b">Watch the pattern. Then copy it after it hides.</p></div><span class="pill">Level <span id="memoryLevelLabel">1</span> · <span id="memoryModeLabel">Forward</span></span></div><div class="row"><button class="action warn" onclick="changeMemoryLevel(-1)">Easier</button><button class="action warn" onclick="changeMemoryLevel(1)">Harder</button><button class="action good" onclick="startMemoryRound()">New Pattern</button><button class="action" onclick="toggleMemoryMode()">Switch Mode</button><button class="action warn" onclick="showPatternAgain()">👀 Show Again</button><button class="action warn" onclick="openDebrief('Memory Mountain')">Debrief</button></div><div class="memoryRows"><div class="memoryLabel">COPY THIS:</div><div id="memoryPatternRow" class="memoryRow"></div><div class="memoryLabel">YOUR PICKS:</div><div id="memoryInputRow" class="memoryRow"></div></div><div id="memoryGrid" class="memoryGrid"></div><div id="memoryFeedback" class="feedback">Climb the mountain one step at a time.</div></div></section>
-<section id="patternPanel" class="hidden"><div class="card"><div class="topLine"><div><h2>🧩 Pattern Cave 2.0</h2><p class="sub" style="color:#38506b">Next, missing item, odd-one-out, and mistake hunter modes.</p></div><span class="pill">Level <span id="patternLevelLabel">1</span> · <span id="patternModeLabel">Next</span></span></div><div class="row"><button class="action warn" onclick="changePatternLevel(-1)">Easier</button><button class="action warn" onclick="changePatternLevel(1)">Harder</button><button class="action good" onclick="newPattern()">New Pattern</button><button class="action" onclick="patternHint()">Hint</button><button class="action warn" onclick="openDebrief('Pattern Cave')">Debrief</button></div><div id="patternStrip" class="patternStrip"></div><div id="patternChoices" class="patternChoices"></div><div id="patternFeedback" class="feedback">Find the rule, detective.</div></div></section>
-<section id="drawingPanel" class="hidden"><div class="card pinkBorder"><div class="topLine"><h2>🎨 Creation Cove</h2><span class="pill"><span id="drawCategory">Silly</span></span></div><div id="drawingPrompt" class="preview">Draw a turtle using only three shapes.</div><p class="sub" style="color:#38506b">Good enough counts. Keep going without restarting.</p><div class="row"><button class="action good" onclick="doneDrawing()">I Did It!</button><button class="action warn" onclick="newDrawing()">New Drawing</button><button class="action" onclick="newDrawingCategory()">New Category</button><button class="action red" onclick="openReset('Turtle Reset')">I Need Reset</button><button class="action warn" onclick="openDebrief('Creation Cove')">Debrief</button></div></div></section>
-<section class="panel"><button class="action" onclick="el('coachDetails').classList.toggle('hidden')">Coach Corner</button><div id="coachDetails" class="coach hidden"><h2>Coach Corner</h2><div class="coachGrid"><div class="coachBox">Missions<br><b id="missions">0</b></div><div class="coachBox">Resets<br><b id="resets">0</b></div><div class="coachBox">Hints<br><b id="hints">0</b></div><div class="coachBox">Comebacks<br><b id="comebacks">0</b></div><div class="coachBox">Word Finds<br><b id="wordFinds">0</b></div><div class="coachBox">Dot Wins<br><b id="dotWins">0</b></div><div class="coachBox">Memory<br><b id="memoryLevelReport">1</b></div><div class="coachBox">Pattern<br><b id="patternLevelReport">1</b></div></div><h2 style="margin-top:12px">Session Debrief</h2><div class="debriefGrid"><div class="debriefBox">😀 Easy<br><b id="dEasy">0</b></div><div class="debriefBox">🙂 Thinking<br><b id="dThinking">0</b></div><div class="debriefBox">😐 Hard<br><b id="dHard">0</b></div><div class="debriefBox">😬 Frustrating<br><b id="dFrustrating">0</b></div><div class="debriefBox">🦖 Zach First<br><b id="dZach">0</b></div><div class="debriefBox">🐢 Coach First<br><b id="dCoach">0</b></div><div class="debriefBox">🤝 Both<br><b id="dBoth">0</b></div><div class="debriefBox">✅ Reset Yes<br><b id="dResetYes">0</b></div></div><p id="coachNote">Session opened.</p></div></section>
-</main>
-<button class="drawerTab" onclick="toggleDrawer()">RESET</button><div id="drawer" class="drawer"><button class="closeDrawer" onclick="toggleDrawer()">×</button><h3>Tools</h3><label style="display:block;font-weight:900;margin:6px 0 4px">Sidekick</label><select id="sidekickSelect" onchange="pickSidekickFromSelect()" style="width:100%;padding:10px;border-radius:14px;border:0;font-weight:900;margin-bottom:8px"><option value="🐢|Turtle Captain">🐢 Turtle Captain</option><option value="🦖|Dino Pilot">🦖 Dino Pilot</option><option value="🤖|Robot Buddy">🤖 Robot Buddy</option><option value="🥷|Ninja Star">🥷 Ninja Star</option></select><button class="action good" onclick="openReset('Turtle Reset');toggleDrawer(false)">🐢 Turtle Reset</button><button class="action" onclick="openReset('Freeze Reset');toggleDrawer(false)">🧊 Freeze Reset</button><button class="action warn" onclick="openCheck();toggleDrawer(false)">👀 Brain Check</button><button class="action" onclick="showReport();toggleDrawer(false)">📋 Report</button></div>
-<div id="modal" class="modal"><div class="pop"><h2 id="modalTitle">Reset</h2><div id="modalBody"></div><button class="action good" onclick="closeModal()">Close</button></div></div>
-<script>
-var state={stars:0,rescued:0,comebackPower:0,missions:0,resets:0,hints:0,comebacks:0,wordFinds:0,dotWins:0,usedReset:false,sidekick:'🐢',zone:0,goals:{dot:false,word:false,memory:false,pattern:false,drawing:false,reset:false,zone:false,debrief:false},daily:null,dailyDone:false,debrief:{easy:0,thinking:0,hard:0,frustrating:0,zach:0,coach:0,both:0,resetYes:0,resetNo:0}};
-var zones=['😀','🙂','😐','😬','🛑'];var zoneNames=['Easy','Thinking','Hard','Frustrated','Reset Needed'];var recentSearchWords=[];var wordState={themes:['animals'],size:6,grid:[],words:[],found:[],placements:{},dragging:false,path:[],misses:0};var memoryState={level:1,sequence:[],input:[],misses:0,visible:false,hideTimer:null,mode:'forward'};var patternState={level:1,answer:null,misses:0,current:null,mode:'next'};var dotState={level:1,dots:[],path:[],star:null,treasure:null,lineLimit:null,mode:'all'};
-var memoryIcons=['🐢','🦖','🤖','🥷','⭐','🚀','🐞','🧪','🎯','🧩','🌙','🔥'];var shapes=['🐢','⭐','🌙','🔥','🦖','🤖','🐞','🚀','🎯','🧩'];var wordThemes={
-animals:['CAT','DOG','FOX','OWL','PIG','BEAR','FROG','DUCK','LION','WOLF','HORSE','SNAKE','TURTLE','RABBIT','MONKEY','GIRAFFE','ELEPHANT','KANGAROO','OTTER','MOOSE','TIGER','ZEBRA','HIPPO','PANDA','KOALA','GORILLA','LEMUR','CAMEL','LLAMA','SLOTH','SHARK','WHALE','DOLPHIN','SEAL','EAGLE','FALCON','PARROT','PENGUIN','BEAVER','BADGER','FERRET','RACCOON','SKUNK','COYOTE','JAGUAR','LEOPARD','CHEETAH','BUFFALO','DONKEY','GOAT','SHEEP','MOUSE','HAMSTER','SQUIRREL','CHIPMUNK','ALLIGATOR','CROCODILE','CHAMELEON','PORCUPINE','ARMADILLO','FLAMINGO','PEACOCK','OCTOPUS','LOBSTER','SEAHORSE','STARFISH','JELLYFISH'],
-dinos:['REX','EGG','BONE','ROAR','CLAW','DINO','TAIL','FOSSIL','RAPTOR','VOLCANO','METEOR','JURASSIC','TRICERA','STEGOSAUR','DINOSAUR','PTERODON','ANKYLO','BRONTOSAUR','SAUROPOD','SPINOSAUR','PARASAUROL','VELOCIRAPTOR','PTERODACTYL','TRICERATOPS','STEGOSAURUS','ANKYLOSAURUS','BRACHIOSAURUS','ALLOSAURUS','IGUANODON','DILOPHOSAUR','COMPSOGNATHUS','PALEONTOLOGY','PALEONTOLOGIST','EXCAVATE','AMBER','EXTINCT','CRETACEOUS','HERBIVORE','CARNIVORE','FOOTPRINT','SKELETON','MUSEUM','DIGSITE','HATCHLING'],
-space:['SUN','MOON','STAR','MARS','COMET','ALIEN','ROCKET','PLANET','GALAXY','ASTRO','ORBIT','SATURN','NEBULA','METEOR','COSMOS','VENUS','EARTH','JUPITER','URANUS','NEPTUNE','PLUTO','SPACESHIP','ASTRONAUT','SATELLITE','TELESCOPE','BLACKHOLE','SUPERNOVA','MISSION','LAUNCH','CRATER','GRAVITY','ECLIPSE','CONSTELLATION','MILKYWAY','SPACEWALK','SPACESTATION','MOONROVER','ASTEROID','MERCURY','UNIVERSE','QUASAR','ORION','APOLLO','SHUTTLE'],
-ninjas:['STAR','MASK','JUMP','FAST','HIDE','KICK','NINJA','DOJO','SNEAK','SHADOW','DRAGON','SAMURAI','TRAINING','BALANCE','FOCUS','HONOR','SENSEI','STEALTH','DODGE','CLIMB','FLIP','SPIN','BAMBOO','TEMPLE','ROOFTOP','SILENT','COURAGE','KATANA','SHURIKEN','HEADBAND','BLACKBELT','KARATE','MARTIAL','MISSION','GUARDIAN','MASTER','APPRENTICE','SWIFT','NUNCHUCKS'],
-bugs:['BUG','BEE','ANT','MOTH','WORM','WING','FLY','BEETLE','SPIDER','CRICKET','LADYBUG','BUTTERFLY','CATERPILLAR','DRAGONFLY','MOSQUITO','GRASSHOPPER','FIREFLY','TERMITE','CENTIPEDE','MILLIPEDE','COCOON','HONEYBEE','BUMBLEBEE','PRAYINGMANTIS','APHID','CICADA','TARANTULA','SCORPION','COCKROACH','INSECT','ANTENNA','STINGER','WEB','HIVE','NEST','POLLEN','CHRYSALIS','METAMORPH'],
-robots:['BOT','CODE','GEAR','BEEP','WIRE','LASER','ROBOT','CIRCUIT','COMPUTER','BATTERY','MACHINE','INVENTION','ANDROID','CYBORG','SENSOR','MOTOR','BUTTON','SCREEN','SIGNAL','PROGRAM','GADGET','DRONE','ROVER','CHARGER','ELECTRIC','MICROCHIP','PROCESSOR','KEYBOARD','MONITOR','SPEAKER','MAGNET','WRENCH','BOLT','FACTORY','AUTOMATIC','CONTROLLER','MECHANIC','ASSEMBLE','REBOOT','UPGRADE']
-};
-var drawCats={Animals:['turtle','fox','owl','frog','rabbit','monkey','giraffe','elephant'],Dinos:['tiny T-Rex','sleepy dinosaur','dino chef','dinosaur on skates','baby raptor'],Robots:['robot teacher','robot dog','robot pancake maker','robot treehouse','robot astronaut'],Space:['turtle rocket','moon base','alien pet shop','planet playground','rocket shaped like a fish'],Silly:['fish riding a bike','pizza with legs','banana spaceship','dragon in pajamas','monster brushing teeth'],Build:['treehouse for a dragon','bridge for turtles','fort on the moon','tiny city for bugs','machine that makes tacos']};var drawCat='Silly';
-function el(id){return document.getElementById(id)}function shuffle(a){return a.slice().sort(function(){return Math.random()-.5})}function hideAll(){['dotPanel','wordPanel','memoryPanel','patternPanel','drawingPanel'].forEach(function(id){el(id).classList.add('hidden')})}function note(t){el('coachNote').textContent=t}function sparkle(items){var box=el('celebrate');for(var i=0;i<18;i++){var s=document.createElement('div');s.className='confetti';s.textContent=items[Math.floor(Math.random()*items.length)];s.style.left=Math.random()*100+'vw';s.style.animationDelay=(Math.random()*.35)+'s';box.appendChild(s);setTimeout(function(x){return function(){x.remove()}},1800,s)}}function addComeback(n){state.comebackPower=Math.min(100,state.comebackPower+n)}function rescue(extra){state.rescued++;state.stars+=extra?12:7;if(state.usedReset){state.comebacks++;addComeback(25);state.usedReset=false}else if(extra){state.comebacks++;addComeback(15)}}function update(){el('stars').textContent=state.stars;el('rescued').textContent=state.rescued;el('comebackPower').textContent=state.comebackPower;el('comebackFill').style.width=state.comebackPower+'%';el('zoneEmoji').textContent=zones[state.zone];el('missions').textContent=state.missions;el('resets').textContent=state.resets;el('hints').textContent=state.hints;el('comebacks').textContent=state.comebacks;el('wordFinds').textContent=state.wordFinds;el('dotWins').textContent=state.dotWins;el('memoryLevelReport').textContent=memoryState.level;el('patternLevelReport').textContent=patternState.level;el('dEasy').textContent=state.debrief.easy;el('dThinking').textContent=state.debrief.thinking;el('dHard').textContent=state.debrief.hard;el('dFrustrating').textContent=state.debrief.frustrating;el('dZach').textContent=state.debrief.zach;el('dCoach').textContent=state.debrief.coach;el('dBoth').textContent=state.debrief.both;el('dResetYes').textContent=state.debrief.resetYes;renderMissionBoard()}function cycleZone(){state.zone=(state.zone+1)%zones.length;state.goals.zone=true;note('Zone check: '+zoneNames[state.zone]);update()}function toggleDrawer(force){var d=el('drawer');if(force===false){d.classList.remove('open');return}d.classList.toggle('open')}function pickSidekickFromSelect(){var parts=el('sidekickSelect').value.split('|');state.sidekick=parts[0];note('Sidekick changed to '+parts[1]);update()}function lockedWorld(){el('modalTitle').textContent='Under Construction';el('modalBody').innerHTML='<p>This island is under construction.</p><p>Try Dot Lab, Memory Mountain, Pattern Cave, Creation Cove, or Search Beach.</p>';el('modal').classList.add('show')}function closeModal(){el('modal').classList.remove('show')}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mission Control - Zach</title>
+        <style>
+            * {
+                box-sizing: border-box
+            }
 
-var dailyChallenges=[
-  'Use a reset before Coach reminds you.',
-  'Tell Coach when you move into the Hard Zone.',
-  'Finish something after making a mistake.',
-  'Stay with a hard puzzle for two minutes.',
-  'Try one activity that feels hard.',
-  'Say “I need a reset” before quitting.',
-  'Use the Zone button three times.',
-  'Complete a debrief after a tough mission.'
-];
-function setupDailyChallenge(){
-  if(!state.daily) state.daily=shuffle(dailyChallenges)[0];
-}
-function renderMissionBoard(){
-  if(!el('missionGoals')) return;
-  setupDailyChallenge();
-  var goals=[
-    ['dot','Complete Dot Lab'],
-    ['word','Try Search Beach'],
-    ['memory','Try Memory Mountain'],
-    ['pattern','Try Pattern Cave'],
-    ['drawing','Try Creation Cove'],
-    ['zone','Check your Zone'],
-    ['reset','Use a Reset'],
-    ['debrief','Complete a Debrief']
-  ];
-  el('missionGoals').innerHTML=goals.map(function(g){
-    return '<div class="goalItem '+(state.goals[g[0]]?'done':'')+'">'+(state.goals[g[0]]?'✅ ':'⬜ ')+g[1]+'</div>';
-  }).join('');
-  el('dailyChallenge').textContent=(state.dailyDone?'✅ ':'⭐ ')+state.daily;
-}
+            body {
+                margin: 0;
+                font-family: "Arial Rounded MT Bold","Comic Sans MS",system-ui,sans-serif;
+                background: radial-gradient(circle at 10% 0,#273f9b,#111a3c 42%,#071024);
+                color: #fff;
+                min-height: 100vh;
+                overflow-x: hidden
+            }
 
-function openDebrief(mission){var temp={mission:mission,hard:null,noticed:null,reset:null};el('modalTitle').textContent='🐢 Mission Debrief';el('modalBody').innerHTML='<p><b>'+mission+'</b></p><p>How hard was that?</p><div class="popGrid"><button class="tile" onclick="debriefHard(\'easy\')"><span>😀</span><b>Easy</b></button><button class="tile" onclick="debriefHard(\'thinking\')"><span>🙂</span><b>Thinking</b></button><button class="tile yellow" onclick="debriefHard(\'hard\')"><span>😐</span><b>Hard</b></button><button class="tile pink" onclick="debriefHard(\'frustrating\')"><span>😬</span><b>Frustrating</b></button></div>';window.debriefTemp=temp;el('modal').classList.add('show')}function debriefHard(level){window.debriefTemp.hard=level;state.debrief[level]++;if(level==='easy'||level==='thinking'){finishDebrief()}else{el('modalBody').innerHTML='<p>Who noticed first?</p><div class="popGrid"><button class="tile green" onclick="debriefNotice(\'zach\')"><span>🦖</span><b>Zach</b></button><button class="tile yellow" onclick="debriefNotice(\'coach\')"><span>🐢</span><b>Coach</b></button><button class="tile" onclick="debriefNotice(\'both\')"><span>🤝</span><b>Both</b></button></div>'}}function debriefNotice(who){window.debriefTemp.noticed=who;state.debrief[who]++;el('modalBody').innerHTML='<p>Did you use a reset?</p><div class="popGrid"><button class="tile green" onclick="debriefReset(true)"><span>✅</span><b>Yes</b></button><button class="tile pink" onclick="debriefReset(false)"><span>❌</span><b>No</b></button></div>'}function debriefReset(yes){if(yes)state.debrief.resetYes++;else state.debrief.resetNo++;finishDebrief()}function finishDebrief(){state.goals.debrief=true;if(state.daily&&state.daily.indexOf('debrief')>=0)state.dailyDone=true;if(state.daily&&state.daily.indexOf('Hard Zone')>=0&&state.zone>=2)state.dailyDone=true;if(state.daily&&state.daily.indexOf('reset')>=0&&state.goals.reset)state.dailyDone=true;state.stars+=3;note('Debrief complete: +3 reflection stars.');sparkle(['⭐','🐢','🧠']);closeModal();update()}
-function openReset(name){state.resets++;state.goals.reset=true;state.usedReset=true;state.stars+=2;addComeback(10);el('modalTitle').textContent=name;el('modalBody').innerHTML='<ol style="text-align:left;font-size:1.2rem"><li>Pull in like a turtle.</li><li>Take one slow breath.</li><li>Say: one small step.</li><li>Try again.</li></ol>';el('modal').classList.add('show');update()}function openCheck(){el('modalTitle').textContent='Brain Check';el('modalBody').innerHTML='<div class="popGrid">'+zones.map(function(z,i){return '<button class="tile" onclick="state.zone='+i+';closeModal();update()"><span>'+z+'</span><b>'+zoneNames[i]+'</b></button>'}).join('')+'</div>';el('modal').classList.add('show')}function showReport(){el('modalTitle').textContent='Mission Report';el('modalBody').innerHTML='<p><b>Stars:</b> '+state.stars+'</p><p><b>Turtles:</b> '+state.rescued+'</p><p><b>Comeback:</b> '+state.comebackPower+'%</p><p><b>Debriefs:</b> Easy '+state.debrief.easy+', Thinking '+state.debrief.thinking+', Hard '+state.debrief.hard+', Frustrating '+state.debrief.frustrating+'</p>';el('modal').classList.add('show')}
-function openDotLab(){hideAll();state.missions++;state.goals.dot=true;el('dotPanel').classList.remove('hidden');newDotPuzzle();state.stars+=2;note('Started Dot Challenge Lab.');update()}function changeDotLevel(d){dotState.level=Math.max(1,Math.min(10,dotState.level+d));newDotPuzzle()}function newDotPuzzle(){dotState.path=[];var n=dotState.level<3?5:dotState.level<5?7:dotState.level<7?9:dotState.level<9?11:13;dotState.dots=[];for(var i=0;i<n;i++)dotState.dots.push({x:70+Math.random()*620,y:55+Math.random()*400});dotState.star=dotState.level>=3?Math.floor(Math.random()*n):null;dotState.treasure=dotState.level>=5?Math.floor(Math.random()*n):null;dotState.lineLimit=dotState.level>=6?Math.max(4,Math.ceil(n*.75)):null;dotState.mode=dotState.level<3?'connect':dotState.level<5?'star':dotState.level<7?'treasure':'limited';el('dotLevelLabel').textContent=dotState.level;var rules=['Connect every dot.','Do not retrace if you can avoid it.'];if(dotState.star!==null)rules.push('Touch the ⭐ star dot.');if(dotState.treasure!==null)rules.push('End on the 💎 treasure dot.');if(dotState.lineLimit)rules.push('Try to use '+dotState.lineLimit+' lines or fewer.');el('dotRules').innerHTML='<b>Rules</b><ul>'+rules.map(function(r){return '<li>'+r+'</li>'}).join('')+'</ul>';drawDots();el('dotFeedback').textContent='Tap dots to build your path.'}function drawDots(){var c=el('dotCanvas'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);ctx.lineWidth=6;ctx.strokeStyle='#725fd1';ctx.lineCap='round';ctx.beginPath();dotState.path.forEach(function(idx,i){var p=dotState.dots[idx];if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y)});ctx.stroke();dotState.dots.forEach(function(p,i){ctx.beginPath();ctx.fillStyle=dotState.path.indexOf(i)>=0?'#68ff9c':'#eaf8ff';ctx.strokeStyle='#10233a';ctx.lineWidth=3;ctx.arc(p.x,p.y,18,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle='#10233a';ctx.font='24px Arial';ctx.textAlign='center';ctx.textBaseline='middle';var label=i===dotState.star?'⭐':i===dotState.treasure?'💎':'●';ctx.fillText(label,p.x,p.y)})}el('dotCanvas').addEventListener('click',function(e){var r=this.getBoundingClientRect(),x=(e.clientX-r.left)*(this.width/r.width),y=(e.clientY-r.top)*(this.height/r.height),best=-1,dist=999;dotState.dots.forEach(function(p,i){var d=Math.hypot(p.x-x,p.y-y);if(d<dist){dist=d;best=i}});if(dist<35){dotState.path.push(best);drawDots();el('dotFeedback').textContent='Path length: '+Math.max(0,dotState.path.length-1)+' lines.'}});function undoDot(){dotState.path.pop();drawDots()}function clearDotPath(){dotState.path=[];drawDots()}function finishDotPuzzle(){var unique=new Set(dotState.path);var ok=unique.size===dotState.dots.length;if(dotState.star!==null&&!unique.has(dotState.star))ok=false;if(dotState.treasure!==null&&dotState.path[dotState.path.length-1]!==dotState.treasure)ok=false;if(ok){state.dotWins++;state.stars+=8+dotState.level;rescue(dotState.path.length>dotState.dots.length+2);sparkle(['✏️','🐢','⭐']);el('dotFeedback').textContent='Dot challenge complete!'}else{state.hints++;el('dotFeedback').textContent='Not yet. Check the rules and try one small change.'}update()}
-function wordPlan(size){if(size<=5)return{count:6,max:4};if(size===6)return{count:8,max:5};if(size===7)return{count:10,max:6};if(size===8)return{count:12,max:8};if(size===9)return{count:15,max:9};return{count:18,max:10}}function dirsFor(size){if(size<=5)return[[1,0],[0,1]];if(size===6)return[[1,0],[0,1],[1,1]];if(size===7)return[[1,0],[-1,0],[0,1],[1,1]];if(size===8)return[[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1]];return[[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1],[1,-1],[-1,-1]]}function chooseWords(size){
-  var p=wordPlan(size),pool=[];
-  wordState.themes.forEach(function(t){pool=pool.concat(wordThemes[t])});
-  pool=Array.from(new Set(pool)).filter(function(w){return w.length<=Math.min(size,p.max)});
-  var short=shuffle(pool.filter(function(w){return w.length<=4 && recentSearchWords.indexOf(w)<0}));
-  var mid=shuffle(pool.filter(function(w){return w.length>=5 && w.length<=7 && recentSearchWords.indexOf(w)<0}));
-  var long=shuffle(pool.filter(function(w){return w.length>=8 && recentSearchWords.indexOf(w)<0}));
-  var chosen=[];
-  var shortNeed=Math.ceil(p.count*.45), midNeed=Math.ceil(p.count*.38), longNeed=p.count-shortNeed-midNeed;
-  if(size<7){longNeed=0;midNeed=Math.ceil(p.count*.35);shortNeed=p.count-midNeed}
-  if(size>=8){chosen=chosen.concat(long.slice(0,longNeed))}
-  chosen=chosen.concat(mid.slice(0,midNeed)).concat(short.slice(0,shortNeed));
-  var rest=shuffle(pool.filter(function(w){return chosen.indexOf(w)<0 && recentSearchWords.indexOf(w)<0}));
-  chosen=chosen.concat(rest).slice(0,p.count);
-  if(chosen.length<p.count){
-    chosen=chosen.concat(shuffle(pool.filter(function(w){return chosen.indexOf(w)<0}))).slice(0,p.count);
-  }
-  recentSearchWords=chosen.concat(recentSearchWords).slice(0,40);
-  return chosen;
-}function openWordSearch(){hideAll();state.missions++;state.goals.word=true;el('wordPanel').classList.remove('hidden');syncThemeButtons();buildWordSearch();state.stars+=2;update()}function toggleTheme(theme){var i=wordState.themes.indexOf(theme);if(i>=0&&wordState.themes.length>1)wordState.themes.splice(i,1);else if(i<0){if(wordState.themes.length>=3){el('wordFeedback').textContent='Pick up to 3 themes.';return}else wordState.themes.push(theme)}syncThemeButtons();buildWordSearch()}function syncThemeButtons(){Object.keys(wordThemes).forEach(function(t){el('theme-'+t).classList.toggle('themeOn',wordState.themes.indexOf(t)>=0)})}function changeSize(d){wordState.size=Math.max(5,Math.min(10,wordState.size+d));buildWordSearch()}function buildWordSearch(){var size=wordState.size,p=wordPlan(size);wordState.found=[];wordState.placements={};wordState.path=[];wordState.misses=0;var grid=Array.from({length:size},function(){return Array(size).fill('')});var selected=[];chooseWords(size).forEach(function(w){if(selected.length<p.count&&placeWord(grid,w,dirsFor(size)))selected.push(w)});wordState.words=selected;var letters=selected.join('')+'AEIOURSTLN';for(var r=0;r<size;r++)for(var c=0;c<size;c++)if(!grid[r][c])grid[r][c]=letters[Math.floor(Math.random()*letters.length)];wordState.grid=grid;renderWord();el('wordFeedback').textContent='Find '+selected.length+' words!'}function placeWord(grid,word,dirs){var size=grid.length;for(var tries=0;tries<300;tries++){var d=dirs[Math.floor(Math.random()*dirs.length)],dc=d[0],dr=d[1],r=Math.floor(Math.random()*size),c=Math.floor(Math.random()*size),endR=r+dr*(word.length-1),endC=c+dc*(word.length-1);if(endR<0||endR>=size||endC<0||endC>=size)continue;var path=[],ok=true;for(var i=0;i<word.length;i++){var rr=r+dr*i,cc=c+dc*i;if(grid[rr][cc]&&grid[rr][cc]!==word[i]){ok=false;break}path.push({r:rr,c:cc})}if(ok){path.forEach(function(p,i){grid[p.r][p.c]=word[i]});wordState.placements[word]=path;return true}}return false}function cellSize(size){var board=Math.min(innerWidth-52,innerHeight*.54,680);return Math.max(34,Math.min(66,Math.floor((board-(size-1)*6)/size)))}function renderWord(){var size=wordState.size;el('gridSizeLabel').textContent=size;el('gridSizeLabel2').textContent=size;el('wordProgress').style.width=(wordState.words.length?wordState.found.length/wordState.words.length*100:0)+'%';var g=el('wordGrid');g.style.setProperty('--cell',cellSize(size)+'px');g.style.gridTemplateColumns='repeat('+size+', var(--cell))';g.innerHTML='';for(var r=0;r<size;r++)for(var c=0;c<size;c++){var b=document.createElement('button');b.className='cell';b.textContent=wordState.grid[r][c];b.dataset.r=r;b.dataset.c=c;b.addEventListener('pointerdown',startDrag);b.addEventListener('pointerenter',enterCell);g.appendChild(b)}document.addEventListener('pointerup',endDrag,{once:true});paintFound();el('wordList').innerHTML=wordState.words.map(function(w){return '<span class="wordChip '+(wordState.found.indexOf(w)>=0?'done':'')+'">'+w+'</span>'}).join('')}function startDrag(e){e.preventDefault();wordState.dragging=true;wordState.path=[];clearPath();addToPath(e.currentTarget)}function enterCell(e){if(wordState.dragging)addToPath(e.currentTarget)}function addToPath(cell){var r=+cell.dataset.r,c=+cell.dataset.c,key=r+','+c;if(wordState.path.some(function(p){return p.key===key}))return;var trial=wordState.path.concat([{r:r,c:c,key:key}]);if(trial.length>2&&!straight(trial))return;wordState.path=trial;paintPath()}function straight(path){var a=path[0],b=path[path.length-1];return a.r===b.r||a.c===b.c||Math.abs(b.r-a.r)===Math.abs(b.c-a.c)}function paintPath(){clearPath();wordState.path.forEach(function(p){wordCell(p.r,p.c).classList.add('path')})}function clearPath(){document.querySelectorAll('.cell.path,.cell.bad,.cell.hint').forEach(function(x){x.classList.remove('path','bad','hint')})}function endDrag(){if(!wordState.dragging)return;wordState.dragging=false;checkPath()}function checkPath(){var sel=wordState.path;if(sel.length<2){clearPath();return}var word=sel.map(function(p){return wordState.grid[p.r][p.c]}).join(''),back=word.split('').reverse().join(''),found=wordState.words.find(function(w){return (w===word||w===back)&&wordState.found.indexOf(w)<0});if(found){wordState.found.push(found);state.stars+=4;state.wordFinds++;el('wordFeedback').textContent='You found '+found+'!';sparkle(['⭐','🔎']);if(wordState.found.length===wordState.words.length){state.stars+=10;rescue(wordState.misses>=3);openDebrief('Search Beach')}}else{wordState.misses++;state.hints++;sel.forEach(function(p){var x=wordCell(p.r,p.c);if(x)x.classList.add('bad')});el('wordFeedback').textContent=wordState.misses>=3?'Three tricky tries. Consider a reset.':'Try another direction.'}wordState.path=[];setTimeout(function(){renderWord();update()},found?150:450)}function paintFound(){wordState.found.forEach(function(w){(wordState.placements[w]||[]).forEach(function(p){var x=wordCell(p.r,p.c);if(x)x.classList.add('found')})})}function showWordHint(){var left=wordState.words.find(function(w){return wordState.found.indexOf(w)<0});if(!left)return;state.hints++;var p=wordState.placements[left][0];wordCell(p.r,p.c).classList.add('hint');update()}function wordCell(r,c){return document.querySelector('.cell[data-r="'+r+'"][data-c="'+c+'"]')}
-function openMemory(){hideAll();state.missions++;state.goals.memory=true;el('memoryPanel').classList.remove('hidden');buildMemoryGrid();startMemoryRound();state.stars+=2;update()}function memoryPlan(){var l=memoryState.level;return{tiles:l<3?4:l<6?6:9,length:Math.min(3+Math.floor(l/2),10)}}function changeMemoryLevel(d){memoryState.level=Math.max(1,Math.min(10,memoryState.level+d));buildMemoryGrid();startMemoryRound()}function toggleMemoryMode(){memoryState.mode=memoryState.mode==='forward'?'reverse':'forward';startMemoryRound()}function buildMemoryGrid(){var plan=memoryPlan(),cols=plan.tiles<=4?2:3,g=el('memoryGrid');g.style.setProperty('--memCols',cols);g.innerHTML='';for(var i=0;i<plan.tiles;i++){var b=document.createElement('button');b.className='memoryTile';b.textContent=memoryIcons[i];b.dataset.i=i;b.onclick=(function(idx){return function(){memoryTap(idx)}})(i);g.appendChild(b)}el('memoryLevelLabel').textContent=memoryState.level;el('memoryModeLabel').textContent=memoryState.mode==='forward'?'Forward':'Reverse'}function targetSeq(){return memoryState.mode==='reverse'?memoryState.sequence.slice().reverse():memoryState.sequence}function startMemoryRound(){var plan=memoryPlan();memoryState.sequence=[];memoryState.input=[];memoryState.misses=0;memoryState.visible=true;if(memoryState.hideTimer)clearTimeout(memoryState.hideTimer);for(var i=0;i<plan.length;i++)memoryState.sequence.push(Math.floor(Math.random()*plan.tiles));renderMemoryRows();el('memoryFeedback').textContent=memoryState.mode==='reverse'?'Study it, then tap it backwards.':'Study the top row.';memoryState.hideTimer=setTimeout(hideMemoryPattern,2200)}function hideMemoryPattern(){memoryState.visible=false;renderMemoryRows();el('memoryFeedback').textContent='Now copy it from memory.'}function renderMemoryRows(){el('memoryPatternRow').textContent=memoryState.visible?memoryState.sequence.map(function(i){return memoryIcons[i]}).join('  '):Array(memoryState.sequence.length).fill('❔').join('  ');var blanks=Array(memoryState.sequence.length-memoryState.input.length).fill('⬜');el('memoryInputRow').textContent=memoryState.input.map(function(i){return memoryIcons[i]}).concat(blanks).join('  ')}function memoryTap(i){var pos=memoryState.input.length,seq=targetSeq();memoryState.input.push(i);renderMemoryRows();var tile=document.querySelector('.memoryTile[data-i="'+i+'"]');if(i===seq[pos]){tile.classList.add('correct');if(memoryState.input.length===seq.length){state.stars+=8+memoryState.level;rescue(memoryState.misses>=2);sparkle(['🧠','🐢','⭐']);if(memoryState.level<10)memoryState.level++;openDebrief('Memory Mountain');setTimeout(function(){buildMemoryGrid();startMemoryRound();update()},900)}}else{memoryState.misses++;state.hints++;tile.classList.add('wrong');el('memoryFeedback').textContent=memoryState.misses>=2?'That was tricky. Reset, then try one small chunk.':'Oops. Use Show Again if you need it.';setTimeout(function(){memoryState.input=[];renderMemoryRows();document.querySelectorAll('.memoryTile').forEach(function(x){x.classList.remove('correct','wrong')})},900)}update()}function memoryHint(){state.hints++;el('memoryFeedback').textContent='Hint: say the pattern out loud while it is showing.';update()}function showPatternAgain(){state.stars=Math.max(0,state.stars-1);memoryState.visible=true;renderMemoryRows();if(memoryState.hideTimer)clearTimeout(memoryState.hideTimer);memoryState.hideTimer=setTimeout(hideMemoryPattern,1800);update()}
-function openPattern(){hideAll();state.missions++;state.goals.pattern=true;el('patternPanel').classList.remove('hidden');newPattern();state.stars+=2;update()}function changePatternLevel(d){patternState.level=Math.max(1,Math.min(10,patternState.level+d));newPattern()}function makeBasePattern(){var l=patternState.level,types=l<3?['AB','AAB','ABB']:l<6?['ABC','ABBA','AABB','AABC']:['ABCD','ABCA','ABCC','AABBCC'];var type=types[Math.floor(Math.random()*types.length)],need=type==='ABCD'?4:type==='AABBCC'?3:type.indexOf('C')>=0?3:2,base=shuffle(shapes).slice(0,need),maps={AB:[0,1],AAB:[0,0,1],ABB:[0,1,1],ABC:[0,1,2],ABBA:[0,1,1,0],AABB:[0,0,1,1],AABC:[0,0,1,2],ABCD:[0,1,2,3],ABCA:[0,1,2,0],ABCC:[0,1,2,2],AABBCC:[0,0,1,1,2,2]},seq=[];while(seq.length<14)maps[type].forEach(function(i){seq.push(base[i])});return{seq:seq,type:type}}function newPattern(){var modes=['next','missing','odd','mistake'];patternState.mode=modes[Math.floor(Math.random()*Math.min(modes.length,patternState.level<3?2:4))];var p=makeBasePattern(),displayLen=6+Math.min(patternState.level,6),display=p.seq.slice(0,displayLen),answer=p.seq[displayLen];patternState.current={type:p.type,display:display};patternState.answer=answer;patternState.misses=0;el('patternLevelLabel').textContent=patternState.level;el('patternModeLabel').textContent={next:'Next',missing:'Missing',odd:'Odd One',mistake:'Mistake'}[patternState.mode];if(patternState.mode==='missing'){var mi=1+Math.floor(Math.random()*(display.length-2));patternState.answer=display[mi];display[mi]='❓'}if(patternState.mode==='odd'){var oi=Math.floor(Math.random()*display.length);patternState.answer=display[oi];display[oi]=shuffle(shapes.filter(function(x){return x!==display[oi]}))[0]}if(patternState.mode==='mistake'){var ei=Math.floor(Math.random()*display.length);patternState.answer=p.seq[ei];display[ei]=shuffle(shapes.filter(function(x){return x!==p.seq[ei]}))[0]}el('patternStrip').innerHTML=display.map(function(x){return '<span>'+x+'</span>'}).join('')+(patternState.mode==='next'?'<span>❓</span>':'');var choices=shuffle([patternState.answer].concat(shuffle(shapes.filter(function(x){return x!==patternState.answer})).slice(0,patternState.level>=6?4:3)));var box=el('patternChoices');box.innerHTML='';choices.forEach(function(choice){var b=document.createElement('button');b.className='choice';b.textContent=choice;b.onclick=function(){patternGuess(choice)};box.appendChild(b)});el('patternFeedback').textContent={next:'What comes next?',missing:'What belongs in the blank?',odd:'Which one does not fit?',mistake:'What should the mistake be?'}[patternState.mode]}function patternGuess(choice){if(choice===patternState.answer){state.stars+=7+patternState.level;rescue(patternState.misses>=2);sparkle(['🧩','🐢','⭐']);if(patternState.level<10)patternState.level++;openDebrief('Pattern Cave');setTimeout(function(){newPattern();update()},900)}else{patternState.misses++;state.hints++;el('patternFeedback').textContent=patternState.misses>=2?'Look for the repeating chunk. Try a reset if needed.':'Not that one. Check the rule.';update()}}function patternHint(){state.hints++;el('patternFeedback').textContent='Hint: rule type '+(patternState.current?patternState.current.type:'AB')+'.';update()}
-function openDrawing(){hideAll();state.missions++;state.goals.drawing=true;el('drawingPanel').classList.remove('hidden');newDrawing();state.stars+=2;update()}function newDrawingCategory(){drawCat=shuffle(Object.keys(drawCats))[0];newDrawing()}function newDrawing(){var item=shuffle(drawCats[drawCat])[0],verbs=['Draw','Design','Invent','Sketch','Create'],twist=['with a tiny hat','inside a spaceship','made of triangles','with one silly mistake','doing something impossible','with a helper turtle'];el('drawCategory').textContent=drawCat;el('drawingPrompt').textContent=shuffle(verbs)[0]+' a '+item+' '+shuffle(twist)[0]+'.'}function doneDrawing(){state.stars+=5;rescue(true);sparkle(['🎉','🐢','⭐']);openDebrief('Creation Cove');update()}
-window.addEventListener('resize',function(){if(!el('wordPanel').classList.contains('hidden'))renderWord();if(!el('dotPanel').classList.contains('hidden'))drawDots()});document.addEventListener('DOMContentLoaded',function(){setupDailyChallenge();update()});
-</script>
-</body>
+            .wrap {
+                max-width: 1200px;
+                margin: auto;
+                padding: 10px 14px
+            }
+
+            header {
+                position: sticky;
+                top: 0;
+                z-index: 20;
+                background: rgba(7,16,36,.97);
+                border-bottom: 2px solid rgba(255,255,255,.15)
+            }
+
+            .top {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                padding: 5px 14px
+            }
+
+            h1 {
+                font-size: clamp(1rem,2.7vw,1.55rem);
+                margin: 0
+            }
+
+            h2 {
+                font-size: clamp(1.25rem,3.5vw,2rem);
+                margin: 0 0 10px
+            }
+
+            .sub {
+                color: #d9ecff;
+                font-size: .82rem
+            }
+
+            .badges {
+                display: flex;
+                gap: 5px;
+                flex-wrap: wrap
+            }
+
+            .badge {
+                background: #ffd166;
+                color: #302000;
+                border: 2px solid #fff;
+                border-radius: 999px;
+                padding: 4px 8px;
+                font-size: .8rem;
+                font-weight: 900
+            }
+
+            .zoneBadge {
+                background: #68ff9c
+            }
+
+            .bar {
+                height: 8px;
+                background: rgba(255,255,255,.2);
+                border-radius: 999px;
+                overflow: hidden;
+                margin: 0 14px 4px
+            }
+
+            .bar div {
+                height: 100%;
+                width: 0;
+                background: linear-gradient(90deg,#68ff9c,#ffd166)
+            }
+
+            .panel {
+                background: rgba(255,255,255,.11);
+                border: 3px solid rgba(255,255,255,.22);
+                border-radius: 24px;
+                padding: 12px;
+                margin: 8px 0
+            }
+
+            .pill {
+                background: #eaf8ff;
+                color: #10233a;
+                border-radius: 999px;
+                padding: 7px 10px;
+                font-size: .85rem;
+                font-weight: 900
+            }
+
+            .launcherTop,.topLine {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap
+            }
+
+            .missionGrid {
+                display: grid;
+                grid-template-columns: repeat(8,minmax(92px,1fr));
+                grid-template-rows: repeat(2,86px);
+                gap: 8px
+            }
+
+            .tile {
+                position: relative;
+                overflow: hidden;
+                border: 0;
+                border-radius: 18px;
+                padding: 7px;
+                color: #08213a;
+                font-weight: 900;
+                background: linear-gradient(180deg,#fff,#bff3ff);
+                box-shadow: 0 5px 0 #4ba7c2;
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 2px
+            }
+
+            .tile span {
+                font-size: 1.8rem
+            }
+
+            .tile b {
+                font-size: .82rem;
+                line-height: 1.05
+            }
+
+            .tile small {
+                font-size: .65rem;
+                color: #27435c
+            }
+
+            .tile:active,.action:active,.cell:active,.memoryTile:active,.choice:active {
+                transform: translateY(4px)
+            }
+
+            .green {
+                background: linear-gradient(180deg,#e2ffe9,#84f59a)!important;
+                box-shadow: 0 5px 0 #35a84f!important
+            }
+
+            .yellow {
+                background: linear-gradient(180deg,#fff8d8,#ffd166)!important;
+                box-shadow: 0 5px 0 #c79224!important
+            }
+
+            .pink {
+                background: linear-gradient(180deg,#ffe2fb,#ff9eea)!important;
+                box-shadow: 0 5px 0 #b94ca3!important
+            }
+
+            .purple {
+                background: linear-gradient(180deg,#efe7ff,#b49cff)!important;
+                box-shadow: 0 5px 0 #725fd1!important
+            }
+
+            .locked {
+                opacity: .7;
+                filter: grayscale(.25)
+            }
+
+            .construction::after {
+                content: "UNDER CONSTRUCTION";
+                position: absolute;
+                left: -38px;
+                bottom: 18px;
+                width: 185px;
+                transform: rotate(-35deg);
+                background: #ff8a8a;
+                color: #fff;
+                border: 2px solid #fff;
+                font-size: .58rem;
+                font-weight: 1000;
+                padding: 4px 0
+            }
+
+            .hidden {
+                display: none!important
+            }
+
+            .card {
+                background: #fff;
+                color: #10233a;
+                border-radius: 28px;
+                padding: 14px;
+                min-height: calc(100vh - 125px);
+                border: 7px solid #84f59a;
+                box-shadow: 0 12px 0 #35a84f;
+                overflow: hidden
+            }
+
+            .card.gold {
+                border-color: #ffd166;
+                box-shadow: 0 12px 0 #c79224
+            }
+
+            .card.pinkBorder {
+                border-color: #ff9eea;
+                box-shadow: 0 12px 0 #b94ca3
+            }
+
+            .card.purpleBorder {
+                border-color: #b49cff;
+                box-shadow: 0 12px 0 #725fd1
+            }
+
+            .row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
+                align-items: center;
+                margin: 8px 0
+            }
+
+            .action {
+                border: 0;
+                border-radius: 18px;
+                padding: 11px 14px;
+                min-height: 44px;
+                background: #5ee4ff;
+                color: #052334;
+                font-weight: 900;
+                cursor: pointer;
+                box-shadow: 0 5px 0 #2391ad
+            }
+
+            .action.good {
+                background: #68ff9c;
+                box-shadow: 0 5px 0 #25a74f
+            }
+
+            .action.warn {
+                background: #ffd166;
+                box-shadow: 0 5px 0 #bd831d
+            }
+
+            .action.red {
+                background: #ff8a8a;
+                box-shadow: 0 5px 0 #bd4343
+            }
+
+            .themeOn {
+                background: #68ff9c!important
+            }
+
+            .playGrid {
+                display: grid;
+                grid-template-columns: minmax(0,1fr) 280px;
+                gap: 14px;
+                align-items: start
+            }
+
+            .boardWrap {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden
+            }
+
+            .feedback {
+                font-size: 1.12rem;
+                font-weight: 900;
+                color: #10233a;
+                min-height: 32px;
+                text-align: center;
+                background: #fff8d8;
+                border-radius: 18px;
+                padding: 10px
+            }
+
+            .progress {
+                height: 16px;
+                border-radius: 999px;
+                background: #d7ecf5;
+                overflow: hidden
+            }
+
+            .progress div {
+                height: 100%;
+                width: 0;
+                background: #68ff9c
+            }
+
+            .wordControls {
+                display: grid;
+                grid-template-columns: repeat(6,minmax(86px,1fr));
+                gap: 8px;
+                margin: 8px 0
+            }
+
+            .wordControls .action {
+                font-size: .92rem;
+                padding: 9px 7px
+            }
+
+            .wordGrid {
+                display: grid;
+                gap: 6px;
+                justify-content: center;
+                margin: 6px auto;
+                touch-action: none;
+                user-select: none
+            }
+
+            .cell {
+                width: var(--cell,48px);
+                height: var(--cell,48px);
+                border: 0;
+                border-radius: 11px;
+                font-size: calc(var(--cell,48px)*.44);
+                font-weight: 900;
+                background: #eaf8ff;
+                color: #10233a;
+                box-shadow: 0 4px 0 #9fc7d8;
+                cursor: pointer;
+                line-height: 1;
+                touch-action: none
+            }
+
+            .cell.path {
+                background: #ffd166
+            }
+
+            .cell.bad {
+                background: #ffb2b2
+            }
+
+            .cell.found {
+                background: #68ff9c
+            }
+
+            .cell.hint {
+                outline: 5px solid #ff8a8a
+            }
+
+            .wordList {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                justify-content: center
+            }
+
+            .wordChip {
+                background: #efe7ff;
+                color: #10233a;
+                border-radius: 999px;
+                padding: 9px 12px;
+                font-weight: 900
+            }
+
+            .wordChip.done {
+                text-decoration: line-through;
+                background: #68ff9c
+            }
+
+            .memoryGrid,.patternChoices {
+                display: grid;
+                gap: 10px;
+                justify-content: center;
+                margin: 12px auto
+            }
+
+            .memoryGrid {
+                grid-template-columns: repeat(var(--memCols,3),minmax(58px,72px))
+            }
+
+            .memoryTile,.choice {
+                border: 0;
+                border-radius: 18px;
+                min-height: 58px;
+                font-size: 2rem;
+                font-weight: 900;
+                cursor: pointer;
+                background: #eaf8ff;
+                color: #10233a;
+                box-shadow: 0 5px 0 #9fc7d8
+            }
+
+            .memoryTile.correct {
+                background: #68ff9c
+            }
+
+            .memoryTile.wrong {
+                background: #ffb2b2
+            }
+
+            .preview,.memoryRows {
+                font-size: 1.4rem;
+                font-weight: 900;
+                background: #fff8d8;
+                color: #10233a;
+                border-radius: 18px;
+                padding: 10px;
+                text-align: center
+            }
+
+            .memoryLabel {
+                font-size: .9rem;
+                font-weight: 1000;
+                margin: 4px 0
+            }
+
+            .memoryRow {
+                font-size: 2rem;
+                min-height: 48px;
+                margin-bottom: 8px
+            }
+
+            .patternStrip {
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+                background: #fff8d8;
+                border-radius: 18px;
+                padding: 14px;
+                margin: 10px 0;
+                font-size: 2.4rem
+            }
+
+            .patternChoices {
+                grid-template-columns: repeat(auto-fit,minmax(110px,1fr));
+                max-width: 700px
+            }
+
+            .choice {
+                min-height: 72px
+            }
+
+            .dotCanvas {
+                width: min(760px,100%);
+                height: 520px;
+                max-height: 58vh;
+                background: #f8fbff;
+                border: 5px solid #b49cff;
+                border-radius: 24px;
+                touch-action: none
+            }
+
+            .ruleBox {
+                background: #fff8d8;
+                border-radius: 18px;
+                padding: 12px;
+                font-weight: 900
+            }
+
+            .drawerTab {
+                position: fixed;
+                right: 0;
+                top: 62px;
+                z-index: 25;
+                border: 0;
+                border-radius: 16px 0 0 16px;
+                padding: 10px 8px;
+                background: #ffd166;
+                color: #302000;
+                font-weight: 900;
+                writing-mode: vertical-rl;
+                cursor: pointer
+            }
+
+            .drawer {
+                position: fixed;
+                right: 0;
+                top: 56px;
+                z-index: 26;
+                width: min(270px,84vw);
+                background: rgba(7,16,36,.97);
+                border: 3px solid rgba(255,255,255,.22);
+                border-right: 0;
+                border-radius: 24px 0 0 24px;
+                padding: 12px;
+                transform: translateX(105%);
+                transition: .2s
+            }
+
+            .drawer.open {
+                transform: translateX(0)
+            }
+
+            .drawer .action {
+                width: 100%;
+                margin: 5px 0
+            }
+
+            .closeDrawer {
+                position: absolute;
+                top: 6px;
+                right: 8px;
+                background: transparent;
+                border: 0;
+                color: white;
+                font-size: 1.4rem;
+                cursor: pointer
+            }
+
+            .modal {
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,.72);
+                display: none;
+                place-items: center;
+                z-index: 30;
+                padding: 18px
+            }
+
+            .modal.show {
+                display: grid
+            }
+
+            .pop {
+                background: #fff;
+                color: #10233a;
+                border-radius: 32px;
+                max-width: 680px;
+                width: 100%;
+                padding: 24px;
+                text-align: center;
+                border: 8px solid #5ee4ff
+            }
+
+            .popGrid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+                gap: 10px
+            }
+
+            .celebrate {
+                position: fixed;
+                inset: 0;
+                pointer-events: none;
+                overflow: hidden;
+                z-index: 40
+            }
+
+            .confetti {
+                position: absolute;
+                font-size: 2.4rem;
+                animation: fall 1.6s linear forwards
+            }
+
+            .coach {
+                font-family: Arial,sans-serif;
+                color: #d9ecff
+            }
+
+            .coachGrid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit,minmax(112px,1fr));
+                gap: 10px
+            }
+
+            .coachBox {
+                background: rgba(0,0,0,.18);
+                border-radius: 18px;
+                padding: 12px
+            }
+
+            .debriefGrid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+                gap: 8px;
+                margin-top: 8px
+            }
+
+            .debriefBox {
+                background: rgba(0,0,0,.18);
+                border-radius: 14px;
+                padding: 10px
+            }
+
+            .missionBoard {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin-top: 10px
+            }
+
+            .missionCard {
+                background: rgba(255,255,255,.13);
+                border: 2px solid rgba(255,255,255,.25);
+                border-radius: 18px;
+                padding: 10px
+            }
+
+            .missionCard h3 {
+                margin: 0 0 8px;
+                font-size: 1.05rem
+            }
+
+            .goalList {
+                display: grid;
+                gap: 6px
+            }
+
+            .goalItem {
+                background: rgba(0,0,0,.18);
+                border-radius: 12px;
+                padding: 8px;
+                font-weight: 900
+            }
+
+            .goalItem.done {
+                background: #68ff9c;
+                color: #063817
+            }
+
+            @media(max-width: 760px) {
+                .missionBoard {
+                    grid-template-columns:1fr
+                }
+            }
+
+            @keyframes fall {
+                from {
+                    transform: translateY(-80px) rotate(0)
+                }
+
+                to {
+                    transform: translateY(110vh) rotate(360deg);
+                    opacity: .2
+                }
+            }
+
+            @media(max-width: 1000px) {
+                .missionGrid {
+                    grid-template-columns:repeat(4,1fr);
+                    grid-template-rows: auto
+                }
+
+                .tile {
+                    min-height: 78px
+                }
+
+                .playGrid {
+                    grid-template-columns: 1fr
+                }
+
+                .wordControls {
+                    grid-template-columns: repeat(3,1fr)
+                }
+            }
+
+            @media(max-width: 620px) {
+                .missionGrid {
+                    grid-template-columns:repeat(2,1fr)
+                }
+
+                .wordControls {
+                    grid-template-columns: repeat(2,1fr)
+                }
+
+                .top {
+                    display: block
+                }
+
+                .dotCanvas {
+                    height: 430px
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div id="celebrate" class="celebrate"></div>
+        <header>
+            <div class="top">
+                <div>
+                    <h1>🚀 Mission Control</h1>
+                    <div class="sub">Turtle Rescue Academy</div>
+                </div>
+                <div class="badges">
+                    <div class="badge">
+                        ⭐ <span id="stars">0</span>
+                    </div>
+                    <div class="badge">
+                        🐢 <span id="rescued">0</span>
+                    </div>
+                    <button class="badge zoneBadge" onclick="cycleZone()">
+                        🧠 Zone: <span id="zoneEmoji">😀</span>
+                    </button>
+                    <div class="badge">
+                        💪 <span id="comebackPower">0</span>
+                        %
+                    </div>
+                </div>
+            </div>
+            <div class="bar">
+                <div id="comebackFill"></div>
+            </div>
+        </header>
+        <main class="wrap">
+            <section class="panel">
+                <div class="launcherTop">
+                    <h2>Mission Grid</h2>
+                    <span class="pill">Built for productive frustration</span>
+                </div>
+                <div class="missionGrid">
+                    <button class="tile purple" onclick="openDotLab()">
+                        <span>✏️🔵</span>
+                        <b>Dot Lab</b>
+                        <small>One-stroke puzzles</small>
+                    </button>
+                    <button class="tile green" onclick="openWordSearch()">
+                        <span>🏝️🔎</span>
+                        <b>Search Beach</b>
+                        <small>Word Search</small>
+                    </button>
+                    <button class="tile yellow" onclick="openMemory()">
+                        <span>🧠⛰️</span>
+                        <b>Memory Mountain</b>
+                        <small>Remember</small>
+                    </button>
+                    <button class="tile" onclick="openPattern()">
+                        <span>🧩🕵️</span>
+                        <b>Pattern Cave</b>
+                        <small>Rule detective</small>
+                    </button>
+                    <button class="tile pink" onclick="openDrawing()">
+                        <span>🎨</span>
+                        <b>Creation Cove</b>
+                        <small>Draw It</small>
+                    </button>
+                    <button class="tile locked construction" onclick="lockedWorld()">
+                        <span>🔒🏗️</span>
+                        <b>Builder Bay</b>
+                    </button>
+                    <button class="tile purple" onclick="window.location.href='modules/frustration-detective.html'">
+                        <span>🔍🧠</span>
+                        <b>Detective Agency</b>
+                        <small>Spot frustration clues</small>
+                    </button>
+                    <button class="tile locked construction" onclick="lockedWorld()">
+                        <span>🔒⭐</span>
+                        <b>Boss Gate</b>
+                    </button>
+                    <button class="tile locked construction" onclick="lockedWorld()">
+                        <span>🔒🎲</span>
+                        <b>Bonus Island</b>
+                    </button>
+                    <button class="tile locked construction" onclick="lockedWorld()">
+                        <span>🔒⚡</span>
+                        <b>Speed Round</b>
+                    </button>
+                    <button class="tile locked construction" onclick="lockedWorld()">
+                        <span>🔒🗺️</span>
+                        <b>Map Quest</b>
+                    </button>
+                    <button class="tile locked construction" onclick="lockedWorld()">
+                        <span>🔒🧪</span>
+                        <b>Science Dock</b>
+                    </button>
+                    <button class="tile locked construction" onclick="lockedWorld()">
+                        <span>🔒🦖</span>
+                        <b>Dino Dig</b>
+                    </button>
+                    <button class="tile locked construction" onclick="lockedWorld()">
+                        <span>🔒🥷</span>
+                        <b>Ninja Path</b>
+                    </button>
+                    <button class="tile locked construction" onclick="lockedWorld()">
+                        <span>🔒🔤</span>
+                        <b>Letter Lab</b>
+                    </button>
+                    <button class="tile locked construction" onclick="lockedWorld()">
+                        <span>🔒🎯</span>
+                        <b>Target Trail</b>
+                    </button>
+                </div>
+                <div class="missionBoard">
+                    <div class="missionCard">
+                        <h3>🚀 Today's Mission Board</h3>
+                        <div id="missionGoals" class="goalList"></div>
+                    </div>
+                    <div class="missionCard">
+                        <h3>🌟 Daily Challenge</h3>
+                        <div id="dailyChallenge" class="goalItem">Loading challenge...</div>
+                    </div>
+                </div>
+            </section>
+            <section id="dotPanel" class="hidden">
+                <div class="card purpleBorder">
+                    <div class="topLine">
+                        <div>
+                            <h2>✏️ Dot Challenge Lab</h2>
+                            <p class="sub" style="color:#38506b">Connect dots under tricky rules. The goal is noticing frustration, not perfection.</p>
+                        </div>
+                        <span class="pill">
+                            Level <span id="dotLevelLabel">1</span>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <button class="action warn" onclick="changeDotLevel(-1)">Easier</button>
+                        <button class="action warn" onclick="changeDotLevel(1)">Harder</button>
+                        <button class="action good" onclick="newDotPuzzle()">New Puzzle</button>
+                        <button class="action" onclick="undoDot()">Undo</button>
+                        <button class="action red" onclick="clearDotPath()">Clear</button>
+                    </div>
+                    <div class="playGrid">
+                        <div class="boardWrap">
+                            <canvas id="dotCanvas" class="dotCanvas" width="760" height="520"></canvas>
+                        </div>
+                        <div>
+                            <div id="dotRules" class="ruleBox"></div>
+                            <div id="dotFeedback" class="feedback" style="margin-top:10px">Tap dots to build a path.</div>
+                            <div class="row">
+                                <button class="action good" onclick="finishDotPuzzle()">Done / Check</button>
+                                <button class="action warn" onclick="openDebrief('Dot Lab')">Debrief</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="wordPanel" class="hidden">
+                <div class="card">
+                    <div class="topLine">
+                        <div>
+                            <h2>🏝️ Search Beach</h2>
+                            <p class="sub" style="color:#38506b">Pick 1 to 3 themes. Drag across words.</p>
+                        </div>
+                        <span class="pill">
+                            Grid: <span id="gridSizeLabel">6</span>
+                            x <span id="gridSizeLabel2">6</span>
+                        </span>
+                    </div>
+                    <div class="wordControls">
+                        <button id="theme-animals" class="action themeOn" onclick="toggleTheme('animals')">🐢 Animals</button>
+                        <button id="theme-dinos" class="action" onclick="toggleTheme('dinos')">🦖 Dinos</button>
+                        <button id="theme-space" class="action" onclick="toggleTheme('space')">🚀 Space</button>
+                        <button id="theme-ninjas" class="action" onclick="toggleTheme('ninjas')">🥷 Ninjas</button>
+                        <button id="theme-bugs" class="action" onclick="toggleTheme('bugs')">🐞 Bugs</button>
+                        <button id="theme-robots" class="action" onclick="toggleTheme('robots')">🤖 Robots</button>
+                    </div>
+                    <div class="row">
+                        <button class="action warn" onclick="changeSize(-1)">Smaller</button>
+                        <button class="action warn" onclick="changeSize(1)">Bigger</button>
+                        <button class="action good" onclick="buildWordSearch()">New Puzzle</button>
+                        <button class="action" onclick="showWordHint()">Hint</button>
+                        <button class="action warn" onclick="openDebrief('Search Beach')">Debrief</button>
+                    </div>
+                    <div class="playGrid">
+                        <div class="boardWrap">
+                            <div id="wordGrid" class="wordGrid"></div>
+                        </div>
+                        <div>
+                            <div class="progress">
+                                <div id="wordProgress"></div>
+                            </div>
+                            <div id="wordList" class="wordList"></div>
+                            <div id="wordFeedback" class="feedback">Find a word, captain!</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="memoryPanel" class="hidden">
+                <div class="card gold">
+                    <div class="topLine">
+                        <div>
+                            <h2>🧠 Memory Mountain</h2>
+                            <p class="sub" style="color:#38506b">Watch the pattern. Then copy it after it hides.</p>
+                        </div>
+                        <span class="pill">
+                            Level <span id="memoryLevelLabel">1</span>
+                            · <span id="memoryModeLabel">Forward</span>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <button class="action warn" onclick="changeMemoryLevel(-1)">Easier</button>
+                        <button class="action warn" onclick="changeMemoryLevel(1)">Harder</button>
+                        <button class="action good" onclick="startMemoryRound()">New Pattern</button>
+                        <button class="action" onclick="toggleMemoryMode()">Switch Mode</button>
+                        <button class="action warn" onclick="showPatternAgain()">👀 Show Again</button>
+                        <button class="action warn" onclick="openDebrief('Memory Mountain')">Debrief</button>
+                    </div>
+                    <div class="memoryRows">
+                        <div class="memoryLabel">COPY THIS:</div>
+                        <div id="memoryPatternRow" class="memoryRow"></div>
+                        <div class="memoryLabel">YOUR PICKS:</div>
+                        <div id="memoryInputRow" class="memoryRow"></div>
+                    </div>
+                    <div id="memoryGrid" class="memoryGrid"></div>
+                    <div id="memoryFeedback" class="feedback">Climb the mountain one step at a time.</div>
+                </div>
+            </section>
+            <section id="patternPanel" class="hidden">
+                <div class="card">
+                    <div class="topLine">
+                        <div>
+                            <h2>🧩 Pattern Cave 2.0</h2>
+                            <p class="sub" style="color:#38506b">Next, missing item, odd-one-out, and mistake hunter modes.</p>
+                        </div>
+                        <span class="pill">
+                            Level <span id="patternLevelLabel">1</span>
+                            · <span id="patternModeLabel">Next</span>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <button class="action warn" onclick="changePatternLevel(-1)">Easier</button>
+                        <button class="action warn" onclick="changePatternLevel(1)">Harder</button>
+                        <button class="action good" onclick="newPattern()">New Pattern</button>
+                        <button class="action" onclick="patternHint()">Hint</button>
+                        <button class="action warn" onclick="openDebrief('Pattern Cave')">Debrief</button>
+                    </div>
+                    <div id="patternStrip" class="patternStrip"></div>
+                    <div id="patternChoices" class="patternChoices"></div>
+                    <div id="patternFeedback" class="feedback">Find the rule, detective.</div>
+                </div>
+            </section>
+            <section id="drawingPanel" class="hidden">
+                <div class="card pinkBorder">
+                    <div class="topLine">
+                        <h2>🎨 Creation Cove</h2>
+                        <span class="pill">
+                            <span id="drawCategory">Silly</span>
+                        </span>
+                    </div>
+                    <div id="drawingPrompt" class="preview">Draw a turtle using only three shapes.</div>
+                    <p class="sub" style="color:#38506b">Good enough counts. Keep going without restarting.</p>
+                    <div class="row">
+                        <button class="action good" onclick="doneDrawing()">I Did It!</button>
+                        <button class="action warn" onclick="newDrawing()">New Drawing</button>
+                        <button class="action" onclick="newDrawingCategory()">New Category</button>
+                        <button class="action red" onclick="openReset('Turtle Reset')">I Need Reset</button>
+                        <button class="action warn" onclick="openDebrief('Creation Cove')">Debrief</button>
+                    </div>
+                </div>
+            </section>
+            <section class="panel">
+                <button class="action" onclick="el('coachDetails').classList.toggle('hidden')">Coach Corner</button>
+                <div id="coachDetails" class="coach hidden">
+                    <h2>Coach Corner</h2>
+                    <div class="coachGrid">
+                        <div class="coachBox">
+                            Missions<br>
+                            <b id="missions">0</b>
+                        </div>
+                        <div class="coachBox">
+                            Resets<br>
+                            <b id="resets">0</b>
+                        </div>
+                        <div class="coachBox">
+                            Hints<br>
+                            <b id="hints">0</b>
+                        </div>
+                        <div class="coachBox">
+                            Comebacks<br>
+                            <b id="comebacks">0</b>
+                        </div>
+                        <div class="coachBox">
+                            Word Finds<br>
+                            <b id="wordFinds">0</b>
+                        </div>
+                        <div class="coachBox">
+                            Dot Wins<br>
+                            <b id="dotWins">0</b>
+                        </div>
+                        <div class="coachBox">
+                            Memory<br>
+                            <b id="memoryLevelReport">1</b>
+                        </div>
+                        <div class="coachBox">
+                            Pattern<br>
+                            <b id="patternLevelReport">1</b>
+                        </div>
+                    </div>
+                    <h2 style="margin-top:12px">Session Debrief</h2>
+                    <div class="debriefGrid">
+                        <div class="debriefBox">
+                            😀 Easy<br>
+                            <b id="dEasy">0</b>
+                        </div>
+                        <div class="debriefBox">
+                            🙂 Thinking<br>
+                            <b id="dThinking">0</b>
+                        </div>
+                        <div class="debriefBox">
+                            😐 Hard<br>
+                            <b id="dHard">0</b>
+                        </div>
+                        <div class="debriefBox">
+                            😬 Frustrating<br>
+                            <b id="dFrustrating">0</b>
+                        </div>
+                        <div class="debriefBox">
+                            🦖 Zach First<br>
+                            <b id="dZach">0</b>
+                        </div>
+                        <div class="debriefBox">
+                            🐢 Coach First<br>
+                            <b id="dCoach">0</b>
+                        </div>
+                        <div class="debriefBox">
+                            🤝 Both<br>
+                            <b id="dBoth">0</b>
+                        </div>
+                        <div class="debriefBox">
+                            ✅ Reset Yes<br>
+                            <b id="dResetYes">0</b>
+                        </div>
+                    </div>
+                    <p id="coachNote">Session opened.</p>
+                </div>
+            </section>
+        </main>
+        <button class="drawerTab" onclick="toggleDrawer()">RESET</button>
+        <div id="drawer" class="drawer">
+            <button class="closeDrawer" onclick="toggleDrawer()">×</button>
+            <h3>Tools</h3>
+            <label style="display:block;font-weight:900;margin:6px 0 4px">Sidekick</label>
+            <select id="sidekickSelect" onchange="pickSidekickFromSelect()" style="width:100%;padding:10px;border-radius:14px;border:0;font-weight:900;margin-bottom:8px">
+                <option value="🐢|Turtle Captain">🐢 Turtle Captain</option>
+                <option value="🦖|Dino Pilot">🦖 Dino Pilot</option>
+                <option value="🤖|Robot Buddy">🤖 Robot Buddy</option>
+                <option value="🥷|Ninja Star">🥷 Ninja Star</option>
+            </select>
+            <button class="action good" onclick="openReset('Turtle Reset');toggleDrawer(false)">🐢 Turtle Reset</button>
+            <button class="action" onclick="openReset('Freeze Reset');toggleDrawer(false)">🧊 Freeze Reset</button>
+            <button class="action warn" onclick="openCheck();toggleDrawer(false)">👀 Brain Check</button>
+            <button class="action" onclick="showReport();toggleDrawer(false)">📋 Report</button>
+        </div>
+        <div id="modal" class="modal">
+            <div class="pop">
+                <h2 id="modalTitle">Reset</h2>
+                <div id="modalBody"></div>
+                <button class="action good" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+        <script>
+            var state = {
+                stars: 0,
+                rescued: 0,
+                comebackPower: 0,
+                missions: 0,
+                resets: 0,
+                hints: 0,
+                comebacks: 0,
+                wordFinds: 0,
+                dotWins: 0,
+                usedReset: false,
+                sidekick: '🐢',
+                zone: 0,
+                goals: {
+                    dot: false,
+                    word: false,
+                    memory: false,
+                    pattern: false,
+                    drawing: false,
+                    reset: false,
+                    zone: false,
+                    debrief: false
+                },
+                daily: null,
+                dailyDone: false,
+                debrief: {
+                    easy: 0,
+                    thinking: 0,
+                    hard: 0,
+                    frustrating: 0,
+                    zach: 0,
+                    coach: 0,
+                    both: 0,
+                    resetYes: 0,
+                    resetNo: 0
+                }
+            };
+            var zones = ['😀', '🙂', '😐', '😬', '🛑'];
+            var zoneNames = ['Easy', 'Thinking', 'Hard', 'Frustrated', 'Reset Needed'];
+            var recentSearchWords = [];
+            var wordState = {
+                themes: ['animals'],
+                size: 6,
+                grid: [],
+                words: [],
+                found: [],
+                placements: {},
+                dragging: false,
+                path: [],
+                misses: 0
+            };
+            var memoryState = {
+                level: 1,
+                sequence: [],
+                input: [],
+                misses: 0,
+                visible: false,
+                hideTimer: null,
+                mode: 'forward'
+            };
+            var patternState = {
+                level: 1,
+                answer: null,
+                misses: 0,
+                current: null,
+                mode: 'next'
+            };
+            var dotState = {
+                level: 1,
+                dots: [],
+                path: [],
+                star: null,
+                treasure: null,
+                lineLimit: null,
+                mode: 'all'
+            };
+            var memoryIcons = ['🐢', '🦖', '🤖', '🥷', '⭐', '🚀', '🐞', '🧪', '🎯', '🧩', '🌙', '🔥'];
+            var shapes = ['🐢', '⭐', '🌙', '🔥', '🦖', '🤖', '🐞', '🚀', '🎯', '🧩'];
+            var wordThemes = {
+                animals: ['CAT', 'DOG', 'FOX', 'OWL', 'PIG', 'BEAR', 'FROG', 'DUCK', 'LION', 'WOLF', 'HORSE', 'SNAKE', 'TURTLE', 'RABBIT', 'MONKEY', 'GIRAFFE', 'ELEPHANT', 'KANGAROO', 'OTTER', 'MOOSE', 'TIGER', 'ZEBRA', 'HIPPO', 'PANDA', 'KOALA', 'GORILLA', 'LEMUR', 'CAMEL', 'LLAMA', 'SLOTH', 'SHARK', 'WHALE', 'DOLPHIN', 'SEAL', 'EAGLE', 'FALCON', 'PARROT', 'PENGUIN', 'BEAVER', 'BADGER', 'FERRET', 'RACCOON', 'SKUNK', 'COYOTE', 'JAGUAR', 'LEOPARD', 'CHEETAH', 'BUFFALO', 'DONKEY', 'GOAT', 'SHEEP', 'MOUSE', 'HAMSTER', 'SQUIRREL', 'CHIPMUNK', 'ALLIGATOR', 'CROCODILE', 'CHAMELEON', 'PORCUPINE', 'ARMADILLO', 'FLAMINGO', 'PEACOCK', 'OCTOPUS', 'LOBSTER', 'SEAHORSE', 'STARFISH', 'JELLYFISH'],
+                dinos: ['REX', 'EGG', 'BONE', 'ROAR', 'CLAW', 'DINO', 'TAIL', 'FOSSIL', 'RAPTOR', 'VOLCANO', 'METEOR', 'JURASSIC', 'TRICERA', 'STEGOSAUR', 'DINOSAUR', 'PTERODON', 'ANKYLO', 'BRONTOSAUR', 'SAUROPOD', 'SPINOSAUR', 'PARASAUROL', 'VELOCIRAPTOR', 'PTERODACTYL', 'TRICERATOPS', 'STEGOSAURUS', 'ANKYLOSAURUS', 'BRACHIOSAURUS', 'ALLOSAURUS', 'IGUANODON', 'DILOPHOSAUR', 'COMPSOGNATHUS', 'PALEONTOLOGY', 'PALEONTOLOGIST', 'EXCAVATE', 'AMBER', 'EXTINCT', 'CRETACEOUS', 'HERBIVORE', 'CARNIVORE', 'FOOTPRINT', 'SKELETON', 'MUSEUM', 'DIGSITE', 'HATCHLING'],
+                space: ['SUN', 'MOON', 'STAR', 'MARS', 'COMET', 'ALIEN', 'ROCKET', 'PLANET', 'GALAXY', 'ASTRO', 'ORBIT', 'SATURN', 'NEBULA', 'METEOR', 'COSMOS', 'VENUS', 'EARTH', 'JUPITER', 'URANUS', 'NEPTUNE', 'PLUTO', 'SPACESHIP', 'ASTRONAUT', 'SATELLITE', 'TELESCOPE', 'BLACKHOLE', 'SUPERNOVA', 'MISSION', 'LAUNCH', 'CRATER', 'GRAVITY', 'ECLIPSE', 'CONSTELLATION', 'MILKYWAY', 'SPACEWALK', 'SPACESTATION', 'MOONROVER', 'ASTEROID', 'MERCURY', 'UNIVERSE', 'QUASAR', 'ORION', 'APOLLO', 'SHUTTLE'],
+                ninjas: ['STAR', 'MASK', 'JUMP', 'FAST', 'HIDE', 'KICK', 'NINJA', 'DOJO', 'SNEAK', 'SHADOW', 'DRAGON', 'SAMURAI', 'TRAINING', 'BALANCE', 'FOCUS', 'HONOR', 'SENSEI', 'STEALTH', 'DODGE', 'CLIMB', 'FLIP', 'SPIN', 'BAMBOO', 'TEMPLE', 'ROOFTOP', 'SILENT', 'COURAGE', 'KATANA', 'SHURIKEN', 'HEADBAND', 'BLACKBELT', 'KARATE', 'MARTIAL', 'MISSION', 'GUARDIAN', 'MASTER', 'APPRENTICE', 'SWIFT', 'NUNCHUCKS'],
+                bugs: ['BUG', 'BEE', 'ANT', 'MOTH', 'WORM', 'WING', 'FLY', 'BEETLE', 'SPIDER', 'CRICKET', 'LADYBUG', 'BUTTERFLY', 'CATERPILLAR', 'DRAGONFLY', 'MOSQUITO', 'GRASSHOPPER', 'FIREFLY', 'TERMITE', 'CENTIPEDE', 'MILLIPEDE', 'COCOON', 'HONEYBEE', 'BUMBLEBEE', 'PRAYINGMANTIS', 'APHID', 'CICADA', 'TARANTULA', 'SCORPION', 'COCKROACH', 'INSECT', 'ANTENNA', 'STINGER', 'WEB', 'HIVE', 'NEST', 'POLLEN', 'CHRYSALIS', 'METAMORPH'],
+                robots: ['BOT', 'CODE', 'GEAR', 'BEEP', 'WIRE', 'LASER', 'ROBOT', 'CIRCUIT', 'COMPUTER', 'BATTERY', 'MACHINE', 'INVENTION', 'ANDROID', 'CYBORG', 'SENSOR', 'MOTOR', 'BUTTON', 'SCREEN', 'SIGNAL', 'PROGRAM', 'GADGET', 'DRONE', 'ROVER', 'CHARGER', 'ELECTRIC', 'MICROCHIP', 'PROCESSOR', 'KEYBOARD', 'MONITOR', 'SPEAKER', 'MAGNET', 'WRENCH', 'BOLT', 'FACTORY', 'AUTOMATIC', 'CONTROLLER', 'MECHANIC', 'ASSEMBLE', 'REBOOT', 'UPGRADE']
+            };
+            var drawCats = {
+                Animals: ['turtle', 'fox', 'owl', 'frog', 'rabbit', 'monkey', 'giraffe', 'elephant'],
+                Dinos: ['tiny T-Rex', 'sleepy dinosaur', 'dino chef', 'dinosaur on skates', 'baby raptor'],
+                Robots: ['robot teacher', 'robot dog', 'robot pancake maker', 'robot treehouse', 'robot astronaut'],
+                Space: ['turtle rocket', 'moon base', 'alien pet shop', 'planet playground', 'rocket shaped like a fish'],
+                Silly: ['fish riding a bike', 'pizza with legs', 'banana spaceship', 'dragon in pajamas', 'monster brushing teeth'],
+                Build: ['treehouse for a dragon', 'bridge for turtles', 'fort on the moon', 'tiny city for bugs', 'machine that makes tacos']
+            };
+            var drawCat = 'Silly';
+            function el(id) {
+                return document.getElementById(id)
+            }
+            function shuffle(a) {
+                return a.slice().sort(function() {
+                    return Math.random() - .5
+                })
+            }
+            function hideAll() {
+                ['dotPanel', 'wordPanel', 'memoryPanel', 'patternPanel', 'drawingPanel'].forEach(function(id) {
+                    el(id).classList.add('hidden')
+                })
+            }
+            function note(t) {
+                el('coachNote').textContent = t
+            }
+            function sparkle(items) {
+                var box = el('celebrate');
+                for (var i = 0; i < 18; i++) {
+                    var s = document.createElement('div');
+                    s.className = 'confetti';
+                    s.textContent = items[Math.floor(Math.random() * items.length)];
+                    s.style.left = Math.random() * 100 + 'vw';
+                    s.style.animationDelay = (Math.random() * .35) + 's';
+                    box.appendChild(s);
+                    setTimeout(function(x) {
+                        return function() {
+                            x.remove()
+                        }
+                    }, 1800, s)
+                }
+            }
+            function addComeback(n) {
+                state.comebackPower = Math.min(100, state.comebackPower + n)
+            }
+            function rescue(extra) {
+                state.rescued++;
+                state.stars += extra ? 12 : 7;
+                if (state.usedReset) {
+                    state.comebacks++;
+                    addComeback(25);
+                    state.usedReset = false
+                } else if (extra) {
+                    state.comebacks++;
+                    addComeback(15)
+                }
+            }
+            function update() {
+                el('stars').textContent = state.stars;
+                el('rescued').textContent = state.rescued;
+                el('comebackPower').textContent = state.comebackPower;
+                el('comebackFill').style.width = state.comebackPower + '%';
+                el('zoneEmoji').textContent = zones[state.zone];
+                el('missions').textContent = state.missions;
+                el('resets').textContent = state.resets;
+                el('hints').textContent = state.hints;
+                el('comebacks').textContent = state.comebacks;
+                el('wordFinds').textContent = state.wordFinds;
+                el('dotWins').textContent = state.dotWins;
+                el('memoryLevelReport').textContent = memoryState.level;
+                el('patternLevelReport').textContent = patternState.level;
+                el('dEasy').textContent = state.debrief.easy;
+                el('dThinking').textContent = state.debrief.thinking;
+                el('dHard').textContent = state.debrief.hard;
+                el('dFrustrating').textContent = state.debrief.frustrating;
+                el('dZach').textContent = state.debrief.zach;
+                el('dCoach').textContent = state.debrief.coach;
+                el('dBoth').textContent = state.debrief.both;
+                el('dResetYes').textContent = state.debrief.resetYes;
+                renderMissionBoard()
+            }
+            function cycleZone() {
+                state.zone = (state.zone + 1) % zones.length;
+                state.goals.zone = true;
+                note('Zone check: ' + zoneNames[state.zone]);
+                update()
+            }
+            function toggleDrawer(force) {
+                var d = el('drawer');
+                if (force === false) {
+                    d.classList.remove('open');
+                    return
+                }
+                d.classList.toggle('open')
+            }
+            function pickSidekickFromSelect() {
+                var parts = el('sidekickSelect').value.split('|');
+                state.sidekick = parts[0];
+                note('Sidekick changed to ' + parts[1]);
+                update()
+            }
+            function lockedWorld() {
+                el('modalTitle').textContent = 'Under Construction';
+                el('modalBody').innerHTML = '<p>This island is under construction.</p><p>Try Dot Lab, Memory Mountain, Pattern Cave, Creation Cove, or Search Beach.</p>';
+                el('modal').classList.add('show')
+            }
+            function closeModal() {
+                el('modal').classList.remove('show')
+            }
+
+            var dailyChallenges = ['Use a reset before Coach reminds you.', 'Tell Coach when you move into the Hard Zone.', 'Finish something after making a mistake.', 'Stay with a hard puzzle for two minutes.', 'Try one activity that feels hard.', 'Say "I need a reset" before quitting.', 'Use the Zone button three times.', 'Complete a debrief after a tough mission.'];
+            function setupDailyChallenge() {
+                if (!state.daily)
+                    state.daily = shuffle(dailyChallenges)[0];
+            }
+            function renderMissionBoard() {
+                if (!el('missionGoals'))
+                    return;
+                setupDailyChallenge();
+                var goals = [['dot', 'Complete Dot Lab'], ['word', 'Try Search Beach'], ['memory', 'Try Memory Mountain'], ['pattern', 'Try Pattern Cave'], ['drawing', 'Try Creation Cove'], ['zone', 'Check your Zone'], ['reset', 'Use a Reset'], ['debrief', 'Complete a Debrief']];
+                el('missionGoals').innerHTML = goals.map(function(g) {
+                    return '<div class="goalItem ' + (state.goals[g[0]] ? 'done' : '') + '">' + (state.goals[g[0]] ? '✅ ' : '⬜ ') + g[1] + '</div>';
+                }).join('');
+                el('dailyChallenge').textContent = (state.dailyDone ? '✅ ' : '⭐ ') + state.daily;
+            }
+
+            function openDebrief(mission) {
+                var temp = {
+                    mission: mission,
+                    hard: null,
+                    noticed: null,
+                    reset: null
+                };
+                el('modalTitle').textContent = '🐢 Mission Debrief';
+                el('modalBody').innerHTML = '<p><b>' + mission + '</b></p><p>How hard was that?</p><div class="popGrid"><button class="tile" onclick="debriefHard(\'easy\')"><span>😀</span><b>Easy</b></button><button class="tile" onclick="debriefHard(\'thinking\')"><span>🙂</span><b>Thinking</b></button><button class="tile yellow" onclick="debriefHard(\'hard\')"><span>😐</span><b>Hard</b></button><button class="tile pink" onclick="debriefHard(\'frustrating\')"><span>😬</span><b>Frustrating</b></button></div>';
+                window.debriefTemp = temp;
+                el('modal').classList.add('show')
+            }
+            function debriefHard(level) {
+                window.debriefTemp.hard = level;
+                state.debrief[level]++;
+                if (level === 'easy' || level === 'thinking') {
+                    finishDebrief()
+                } else {
+                    el('modalBody').innerHTML = '<p>Who noticed first?</p><div class="popGrid"><button class="tile green" onclick="debriefNotice(\'zach\')"><span>🦖</span><b>Zach</b></button><button class="tile yellow" onclick="debriefNotice(\'coach\')"><span>🐢</span><b>Coach</b></button><button class="tile" onclick="debriefNotice(\'both\')"><span>🤝</span><b>Both</b></button></div>'
+                }
+            }
+            function debriefNotice(who) {
+                window.debriefTemp.noticed = who;
+                state.debrief[who]++;
+                el('modalBody').innerHTML = '<p>Did you use a reset?</p><div class="popGrid"><button class="tile green" onclick="debriefReset(true)"><span>✅</span><b>Yes</b></button><button class="tile pink" onclick="debriefReset(false)"><span>❌</span><b>No</b></button></div>'
+            }
+            function debriefReset(yes) {
+                if (yes)
+                    state.debrief.resetYes++;
+                else
+                    state.debrief.resetNo++;
+                finishDebrief()
+            }
+            function finishDebrief() {
+                state.goals.debrief = true;
+                if (state.daily && state.daily.indexOf('debrief') >= 0)
+                    state.dailyDone = true;
+                if (state.daily && state.daily.indexOf('Hard Zone') >= 0 && state.zone >= 2)
+                    state.dailyDone = true;
+                if (state.daily && state.daily.indexOf('reset') >= 0 && state.goals.reset)
+                    state.dailyDone = true;
+                state.stars += 3;
+                note('Debrief complete: +3 reflection stars.');
+                sparkle(['⭐', '🐢', '🧠']);
+                closeModal();
+                update()
+            }
+            function openReset(name) {
+                state.resets++;
+                state.goals.reset = true;
+                state.usedReset = true;
+                state.stars += 2;
+                addComeback(10);
+                el('modalTitle').textContent = name;
+                el('modalBody').innerHTML = '<ol style="text-align:left;font-size:1.2rem"><li>Pull in like a turtle.</li><li>Take one slow breath.</li><li>Say: one small step.</li><li>Try again.</li></ol>';
+                el('modal').classList.add('show');
+                update()
+            }
+            function openCheck() {
+                el('modalTitle').textContent = 'Brain Check';
+                el('modalBody').innerHTML = '<div class="popGrid">' + zones.map(function(z, i) {
+                    return '<button class="tile" onclick="state.zone=' + i + ';closeModal();update()"><span>' + z + '</span><b>' + zoneNames[i] + '</b></button>'
+                }).join('') + '</div>';
+                el('modal').classList.add('show')
+            }
+            function showReport() {
+                el('modalTitle').textContent = 'Mission Report';
+                el('modalBody').innerHTML = '<p><b>Stars:</b> ' + state.stars + '</p><p><b>Turtles:</b> ' + state.rescued + '</p><p><b>Comeback:</b> ' + state.comebackPower + '%</p><p><b>Debriefs:</b> Easy ' + state.debrief.easy + ', Thinking ' + state.debrief.thinking + ', Hard ' + state.debrief.hard + ', Frustrating ' + state.debrief.frustrating + '</p>';
+                el('modal').classList.add('show')
+            }
+            function openDotLab() {
+                hideAll();
+                state.missions++;
+                state.goals.dot = true;
+                el('dotPanel').classList.remove('hidden');
+                newDotPuzzle();
+                state.stars += 2;
+                note('Started Dot Challenge Lab.');
+                update()
+            }
+            function changeDotLevel(d) {
+                dotState.level = Math.max(1, Math.min(10, dotState.level + d));
+                newDotPuzzle()
+            }
+            function newDotPuzzle() {
+                dotState.path = [];
+                var n = dotState.level < 3 ? 5 : dotState.level < 5 ? 7 : dotState.level < 7 ? 9 : dotState.level < 9 ? 11 : 13;
+                dotState.dots = [];
+                for (var i = 0; i < n; i++)
+                    dotState.dots.push({
+                        x: 70 + Math.random() * 620,
+                        y: 55 + Math.random() * 400
+                    });
+                dotState.star = dotState.level >= 3 ? Math.floor(Math.random() * n) : null;
+                dotState.treasure = dotState.level >= 5 ? Math.floor(Math.random() * n) : null;
+                dotState.lineLimit = dotState.level >= 6 ? Math.max(4, Math.ceil(n * .75)) : null;
+                dotState.mode = dotState.level < 3 ? 'connect' : dotState.level < 5 ? 'star' : dotState.level < 7 ? 'treasure' : 'limited';
+                el('dotLevelLabel').textContent = dotState.level;
+                var rules = ['Connect every dot.', 'Do not retrace if you can avoid it.'];
+                if (dotState.star !== null)
+                    rules.push('Touch the ⭐ star dot.');
+                if (dotState.treasure !== null)
+                    rules.push('End on the 💎 treasure dot.');
+                if (dotState.lineLimit)
+                    rules.push('Try to use ' + dotState.lineLimit + ' lines or fewer.');
+                el('dotRules').innerHTML = '<b>Rules</b><ul>' + rules.map(function(r) {
+                    return '<li>' + r + '</li>'
+                }).join('') + '</ul>';
+                drawDots();
+                el('dotFeedback').textContent = 'Tap dots to build your path.'
+            }
+            function drawDots() {
+                var c = el('dotCanvas')
+                  , ctx = c.getContext('2d');
+                ctx.clearRect(0, 0, c.width, c.height);
+                ctx.lineWidth = 6;
+                ctx.strokeStyle = '#725fd1';
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                dotState.path.forEach(function(idx, i) {
+                    var p = dotState.dots[idx];
+                    if (i === 0)
+                        ctx.moveTo(p.x, p.y);
+                    else
+                        ctx.lineTo(p.x, p.y)
+                });
+                ctx.stroke();
+                dotState.dots.forEach(function(p, i) {
+                    ctx.beginPath();
+                    ctx.fillStyle = dotState.path.indexOf(i) >= 0 ? '#68ff9c' : '#eaf8ff';
+                    ctx.strokeStyle = '#10233a';
+                    ctx.lineWidth = 3;
+                    ctx.arc(p.x, p.y, 18, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.fillStyle = '#10233a';
+                    ctx.font = '24px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    var label = i === dotState.star ? '⭐' : i === dotState.treasure ? '💎' : '●';
+                    ctx.fillText(label, p.x, p.y)
+                })
+            }
+            el('dotCanvas').addEventListener('click', function(e) {
+                var r = this.getBoundingClientRect()
+                  , x = (e.clientX - r.left) * (this.width / r.width)
+                  , y = (e.clientY - r.top) * (this.height / r.height)
+                  , best = -1
+                  , dist = 999;
+                dotState.dots.forEach(function(p, i) {
+                    var d = Math.hypot(p.x - x, p.y - y);
+                    if (d < dist) {
+                        dist = d;
+                        best = i
+                    }
+                });
+                if (dist < 35) {
+                    dotState.path.push(best);
+                    drawDots();
+                    el('dotFeedback').textContent = 'Path length: ' + Math.max(0, dotState.path.length - 1) + ' lines.'
+                }
+            });
+            function undoDot() {
+                dotState.path.pop();
+                drawDots()
+            }
+            function clearDotPath() {
+                dotState.path = [];
+                drawDots()
+            }
+            function finishDotPuzzle() {
+                var unique = new Set(dotState.path);
+                var ok = unique.size === dotState.dots.length;
+                if (dotState.star !== null && !unique.has(dotState.star))
+                    ok = false;
+                if (dotState.treasure !== null && dotState.path[dotState.path.length - 1] !== dotState.treasure)
+                    ok = false;
+                if (ok) {
+                    state.dotWins++;
+                    state.stars += 8 + dotState.level;
+                    rescue(dotState.path.length > dotState.dots.length + 2);
+                    sparkle(['✏️', '🐢', '⭐']);
+                    el('dotFeedback').textContent = 'Dot challenge complete!'
+                } else {
+                    state.hints++;
+                    el('dotFeedback').textContent = 'Not yet. Check the rules and try one small change.'
+                }
+                update()
+            }
+            function wordPlan(size) {
+                if (size <= 5)
+                    return {
+                        count: 6,
+                        max: 4
+                    };
+                if (size === 6)
+                    return {
+                        count: 8,
+                        max: 5
+                    };
+                if (size === 7)
+                    return {
+                        count: 10,
+                        max: 6
+                    };
+                if (size === 8)
+                    return {
+                        count: 12,
+                        max: 8
+                    };
+                if (size === 9)
+                    return {
+                        count: 15,
+                        max: 9
+                    };
+                return {
+                    count: 18,
+                    max: 10
+                }
+            }
+            function dirsFor(size) {
+                if (size <= 5)
+                    return [[1, 0], [0, 1]];
+                if (size === 6)
+                    return [[1, 0], [0, 1], [1, 1]];
+                if (size === 7)
+                    return [[1, 0], [-1, 0], [0, 1], [1, 1]];
+                if (size === 8)
+                    return [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, 1]];
+                return [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]]
+            }
+            function chooseWords(size) {
+                var p = wordPlan(size)
+                  , pool = [];
+                wordState.themes.forEach(function(t) {
+                    pool = pool.concat(wordThemes[t])
+                });
+                pool = Array.from(new Set(pool)).filter(function(w) {
+                    return w.length <= Math.min(size, p.max)
+                });
+                var short = shuffle(pool.filter(function(w) {
+                    return w.length <= 4 && recentSearchWords.indexOf(w) < 0
+                }));
+                var mid = shuffle(pool.filter(function(w) {
+                    return w.length >= 5 && w.length <= 7 && recentSearchWords.indexOf(w) < 0
+                }));
+                var long = shuffle(pool.filter(function(w) {
+                    return w.length >= 8 && recentSearchWords.indexOf(w) < 0
+                }));
+                var chosen = [];
+                var shortNeed = Math.ceil(p.count * .45)
+                  , midNeed = Math.ceil(p.count * .38)
+                  , longNeed = p.count - shortNeed - midNeed;
+                if (size < 7) {
+                    longNeed = 0;
+                    midNeed = Math.ceil(p.count * .35);
+                    shortNeed = p.count - midNeed
+                }
+                if (size >= 8) {
+                    chosen = chosen.concat(long.slice(0, longNeed))
+                }
+                chosen = chosen.concat(mid.slice(0, midNeed)).concat(short.slice(0, shortNeed));
+                var rest = shuffle(pool.filter(function(w) {
+                    return chosen.indexOf(w) < 0 && recentSearchWords.indexOf(w) < 0
+                }));
+                chosen = chosen.concat(rest).slice(0, p.count);
+                if (chosen.length < p.count) {
+                    chosen = chosen.concat(shuffle(pool.filter(function(w) {
+                        return chosen.indexOf(w) < 0
+                    }))).slice(0, p.count);
+                }
+                recentSearchWords = chosen.concat(recentSearchWords).slice(0, 40);
+                return chosen;
+            }
+            function openWordSearch() {
+                hideAll();
+                state.missions++;
+                state.goals.word = true;
+                el('wordPanel').classList.remove('hidden');
+                syncThemeButtons();
+                buildWordSearch();
+                state.stars += 2;
+                update()
+            }
+            function toggleTheme(theme) {
+                var i = wordState.themes.indexOf(theme);
+                if (i >= 0 && wordState.themes.length > 1)
+                    wordState.themes.splice(i, 1);
+                else if (i < 0) {
+                    if (wordState.themes.length >= 3) {
+                        el('wordFeedback').textContent = 'Pick up to 3 themes.';
+                        return
+                    } else
+                        wordState.themes.push(theme)
+                }
+                syncThemeButtons();
+                buildWordSearch()
+            }
+            function syncThemeButtons() {
+                Object.keys(wordThemes).forEach(function(t) {
+                    el('theme-' + t).classList.toggle('themeOn', wordState.themes.indexOf(t) >= 0)
+                })
+            }
+            function changeSize(d) {
+                wordState.size = Math.max(5, Math.min(10, wordState.size + d));
+                buildWordSearch()
+            }
+            function buildWordSearch() {
+                var size = wordState.size
+                  , p = wordPlan(size);
+                wordState.found = [];
+                wordState.placements = {};
+                wordState.path = [];
+                wordState.misses = 0;
+                var grid = Array.from({
+                    length: size
+                }, function() {
+                    return Array(size).fill('')
+                });
+                var selected = [];
+                chooseWords(size).forEach(function(w) {
+                    if (selected.length < p.count && placeWord(grid, w, dirsFor(size)))
+                        selected.push(w)
+                });
+                wordState.words = selected;
+                var letters = selected.join('') + 'AEIOURSTLN';
+                for (var r = 0; r < size; r++)
+                    for (var c = 0; c < size; c++)
+                        if (!grid[r][c])
+                            grid[r][c] = letters[Math.floor(Math.random() * letters.length)];
+                wordState.grid = grid;
+                renderWord();
+                el('wordFeedback').textContent = 'Find ' + selected.length + ' words!'
+            }
+            function placeWord(grid, word, dirs) {
+                var size = grid.length;
+                for (var tries = 0; tries < 300; tries++) {
+                    var d = dirs[Math.floor(Math.random() * dirs.length)]
+                      , dc = d[0]
+                      , dr = d[1]
+                      , r = Math.floor(Math.random() * size)
+                      , c = Math.floor(Math.random() * size)
+                      , endR = r + dr * (word.length - 1)
+                      , endC = c + dc * (word.length - 1);
+                    if (endR < 0 || endR >= size || endC < 0 || endC >= size)
+                        continue;
+                    var path = []
+                      , ok = true;
+                    for (var i = 0; i < word.length; i++) {
+                        var rr = r + dr * i
+                          , cc = c + dc * i;
+                        if (grid[rr][cc] && grid[rr][cc] !== word[i]) {
+                            ok = false;
+                            break
+                        }
+                        path.push({
+                            r: rr,
+                            c: cc
+                        })
+                    }
+                    if (ok) {
+                        path.forEach(function(p, i) {
+                            grid[p.r][p.c] = word[i]
+                        });
+                        wordState.placements[word] = path;
+                        return true
+                    }
+                }
+                return false
+            }
+            function cellSize(size) {
+                var board = Math.min(innerWidth - 52, innerHeight * .54, 680);
+                return Math.max(34, Math.min(66, Math.floor((board - (size - 1) * 6) / size)))
+            }
+            function renderWord() {
+                var size = wordState.size;
+                el('gridSizeLabel').textContent = size;
+                el('gridSizeLabel2').textContent = size;
+                el('wordProgress').style.width = (wordState.words.length ? wordState.found.length / wordState.words.length * 100 : 0) + '%';
+                var g = el('wordGrid');
+                g.style.setProperty('--cell', cellSize(size) + 'px');
+                g.style.gridTemplateColumns = 'repeat(' + size + ', var(--cell))';
+                g.innerHTML = '';
+                for (var r = 0; r < size; r++)
+                    for (var c = 0; c < size; c++) {
+                        var b = document.createElement('button');
+                        b.className = 'cell';
+                        b.textContent = wordState.grid[r][c];
+                        b.dataset.r = r;
+                        b.dataset.c = c;
+                        b.addEventListener('pointerdown', startDrag);
+                        b.addEventListener('pointerenter', enterCell);
+                        g.appendChild(b)
+                    }
+                document.addEventListener('pointerup', endDrag, {
+                    once: true
+                });
+                paintFound();
+                el('wordList').innerHTML = wordState.words.map(function(w) {
+                    return '<span class="wordChip ' + (wordState.found.indexOf(w) >= 0 ? 'done' : '') + '">' + w + '</span>'
+                }).join('')
+            }
+            function startDrag(e) {
+                e.preventDefault();
+                wordState.dragging = true;
+                wordState.path = [];
+                clearPath();
+                addToPath(e.currentTarget)
+            }
+            function enterCell(e) {
+                if (wordState.dragging)
+                    addToPath(e.currentTarget)
+            }
+            function addToPath(cell) {
+                var r = +cell.dataset.r
+                  , c = +cell.dataset.c
+                  , key = r + ',' + c;
+                if (wordState.path.some(function(p) {
+                    return p.key === key
+                }))
+                    return;
+                var trial = wordState.path.concat([{
+                    r: r,
+                    c: c,
+                    key: key
+                }]);
+                if (trial.length > 2 && !straight(trial))
+                    return;
+                wordState.path = trial;
+                paintPath()
+            }
+            function straight(path) {
+                var a = path[0]
+                  , b = path[path.length - 1];
+                return a.r === b.r || a.c === b.c || Math.abs(b.r - a.r) === Math.abs(b.c - a.c)
+            }
+            function paintPath() {
+                clearPath();
+                wordState.path.forEach(function(p) {
+                    wordCell(p.r, p.c).classList.add('path')
+                })
+            }
+            function clearPath() {
+                document.querySelectorAll('.cell.path,.cell.bad,.cell.hint').forEach(function(x) {
+                    x.classList.remove('path', 'bad', 'hint')
+                })
+            }
+            function endDrag() {
+                if (!wordState.dragging)
+                    return;
+                wordState.dragging = false;
+                checkPath()
+            }
+            function checkPath() {
+                var sel = wordState.path;
+                if (sel.length < 2) {
+                    clearPath();
+                    return
+                }
+                var word = sel.map(function(p) {
+                    return wordState.grid[p.r][p.c]
+                }).join('')
+                  , back = word.split('').reverse().join('')
+                  , found = wordState.words.find(function(w) {
+                    return (w === word || w === back) && wordState.found.indexOf(w) < 0
+                });
+                if (found) {
+                    wordState.found.push(found);
+                    state.stars += 4;
+                    state.wordFinds++;
+                    el('wordFeedback').textContent = 'You found ' + found + '!';
+                    sparkle(['⭐', '🔎']);
+                    if (wordState.found.length === wordState.words.length) {
+                        state.stars += 10;
+                        rescue(wordState.misses >= 3);
+                        openDebrief('Search Beach')
+                    }
+                } else {
+                    wordState.misses++;
+                    state.hints++;
+                    sel.forEach(function(p) {
+                        var x = wordCell(p.r, p.c);
+                        if (x)
+                            x.classList.add('bad')
+                    });
+                    el('wordFeedback').textContent = wordState.misses >= 3 ? 'Three tricky tries. Consider a reset.' : 'Try another direction.'
+                }
+                wordState.path = [];
+                setTimeout(function() {
+                    renderWord();
+                    update()
+                }, found ? 150 : 450)
+            }
+            function paintFound() {
+                wordState.found.forEach(function(w) {
+                    (wordState.placements[w] || []).forEach(function(p) {
+                        var x = wordCell(p.r, p.c);
+                        if (x)
+                            x.classList.add('found')
+                    })
+                })
+            }
+            function showWordHint() {
+                var left = wordState.words.find(function(w) {
+                    return wordState.found.indexOf(w) < 0
+                });
+                if (!left)
+                    return;
+                state.hints++;
+                var p = wordState.placements[left][0];
+                wordCell(p.r, p.c).classList.add('hint');
+                update()
+            }
+            function wordCell(r, c) {
+                return document.querySelector('.cell[data-r="' + r + '"][data-c="' + c + '"]')
+            }
+            function openMemory() {
+                hideAll();
+                state.missions++;
+                state.goals.memory = true;
+                el('memoryPanel').classList.remove('hidden');
+                buildMemoryGrid();
+                startMemoryRound();
+                state.stars += 2;
+                update()
+            }
+            function memoryPlan() {
+                var l = memoryState.level;
+                return {
+                    tiles: l < 3 ? 4 : l < 6 ? 6 : 9,
+                    length: Math.min(3 + Math.floor(l / 2), 10)
+                }
+            }
+            function changeMemoryLevel(d) {
+                memoryState.level = Math.max(1, Math.min(10, memoryState.level + d));
+                buildMemoryGrid();
+                startMemoryRound()
+            }
+            function toggleMemoryMode() {
+                memoryState.mode = memoryState.mode === 'forward' ? 'reverse' : 'forward';
+                startMemoryRound()
+            }
+            function buildMemoryGrid() {
+                var plan = memoryPlan()
+                  , cols = plan.tiles <= 4 ? 2 : 3
+                  , g = el('memoryGrid');
+                g.style.setProperty('--memCols', cols);
+                g.innerHTML = '';
+                for (var i = 0; i < plan.tiles; i++) {
+                    var b = document.createElement('button');
+                    b.className = 'memoryTile';
+                    b.textContent = memoryIcons[i];
+                    b.dataset.i = i;
+                    b.onclick = (function(idx) {
+                        return function() {
+                            memoryTap(idx)
+                        }
+                    }
+                    )(i);
+                    g.appendChild(b)
+                }
+                el('memoryLevelLabel').textContent = memoryState.level;
+                el('memoryModeLabel').textContent = memoryState.mode === 'forward' ? 'Forward' : 'Reverse'
+            }
+            function targetSeq() {
+                return memoryState.mode === 'reverse' ? memoryState.sequence.slice().reverse() : memoryState.sequence
+            }
+            function startMemoryRound() {
+                var plan = memoryPlan();
+                memoryState.sequence = [];
+                memoryState.input = [];
+                memoryState.misses = 0;
+                memoryState.visible = true;
+                if (memoryState.hideTimer)
+                    clearTimeout(memoryState.hideTimer);
+                for (var i = 0; i < plan.length; i++)
+                    memoryState.sequence.push(Math.floor(Math.random() * plan.tiles));
+                renderMemoryRows();
+                el('memoryFeedback').textContent = memoryState.mode === 'reverse' ? 'Study it, then tap it backwards.' : 'Study the top row.';
+                memoryState.hideTimer = setTimeout(hideMemoryPattern, 2200)
+            }
+            function hideMemoryPattern() {
+                memoryState.visible = false;
+                renderMemoryRows();
+                el('memoryFeedback').textContent = 'Now copy it from memory.'
+            }
+            function renderMemoryRows() {
+                el('memoryPatternRow').textContent = memoryState.visible ? memoryState.sequence.map(function(i) {
+                    return memoryIcons[i]
+                }).join('  ') : Array(memoryState.sequence.length).fill('❔').join('  ');
+                var blanks = Array(memoryState.sequence.length - memoryState.input.length).fill('⬜');
+                el('memoryInputRow').textContent = memoryState.input.map(function(i) {
+                    return memoryIcons[i]
+                }).concat(blanks).join('  ')
+            }
+            function memoryTap(i) {
+                var pos = memoryState.input.length
+                  , seq = targetSeq();
+                memoryState.input.push(i);
+                renderMemoryRows();
+                var tile = document.querySelector('.memoryTile[data-i="' + i + '"]');
+                if (i === seq[pos]) {
+                    tile.classList.add('correct');
+                    if (memoryState.input.length === seq.length) {
+                        state.stars += 8 + memoryState.level;
+                        rescue(memoryState.misses >= 2);
+                        sparkle(['🧠', '🐢', '⭐']);
+                        if (memoryState.level < 10)
+                            memoryState.level++;
+                        openDebrief('Memory Mountain');
+                        setTimeout(function() {
+                            buildMemoryGrid();
+                            startMemoryRound();
+                            update()
+                        }, 900)
+                    }
+                } else {
+                    memoryState.misses++;
+                    state.hints++;
+                    tile.classList.add('wrong');
+                    el('memoryFeedback').textContent = memoryState.misses >= 2 ? 'That was tricky. Reset, then try one small chunk.' : 'Oops. Use Show Again if you need it.';
+                    setTimeout(function() {
+                        memoryState.input = [];
+                        renderMemoryRows();
+                        document.querySelectorAll('.memoryTile').forEach(function(x) {
+                            x.classList.remove('correct', 'wrong')
+                        })
+                    }, 900)
+                }
+                update()
+            }
+            function memoryHint() {
+                state.hints++;
+                el('memoryFeedback').textContent = 'Hint: say the pattern out loud while it is showing.';
+                update()
+            }
+            function showPatternAgain() {
+                state.stars = Math.max(0, state.stars - 1);
+                memoryState.visible = true;
+                renderMemoryRows();
+                if (memoryState.hideTimer)
+                    clearTimeout(memoryState.hideTimer);
+                memoryState.hideTimer = setTimeout(hideMemoryPattern, 1800);
+                update()
+            }
+            function openPattern() {
+                hideAll();
+                state.missions++;
+                state.goals.pattern = true;
+                el('patternPanel').classList.remove('hidden');
+                newPattern();
+                state.stars += 2;
+                update()
+            }
+            function changePatternLevel(d) {
+                patternState.level = Math.max(1, Math.min(10, patternState.level + d));
+                newPattern()
+            }
+            function makeBasePattern() {
+                var l = patternState.level
+                  , types = l < 3 ? ['AB', 'AAB', 'ABB'] : l < 6 ? ['ABC', 'ABBA', 'AABB', 'AABC'] : ['ABCD', 'ABCA', 'ABCC', 'AABBCC'];
+                var type = types[Math.floor(Math.random() * types.length)]
+                  , need = type === 'ABCD' ? 4 : type === 'AABBCC' ? 3 : type.indexOf('C') >= 0 ? 3 : 2
+                  , base = shuffle(shapes).slice(0, need)
+                  , maps = {
+                    AB: [0, 1],
+                    AAB: [0, 0, 1],
+                    ABB: [0, 1, 1],
+                    ABC: [0, 1, 2],
+                    ABBA: [0, 1, 1, 0],
+                    AABB: [0, 0, 1, 1],
+                    AABC: [0, 0, 1, 2],
+                    ABCD: [0, 1, 2, 3],
+                    ABCA: [0, 1, 2, 0],
+                    ABCC: [0, 1, 2, 2],
+                    AABBCC: [0, 0, 1, 1, 2, 2]
+                }
+                  , seq = [];
+                while (seq.length < 14)
+                    maps[type].forEach(function(i) {
+                        seq.push(base[i])
+                    });
+                return {
+                    seq: seq,
+                    type: type
+                }
+            }
+            function newPattern() {
+                var modes = ['next', 'missing', 'odd', 'mistake'];
+                patternState.mode = modes[Math.floor(Math.random() * Math.min(modes.length, patternState.level < 3 ? 2 : 4))];
+                var p = makeBasePattern()
+                  , displayLen = 6 + Math.min(patternState.level, 6)
+                  , display = p.seq.slice(0, displayLen)
+                  , answer = p.seq[displayLen];
+                patternState.current = {
+                    type: p.type,
+                    display: display
+                };
+                patternState.answer = answer;
+                patternState.misses = 0;
+                el('patternLevelLabel').textContent = patternState.level;
+                el('patternModeLabel').textContent = {
+                    next: 'Next',
+                    missing: 'Missing',
+                    odd: 'Odd One',
+                    mistake: 'Mistake'
+                }[patternState.mode];
+                if (patternState.mode === 'missing') {
+                    var mi = 1 + Math.floor(Math.random() * (display.length - 2));
+                    patternState.answer = display[mi];
+                    display[mi] = '❓'
+                }
+                if (patternState.mode === 'odd') {
+                    var oi = Math.floor(Math.random() * display.length);
+                    patternState.answer = display[oi];
+                    display[oi] = shuffle(shapes.filter(function(x) {
+                        return x !== display[oi]
+                    }))[0]
+                }
+                if (patternState.mode === 'mistake') {
+                    var ei = Math.floor(Math.random() * display.length);
+                    patternState.answer = p.seq[ei];
+                    display[ei] = shuffle(shapes.filter(function(x) {
+                        return x !== p.seq[ei]
+                    }))[0]
+                }
+                el('patternStrip').innerHTML = display.map(function(x) {
+                    return '<span>' + x + '</span>'
+                }).join('') + (patternState.mode === 'next' ? '<span>❓</span>' : '');
+                var choices = shuffle([patternState.answer].concat(shuffle(shapes.filter(function(x) {
+                    return x !== patternState.answer
+                })).slice(0, patternState.level >= 6 ? 4 : 3)));
+                var box = el('patternChoices');
+                box.innerHTML = '';
+                choices.forEach(function(choice) {
+                    var b = document.createElement('button');
+                    b.className = 'choice';
+                    b.textContent = choice;
+                    b.onclick = function() {
+                        patternGuess(choice)
+                    }
+                    ;
+                    box.appendChild(b)
+                });
+                el('patternFeedback').textContent = {
+                    next: 'What comes next?',
+                    missing: 'What belongs in the blank?',
+                    odd: 'Which one does not fit?',
+                    mistake: 'What should the mistake be?'
+                }[patternState.mode]
+            }
+            function patternGuess(choice) {
+                if (choice === patternState.answer) {
+                    state.stars += 7 + patternState.level;
+                    rescue(patternState.misses >= 2);
+                    sparkle(['🧩', '🐢', '⭐']);
+                    if (patternState.level < 10)
+                        patternState.level++;
+                    openDebrief('Pattern Cave');
+                    setTimeout(function() {
+                        newPattern();
+                        update()
+                    }, 900)
+                } else {
+                    patternState.misses++;
+                    state.hints++;
+                    el('patternFeedback').textContent = patternState.misses >= 2 ? 'Look for the repeating chunk. Try a reset if needed.' : 'Not that one. Check the rule.';
+                    update()
+                }
+            }
+            function patternHint() {
+                state.hints++;
+                el('patternFeedback').textContent = 'Hint: rule type ' + (patternState.current ? patternState.current.type : 'AB') + '.';
+                update()
+            }
+            function openDrawing() {
+                hideAll();
+                state.missions++;
+                state.goals.drawing = true;
+                el('drawingPanel').classList.remove('hidden');
+                newDrawing();
+                state.stars += 2;
+                update()
+            }
+            function newDrawingCategory() {
+                drawCat = shuffle(Object.keys(drawCats))[0];
+                newDrawing()
+            }
+            function newDrawing() {
+                var item = shuffle(drawCats[drawCat])[0]
+                  , verbs = ['Draw', 'Design', 'Invent', 'Sketch', 'Create']
+                  , twist = ['with a tiny hat', 'inside a spaceship', 'made of triangles', 'with one silly mistake', 'doing something impossible', 'with a helper turtle'];
+                el('drawCategory').textContent = drawCat;
+                el('drawingPrompt').textContent = shuffle(verbs)[0] + ' a ' + item + ' ' + shuffle(twist)[0] + '.'
+            }
+            function doneDrawing() {
+                state.stars += 5;
+                rescue(true);
+                sparkle(['🎉', '🐢', '⭐']);
+                openDebrief('Creation Cove');
+                update()
+            }
+            window.addEventListener('resize', function() {
+                if (!el('wordPanel').classList.contains('hidden'))
+                    renderWord();
+                if (!el('dotPanel').classList.contains('hidden'))
+                    drawDots()
+            });
+            document.addEventListener('DOMContentLoaded', function() {
+                setupDailyChallenge();
+                update()
+            });
+        </script>
+    </body>
 </html>
