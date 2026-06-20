@@ -265,9 +265,15 @@ var SCENARIOS = [
 {level:5,cat:'action',text:'You are in Yellow and your teacher gives you a new worksheet. What is the detective move?',answer:'Check your body clues and decide if you need a reset first',actions:['Check your body clues and decide if you need a reset first','Refuse the worksheet','Rush through it','Cry'],feedback:'Checking your body clues before deciding is top-tier detective thinking. You are monitoring yourself.'},
 {level:5,cat:'action',text:'You are in Red. Your coach says, "Take a break." How should you feel about that?',answer:'Good — Coach spotted the clue and helped',actions:['Good — Coach spotted the clue and helped','Mad — I do not need a break','Embarrassed — breaks are for babies','Ignore Coach'],feedback:'Accepting help when you are in Red is a strong move, not a weak one. Coach and you are on the same team.'},
 
-// Additional Level 1
+// Additional Level 1 — mixed answers so Level 1 is not all Green
 {level:1,cat:'other',text:'Amira finishes her test early, checks her answers, and quietly reads a book.',answer:'green',alt:null,clue:'Calm completion and self-direction',clues:['Calm completion and self-direction','Panicking','Rushing out'],feedback:'Amira is calm, organized, and self-directed. That is textbook Green.'},
 {level:1,cat:'body',text:'Your breathing is slow. Your face feels relaxed. You are sitting comfortably.',answer:'green',alt:null,clue:'Slow breathing and relaxed body',clues:['Slow breathing and relaxed body','Clenched teeth','Stomping feet'],feedback:'Slow breathing, relaxed face, comfortable posture — all Green body signals.'},
+{level:1,cat:'other',text:'Toby throws his crayon on the floor and says "I HATE coloring!"',answer:'red',alt:null,clue:'Throwing things and yelling',clues:['Throwing things and yelling','Coloring calmly','Asking for help'],feedback:'Throwing things and yelling "I hate this" are strong Red clues. Toby needs a reset.'},
+{level:1,cat:'other',text:'Mika sighs three times and keeps erasing the same spot on her paper.',answer:'yellow',alt:null,clue:'Sighing and repeated erasing',clues:['Sighing and repeated erasing','Smiling and drawing','Ripping the paper'],feedback:'Sighing and erasing the same spot over and over — those are Yellow clues. Frustration is starting.'},
+{level:1,cat:'self',text:'You try to tie your shoe and the lace breaks. You scream and kick the shoe across the room.',answer:'red',alt:null,clue:'Screaming and kicking',clues:['Screaming and kicking','Taking a deep breath','Asking for new laces'],feedback:'Screaming and kicking are big Red signals. Your body took over. Time for a turtle reset.'},
+{level:1,cat:'other',text:'Ella pushes her chair back hard and crosses her arms after getting a question wrong.',answer:'yellow',alt:null,clue:'Pushing chair and crossing arms',clues:['Pushing chair and crossing arms','Sitting still','Trying the next question'],feedback:'Pushing the chair and crossing arms — those are body clues that say Yellow. Frustration is building.'},
+{level:1,cat:'body',text:'Your face feels hot and your stomach feels tight.',answer:'yellow',alt:null,clue:'Hot face and tight stomach',clues:['Hot face and tight stomach','Cool and relaxed','Smiling face'],feedback:'Hot face and tight stomach are body signals for Yellow. Your body is telling you frustration is starting.'},
+{level:1,cat:'self',text:'You drop your snack on the floor and say "It is okay, I will get another one."',answer:'green',alt:null,clue:'Calm response to a problem',clues:['Calm response to a problem','Screaming','Stomping'],feedback:'Handling a small problem calmly is Green. You stayed in control.'},
 
 // Additional Level 2
 {level:2,cat:'other',text:'Clara keeps restarting her LEGO build from scratch every time one piece does not fit.',answer:'yellow',alt:null,clue:'Restarting instead of adjusting',clues:['Restarting instead of adjusting','Building steadily','Smashing the build'],feedback:'Restarting from scratch every time is a Yellow clue. Clara is getting stuck in a frustration loop.'},
@@ -371,10 +377,23 @@ save.ownClues.push(v);inp.value='';persist();renderOwnClues();
 function removeOwnClue(i){save.ownClues.splice(i,1);persist();renderOwnClues()}
 
 function pickScenario(){
-var pool=SCENARIOS.filter(function(s){return s.level===session.level});
-// weight by category misses
+// Auto-advance: after 3 correct in a row, bump level
+if(session.streak>0&&session.streak%3===0&&session.level<5){
+session.level++;
+renderLevelTabs();
+}
+// Mix levels: 60% current level, 25% one below, 15% one above
+var levels=[];
+var r=Math.random();
+if(r<0.60){levels=[session.level]}
+else if(r<0.85){levels=[Math.max(1,session.level-1)]}
+else{levels=[Math.min(5,session.level+1)]}
+// Fallback: if chosen level has no unused scenarios, widen to all unlocked
+var maxLevel=Math.min(5,session.level+1);
+var pool=SCENARIOS.filter(function(s){return levels.indexOf(s.level)>=0});
+if(pool.length===0)pool=SCENARIOS.filter(function(s){return s.level<=maxLevel});
 var weighted=[];
-pool.forEach(function(s,idx){
+pool.forEach(function(s){
 var globalIdx=SCENARIOS.indexOf(s);
 if(session.usedIndices.indexOf(globalIdx)>=0)return;
 var cat=s.cat;
@@ -383,7 +402,6 @@ var weight=1+Math.round(missRate*3);
 for(var w=0;w<weight;w++)weighted.push(globalIdx);
 });
 if(weighted.length===0){
-// reset used indices for this level
 session.usedIndices=[];
 return pickScenario();
 }
