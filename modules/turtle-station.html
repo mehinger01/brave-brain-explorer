@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turtle Station: The Trickster</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Arial Rounded MT Bold","Comic Sans MS",system-ui,sans-serif;background:radial-gradient(circle at 10% 0,#1b6b3a,#0a3320 42%,#051a10);color:#fff;min-height:100vh;overflow-x:hidden}
+.wrap{max-width:900px;margin:auto;padding:10px 14px}
+
+header{position:sticky;top:0;z-index:20;background:rgba(5,26,16,.97);border-bottom:2px solid rgba(255,255,255,.15)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 14px;flex-wrap:wrap}
+h1{font-size:clamp(1rem,2.7vw,1.55rem);margin:0}
+.sub{color:#b8f5d0;font-size:.82rem}
+.badges{display:flex;gap:5px;flex-wrap:wrap}
+.badge{background:#ffd166;color:#302000;border:2px solid #fff;border-radius:999px;padding:4px 10px;font-size:.8rem;font-weight:900}
+
+.card{background:#fff;color:#10233a;border-radius:28px;padding:18px;margin:10px 0;border:7px solid #68ff9c;box-shadow:0 12px 0 #25a74f;overflow:hidden}
+.card.gold{border-color:#ffd166;box-shadow:0 12px 0 #c79224}
+.card.purple{border-color:#b49cff;box-shadow:0 12px 0 #725fd1}
+
+h2{font-size:clamp(1.15rem,3vw,1.7rem);margin:0 0 8px}
+
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;margin:10px 0}
+
+.action{border:0;border-radius:18px;padding:12px 18px;min-height:48px;font-weight:900;cursor:pointer;font-size:1rem;touch-action:manipulation}
+.action:active{transform:translateY(3px)}
+.action.green{background:#68ff9c;color:#063817;box-shadow:0 5px 0 #25a74f}
+.action.blue{background:#5ee4ff;color:#052334;box-shadow:0 5px 0 #2391ad}
+.action.warn{background:#ffd166;color:#302000;box-shadow:0 5px 0 #bd831d}
+.action.red{background:#ff8a8a;color:#3a0808;box-shadow:0 5px 0 #bd4343}
+.action.purple{background:#b49cff;color:#1a0a3e;box-shadow:0 5px 0 #725fd1}
+.action.orange{background:#ffb347;color:#3a1d00;box-shadow:0 5px 0 #c77d1d}
+
+.scenario-card{background:#f0fff4;border:4px solid #68ff9c;border-radius:24px;padding:20px;margin:12px 0;min-height:100px;font-size:1.15rem;font-weight:900;line-height:1.5;text-align:center}
+
+.choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:12px 0}
+.choice-btn{border:0;border-radius:16px;padding:14px 10px;font-weight:900;font-size:.95rem;cursor:pointer;background:#eaf8ee;color:#10233a;box-shadow:0 4px 0 #9fd8a8;text-align:center;touch-action:manipulation;min-height:56px}
+.choice-btn:active{transform:translateY(3px)}
+.choice-btn.correct{background:#68ff9c;box-shadow:0 4px 0 #25a74f}
+.choice-btn.wrong{background:#ffb2b2;box-shadow:0 4px 0 #bd4343}
+.choice-btn.selected{outline:4px solid #10233a;outline-offset:2px}
+
+.feedback-box{background:#fff8d8;border-radius:18px;padding:14px;font-weight:900;font-size:1.05rem;text-align:center;min-height:48px;margin:10px 0;line-height:1.4}
+
+.progress-bar{height:14px;border-radius:999px;background:#1a4a2a;overflow:hidden;margin:8px 0}
+.progress-bar div{height:100%;width:0;background:linear-gradient(90deg,#68ff9c,#ffd166);transition:width .3s}
+
+.character-tag{display:inline-block;border-radius:999px;padding:4px 12px;font-weight:900;font-size:.85rem;margin:4px}
+.character-tag.turtle{background:#68ff9c;color:#063817}
+.character-tag.fox{background:#ff8a8a;color:#3a0808}
+.character-tag.beaver{background:#ffd166;color:#302000}
+.character-tag.frog{background:#5ee4ff;color:#052334}
+.character-tag.octopus{background:#b49cff;color:#1a0a3e}
+.character-tag.gecko{background:#ffb347;color:#3a1d00}
+
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:10px 0}
+.stat-box{background:rgba(0,0,0,.12);border-radius:14px;padding:10px;text-align:center;font-weight:900}
+
+.mission-type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0}
+.mission-type-btn{border:0;border-radius:18px;padding:14px 10px;font-weight:900;font-size:.9rem;cursor:pointer;text-align:center;touch-action:manipulation;min-height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.mission-type-btn:active{transform:translateY(3px)}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;place-items:center;z-index:30;padding:18px}
+.modal.show{display:grid}
+.pop{background:#fff;color:#10233a;border-radius:32px;max-width:520px;width:100%;padding:24px;text-align:center;border:8px solid #68ff9c}
+
+.celebrate{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:40}
+.confetti{position:absolute;font-size:2.4rem;animation:fall 1.6s linear forwards}
+@keyframes fall{from{transform:translateY(-80px) rotate(0)}to{transform:translateY(110vh) rotate(360deg);opacity:.2}}
+
+.trickster-type{display:inline-block;border-radius:12px;padding:4px 10px;font-weight:900;font-size:.8rem;margin:2px}
+.trickster-type.rush{background:#ff8a8a;color:#3a0808}
+.trickster-type.quitter{background:#ffb347;color:#3a1d00}
+.trickster-type.distractor{background:#5ee4ff;color:#052334}
+.trickster-type.shortcut{background:#b49cff;color:#1a0a3e}
+
+.back-link{color:#b8f5d0;text-decoration:none;font-weight:900;font-size:.95rem}
+
+@media(max-width:620px){
+.top{display:block}
+.choice-grid{grid-template-columns:1fr}
+.mission-type-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div id="celebrate" class="celebrate"></div>
+
+<header>
+<div class="top">
+<div>
+<h1>🐢 Turtle Station: The Trickster</h1>
+<div class="sub">Spot the Trickster. Choose the smart move.</div>
+</div>
+<div class="badges">
+<a href="../index.html" class="badge" style="text-decoration:none">🚀 Mission Control</a>
+<div class="badge">⭐ <span id="xpCount">0</span> XP</div>
+<div class="badge">🎯 <span id="missionNum">0</span> Missions</div>
+</div>
+</div>
+<div class="progress-bar"><div id="sessionProgress"></div></div>
+</header>
+
+<main class="wrap">
+
+<section id="startScreen">
+<div class="card" style="border-color:#68ff9c">
+<h2>🐢 Welcome to Turtle Station</h2>
+<p>The <b>Trickster</b> is sneaky. It tries to make you rush, quit, get distracted, or take shortcuts. Your job: spot the Trickster's tricks and choose a smarter move.</p>
+<p><b>Commander Turtle</b> is here to help. One step at a time.</p>
+
+<h2 style="margin-top:14px">🎭 Meet the Crew</h2>
+<div class="row">
+<span class="character-tag turtle">🐢 Commander Turtle</span>
+<span class="character-tag fox">🦊 Rocket Fox</span>
+<span class="character-tag beaver">🦫 Builder Beaver</span>
+<span class="character-tag frog">🐸 Explorer Frog</span>
+<span class="character-tag octopus">🐙 Inventor Octopus</span>
+<span class="character-tag gecko">🦎 Captain Gecko</span>
+</div>
+
+<div class="row" style="margin-top:16px">
+<button class="action green" onclick="startSession()" style="font-size:1.2rem;padding:16px 28px">Start Missions</button>
+</div>
+
+<h2 style="margin-top:18px">🏆 Trickster Types Defeated</h2>
+<div class="row">
+<span class="trickster-type rush">🏃 Rush: <span id="rushCount">0</span></span>
+<span class="trickster-type quitter">🚪 Quitter: <span id="quitterCount">0</span></span>
+<span class="trickster-type distractor">🌀 Distractor: <span id="distractorCount">0</span></span>
+<span class="trickster-type shortcut">✂️ Shortcut: <span id="shortcutCount">0</span></span>
+</div>
+
+<h2 style="margin-top:18px">📊 Station Stats</h2>
+<div id="statsGrid" class="stats-grid"></div>
+</div>
+</section>
+
+<section id="gameScreen" style="display:none">
+<div class="card" id="gameCard">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+<h2 id="gameTitle">🎯 Mission #1</h2>
+<span id="missionTypePill" style="background:#e7ffe7;color:#10233a;border-radius:999px;padding:6px 12px;font-weight:900;font-size:.85rem">Mission</span>
+</div>
+
+<div id="scenarioCard" class="scenario-card"></div>
+
+<div id="stepChoices" style="display:none">
+<p id="choicePrompt" style="font-weight:900;text-align:center">What do you think?</p>
+<div id="choiceOptions" class="choice-grid"></div>
+</div>
+
+<div id="feedbackBox" class="feedback-box" style="display:none"></div>
+
+<div id="nextRow" class="row" style="display:none">
+<button class="action green" onclick="nextMission()" style="font-size:1.1rem;padding:14px 24px">Next Mission</button>
+<button class="action purple" onclick="showMissionReport()">Finish Session</button>
+<button class="action warn" onclick="endSession()">Back to Station</button>
+</div>
+</div>
+</section>
+
+</main>
+
+<div id="reportModal" class="modal">
+<div class="pop" style="border-color:#68ff9c">
+<h2>🐢 Commander Turtle Mission Report</h2>
+<div id="reportBody" style="text-align:left;font-weight:900;line-height:1.8"></div>
+<div id="reportClosing" class="feedback-box" style="margin-top:12px"></div>
+<div class="row" style="margin-top:14px">
+<button class="action green" onclick="el('reportModal').classList.remove('show')">Close Report</button>
+<a href="../index.html" class="action blue" style="text-decoration:none">🚀 Mission Control</a>
+</div>
+</div>
+</div>
+
+<script>
+var CHARACTERS = {
+turtle:{name:'Commander Turtle',icon:'🐢',style:'calm, one step at a time'},
+fox:{name:'Rocket Fox',icon:'🦊',style:'loves speed, often rushes'},
+beaver:{name:'Builder Beaver',icon:'🦫',style:'careful and steady'},
+frog:{name:'Explorer Frog',icon:'🐸',style:'curious but gets distracted'},
+octopus:{name:'Inventor Octopus',icon:'🐙',style:'creative, finds another way'},
+gecko:{name:'Captain Gecko',icon:'🦎',style:'takes shortcuts, skips steps'}
+};
+
+var MISSIONS = [
+// === WHO LISTENED TO THE TRICKSTER ===
+// Pick which character gave in to Trickster thinking
+{type:'whoListened',trickster:'rush',text:'The class had 10 minutes to finish a drawing. Rocket Fox scribbled super fast and turned it in after 2 minutes without coloring it. Builder Beaver worked carefully and used the whole time.',question:'Who listened to the Trickster?',answer:'Rocket Fox',choices:['Rocket Fox','Builder Beaver'],feedback:'Rocket Fox rushed through without caring about quality. The Rush Trickster got him! Builder Beaver took it one step at a time.'},
+{type:'whoListened',trickster:'rush',text:'The teacher said to read the directions twice before starting. Rocket Fox skipped the directions and started right away. Commander Turtle read them twice, then began.',question:'Who listened to the Trickster?',answer:'Rocket Fox',choices:['Rocket Fox','Commander Turtle'],feedback:'Skipping directions is a Rush Trickster move. Commander Turtle slowed down and got it right.'},
+{type:'whoListened',trickster:'quitter',text:'The math problem was hard. Explorer Frog said "I give up" and put her head down. Builder Beaver said "Let me try one more step."',question:'Who listened to the Trickster?',answer:'Explorer Frog',choices:['Explorer Frog','Builder Beaver'],feedback:'The Quitter Trickster told Explorer Frog to give up. Builder Beaver tried one more step — that is the Commander Turtle way.'},
+{type:'whoListened',trickster:'quitter',text:'During a puzzle, Captain Gecko said "This is impossible, I am done" after one try. Inventor Octopus said "Let me try a different piece."',question:'Who listened to the Trickster?',answer:'Captain Gecko',choices:['Captain Gecko','Inventor Octopus'],feedback:'One try and quitting? That is the Quitter Trickster. Inventor Octopus found another way — smart thinking.'},
+{type:'whoListened',trickster:'distractor',text:'During reading time, Explorer Frog kept looking at what everyone else was doing instead of reading. Builder Beaver stayed focused on her book.',question:'Who listened to the Trickster?',answer:'Explorer Frog',choices:['Explorer Frog','Builder Beaver'],feedback:'Looking around instead of working is the Distractor Trickster. Builder Beaver kept focus — strong move.'},
+{type:'whoListened',trickster:'distractor',text:'The teacher was explaining something important. Rocket Fox started drawing on his paper instead of listening. Commander Turtle watched and listened carefully.',question:'Who listened to the Trickster?',answer:'Rocket Fox',choices:['Rocket Fox','Commander Turtle'],feedback:'Drawing during directions is a Distractor Trickster trick. Commander Turtle paid attention — one step at a time starts with listening.'},
+{type:'whoListened',trickster:'shortcut',text:'The class had to write three sentences. Captain Gecko wrote one really short sentence and said "Done!" Inventor Octopus wrote three complete sentences.',question:'Who listened to the Trickster?',answer:'Captain Gecko',choices:['Captain Gecko','Inventor Octopus'],feedback:'Skipping steps to finish faster is the Shortcut Trickster. Inventor Octopus did the whole job — that is real done.'},
+{type:'whoListened',trickster:'shortcut',text:'Everyone had to show their work on the math page. Captain Gecko just wrote answers without showing work. Builder Beaver showed every step.',question:'Who listened to the Trickster?',answer:'Captain Gecko',choices:['Captain Gecko','Builder Beaver'],feedback:'Skipping the work to get to the answer is a Shortcut Trickster move. Showing your steps helps your brain learn.'},
+{type:'whoListened',trickster:'rush',text:'It was time to clean up. Rocket Fox threw everything in the bin without sorting. Builder Beaver sorted supplies into the right spots.',question:'Who listened to the Trickster?',answer:'Rocket Fox',choices:['Rocket Fox','Builder Beaver'],feedback:'Throwing everything in without sorting is rushing. The Trickster says "fast is better" but Commander Turtle says "right is better."'},
+{type:'whoListened',trickster:'quitter',text:'The LEGO tower kept falling over. Explorer Frog walked away and said "Forget it." Inventor Octopus tried building the base wider.',question:'Who listened to the Trickster?',answer:'Explorer Frog',choices:['Explorer Frog','Inventor Octopus'],feedback:'Walking away after it gets hard is the Quitter Trickster. Inventor Octopus tried another way — that is flexible thinking.'},
+
+// === SUSPICIOUS STEP ===
+// Spot which step in a plan is a Trickster trick
+{type:'suspiciousStep',trickster:'rush',text:'Rocket Fox\'s plan for a writing assignment:\n1. Read the prompt\n2. Skip planning and start writing immediately\n3. Turn it in without reading it over',question:'Which step is suspicious?',answer:'Skip planning and start writing immediately',choices:['Read the prompt','Skip planning and start writing immediately','Turn it in without reading it over'],feedback:'Skipping planning is a Rush Trickster move. Good detectives plan before they act.'},
+{type:'suspiciousStep',trickster:'shortcut',text:'Captain Gecko\'s plan for building a model:\n1. Look at the picture on the box\n2. Skip the first 5 steps of directions\n3. Wonder why it does not look right',question:'Which step is suspicious?',answer:'Skip the first 5 steps of directions',choices:['Look at the picture on the box','Skip the first 5 steps of directions','Wonder why it does not look right'],feedback:'Skipping steps in the directions is a Shortcut Trickster move. Every step matters.'},
+{type:'suspiciousStep',trickster:'quitter',text:'Explorer Frog\'s plan for a hard math problem:\n1. Read the problem\n2. Try one thing\n3. Say "I can not do this" and stop',question:'Which step is suspicious?',answer:'Say "I can not do this" and stop',choices:['Read the problem','Try one thing','Say "I can not do this" and stop'],feedback:'Stopping after one try and saying "I can not" is the Quitter Trickster talking. Try one more step before deciding.'},
+{type:'suspiciousStep',trickster:'distractor',text:'Explorer Frog\'s plan for finishing homework:\n1. Sit down at the desk\n2. Start playing with a toy on the desk\n3. Wonder why homework is not done',question:'Which step is suspicious?',answer:'Start playing with a toy on the desk',choices:['Sit down at the desk','Start playing with a toy on the desk','Wonder why homework is not done'],feedback:'Playing with a toy instead of starting is the Distractor Trickster. Move the toy away and start step one.'},
+{type:'suspiciousStep',trickster:'rush',text:'Rocket Fox\'s plan for a spelling test:\n1. Look at the word for one second\n2. Write it as fast as possible\n3. Do not check the spelling',question:'Which step is suspicious?',answer:'Write it as fast as possible',choices:['Look at the word for one second','Write it as fast as possible','Do not check the spelling'],feedback:'Writing as fast as possible without checking is Rush Trickster thinking. Slow and steady wins the spelling test.'},
+{type:'suspiciousStep',trickster:'shortcut',text:'Captain Gecko\'s plan for cleaning his room:\n1. Pick up the big stuff\n2. Shove everything else under the bed\n3. Say "All clean!"',question:'Which step is suspicious?',answer:'Shove everything else under the bed',choices:['Pick up the big stuff','Shove everything else under the bed','Say "All clean!"'],feedback:'Shoving things under the bed is the Shortcut Trickster. It looks done but it is not really done.'},
+
+// === FIND THE TRICKSTER CLUE ===
+// Identify which type of Trickster is at work
+{type:'findClue',trickster:'rush',text:'You are working on a project and your brain says: "Just do it fast! Who cares if it is messy!"',question:'Which Trickster is talking?',answer:'Rush Trickster',choices:['Rush Trickster','Quitter Trickster','Distractor Trickster','Shortcut Trickster'],feedback:'That is the Rush Trickster. It wants speed over quality. Commander Turtle says: "Slow is smooth, smooth is fast."'},
+{type:'findClue',trickster:'quitter',text:'You try a puzzle piece and it does not fit. Your brain says: "This is too hard. Just stop."',question:'Which Trickster is talking?',answer:'Quitter Trickster',choices:['Rush Trickster','Quitter Trickster','Distractor Trickster','Shortcut Trickster'],feedback:'The Quitter Trickster wants you to give up after one try. Commander Turtle says: "Try one more step."'},
+{type:'findClue',trickster:'distractor',text:'You are supposed to be reading but you keep thinking about what game to play at recess.',question:'Which Trickster is talking?',answer:'Distractor Trickster',choices:['Rush Trickster','Quitter Trickster','Distractor Trickster','Shortcut Trickster'],feedback:'That is the Distractor Trickster pulling your attention away. Commander Turtle says: "Finish this first, then think about recess."'},
+{type:'findClue',trickster:'shortcut',text:'You have to write your name on every page. Your brain says: "Just write it on the first one. Nobody will notice."',question:'Which Trickster is talking?',answer:'Shortcut Trickster',choices:['Rush Trickster','Quitter Trickster','Distractor Trickster','Shortcut Trickster'],feedback:'The Shortcut Trickster skips steps. Commander Turtle says: "Do it right on every page."'},
+{type:'findClue',trickster:'rush',text:'Your teacher says "Take your time on this test." Your brain says: "Finish first and you win!"',question:'Which Trickster is talking?',answer:'Rush Trickster',choices:['Rush Trickster','Quitter Trickster','Distractor Trickster','Shortcut Trickster'],feedback:'The Rush Trickster thinks finishing first is winning. Commander Turtle says: "Finishing well is the real win."'},
+{type:'findClue',trickster:'quitter',text:'You are building a tower and it falls down. Your brain says: "See? You can not build anything."',question:'Which Trickster is talking?',answer:'Quitter Trickster',choices:['Rush Trickster','Quitter Trickster','Distractor Trickster','Shortcut Trickster'],feedback:'The Quitter Trickster uses mean words to make you stop. Commander Turtle says: "Falling down is part of building. Try again."'},
+{type:'findClue',trickster:'distractor',text:'You sit down to do homework and suddenly you need to sharpen every pencil, get water, check the window, and find your eraser.',question:'Which Trickster is talking?',answer:'Distractor Trickster',choices:['Rush Trickster','Quitter Trickster','Distractor Trickster','Shortcut Trickster'],feedback:'Finding a million things to do instead of starting is the Distractor Trickster. Commander Turtle says: "Start the first problem. Everything else can wait."'},
+{type:'findClue',trickster:'shortcut',text:'Your teacher says to check your work. Your brain says: "It is probably fine. Just turn it in."',question:'Which Trickster is talking?',answer:'Shortcut Trickster',choices:['Rush Trickster','Quitter Trickster','Distractor Trickster','Shortcut Trickster'],feedback:'Skipping the check is the Shortcut Trickster. Commander Turtle says: "Checking your work is the last step. Do not skip it."'},
+
+// === SLOW DOWN MISSION ===
+// Given a rushing scenario, pick the slow-down strategy
+{type:'slowDown',trickster:'rush',text:'You have a big worksheet. The Rush Trickster says: "Do it all at once as fast as you can!" What is the Commander Turtle move?',question:'What should you do?',answer:'Break it into small pieces and do one at a time',choices:['Break it into small pieces and do one at a time','Race through it','Skip the hard parts','Give up and do it later'],feedback:'Breaking big tasks into small steps is how Commander Turtle beats the Rush Trickster. One piece at a time.'},
+{type:'slowDown',trickster:'rush',text:'You just got a new board game. The Rush Trickster says: "Skip the rules and just play!" What is the smart move?',question:'What should you do?',answer:'Read the rules first, then play',choices:['Read the rules first, then play','Skip the rules','Make up your own rules','Quit if it seems hard'],feedback:'Reading the rules first means you actually know how to play. Commander Turtle says: "Understanding comes before action."'},
+{type:'slowDown',trickster:'rush',text:'You are writing a story. The Rush Trickster says: "Just write one sentence and call it done!" What would Commander Turtle say?',question:'What should you do?',answer:'Write a beginning, middle, and end',choices:['Write a beginning, middle, and end','Write one sentence','Copy someone else\'s story','Say you do not want to'],feedback:'A real story has parts. Commander Turtle says: "One part at a time. Start with the beginning."'},
+{type:'slowDown',trickster:'rush',text:'You are about to take a test. The Rush Trickster says: "First one done gets a prize!" Is that true?',question:'What is the truth?',answer:'There is no prize for finishing first',choices:['There is no prize for finishing first','Faster is always better','Skip the hard questions','Just guess everything'],feedback:'The Rush Trickster lies about prizes for speed. Commander Turtle says: "The real prize is doing your best work."'},
+
+// === ANOTHER WAY MISSION ===
+// When stuck, find the flexible thinking option
+{type:'anotherWay',trickster:'quitter',text:'You are trying to draw a horse but it does not look right. The Quitter Trickster says: "You are bad at drawing. Stop." What is another way?',question:'What is a better move?',answer:'Try drawing it a different way or ask for help',choices:['Try drawing it a different way or ask for help','Rip up the paper','Give up on drawing forever','Say "I am bad at everything"'],feedback:'Trying a different way is flexible thinking. Inventor Octopus says: "There is always another way." Commander Turtle says: "One new try."'},
+{type:'anotherWay',trickster:'quitter',text:'Your LEGO build keeps falling apart at the same spot. The Quitter Trickster says: "This set is broken. Throw it away." What could you try?',question:'What is a better move?',answer:'Build that part differently or ask someone to help',choices:['Build that part differently or ask someone to help','Throw all the pieces away','Blame the LEGO set','Cry and give up'],feedback:'When something keeps not working, try it a different way. That is flexible thinking — the Trickster hates flexible thinking.'},
+{type:'anotherWay',trickster:'shortcut',text:'You forgot your pencil. The Shortcut Trickster says: "Just do not do the work." What is another way?',question:'What is a better move?',answer:'Borrow a pencil or ask the teacher',choices:['Borrow a pencil or ask the teacher','Skip the assignment','Pretend to work','Do nothing'],feedback:'Finding another way to get what you need is smart problem-solving. The Shortcut Trickster wants you to give up, but Commander Turtle says: "Find a way."'},
+{type:'anotherWay',trickster:'distractor',text:'You keep getting distracted by noises in the room. The Distractor Trickster loves noises. What could help?',question:'What is a better move?',answer:'Ask to move to a quieter spot or use a focus tool',choices:['Ask to move to a quieter spot or use a focus tool','Give up and stop working','Make more noise','Blame the other kids'],feedback:'Changing your spot or using a focus tool is flexible thinking. You outsmarted the Distractor Trickster.'},
+{type:'anotherWay',trickster:'quitter',text:'You tried to tie your shoe three times and it will not stay tied. The Quitter Trickster says: "Just leave it untied." What is another way?',question:'What is a better move?',answer:'Ask someone to show you a different knot',choices:['Ask someone to show you a different knot','Leave it untied forever','Get mad at the shoe','Take off both shoes'],feedback:'Asking someone to show you a new way is flexible AND brave. Commander Turtle says: "Asking for help is a power move."'},
+{type:'anotherWay',trickster:'distractor',text:'You are supposed to clean your room but you keep finding old toys to play with instead. What is the Commander Turtle move?',question:'What is a better move?',answer:'Put toys in a "play later" pile and keep cleaning',choices:['Put toys in a "play later" pile and keep cleaning','Play with every toy you find','Hide the toys under the bed','Say "My room is fine"'],feedback:'A "play later" pile is genius. You outsmarted the Distractor Trickster AND still get to play later.'},
+];
+
+var turtleSuccess=[
+'🐢 Commander Turtle says: "You spotted the Trickster. Strong thinking."',
+'🐢 Commander Turtle says: "One step at a time. You chose the smart move."',
+'🐢 Commander Turtle says: "The Trickster tried, but you were too smart."',
+'🐢 Commander Turtle says: "That is flexible thinking. The Trickster does not like that."',
+'🐢 Commander Turtle says: "You slowed down and made a good choice."',
+'🐢 Commander Turtle says: "Nice work. You are getting better at spotting tricks."',
+];
+var turtleCoach=[
+'🐢 Commander Turtle says: "Take another look. What would the Trickster want you to do?"',
+'🐢 Commander Turtle says: "Slow down. Think about what Commander Turtle would say."',
+'🐢 Commander Turtle says: "The Trickster is tricky! Try again — you can spot it."',
+'🐢 Commander Turtle says: "Think about it: which choice rushes, quits, distracts, or skips?"',
+'🐢 Commander Turtle says: "You are close. Check one more time."',
+];
+
+var MISSION_NAMES={
+whoListened:'Who Listened?',
+suspiciousStep:'Suspicious Step',
+findClue:'Find the Trickster Clue',
+slowDown:'Slow Down Mission',
+anotherWay:'Another Way Mission'
+};
+
+var save={
+xp:0,missionsCompleted:0,trickstersDefeated:0,
+rush:0,quitter:0,distractor:0,shortcut:0,
+bestStreak:0,lastSession:null
+};
+
+var session={current:null,missionIndex:0,streak:0,usedIndices:[],sessionMissions:0,sessionCorrect:0,sessionTricksters:{rush:0,quitter:0,distractor:0,shortcut:0}};
+
+function randFrom(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function el(id){return document.getElementById(id)}
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5})}
+
+function loadSave(){
+try{var s=localStorage.getItem('ts_save');if(s){var d=JSON.parse(s);for(var k in d)save[k]=d[k]}}catch(e){}
+}
+function persist(){save.lastSession=new Date().toISOString();localStorage.setItem('ts_save',JSON.stringify(save))}
+
+function sparkle(items){
+var box=el('celebrate');
+for(var i=0;i<16;i++){var s=document.createElement('div');s.className='confetti';s.textContent=items[Math.floor(Math.random()*items.length)];s.style.left=Math.random()*100+'vw';s.style.animationDelay=(Math.random()*.35)+'s';box.appendChild(s);setTimeout(function(x){return function(){x.remove()}}(s),1800)}
+}
+
+function renderStart(){
+renderStats();
+el('xpCount').textContent=save.xp;
+el('missionNum').textContent=save.missionsCompleted;
+el('rushCount').textContent=save.rush;
+el('quitterCount').textContent=save.quitter;
+el('distractorCount').textContent=save.distractor;
+el('shortcutCount').textContent=save.shortcut;
+}
+
+function renderStats(){
+var box=el('statsGrid');
+var items=[['Missions','missionsCompleted'],['Defeated','trickstersDefeated'],['Streak','bestStreak'],['XP','xp']];
+box.innerHTML=items.map(function(p){return '<div class="stat-box">'+p[0]+'<br><b style="font-size:1.4rem">'+save[p[1]]+'</b></div>'}).join('');
+}
+
+function pickMission(){
+var pool=[];
+MISSIONS.forEach(function(m,i){
+if(session.usedIndices.indexOf(i)<0)pool.push(i);
+});
+if(pool.length===0){
+session.usedIndices=[];
+return pickMission();
+}
+var pick=pool[Math.floor(Math.random()*pool.length)];
+session.usedIndices.push(pick);
+return MISSIONS[pick];
+}
+
+function startSession(){
+el('startScreen').style.display='none';
+el('gameScreen').style.display='block';
+session.missionIndex=0;session.streak=0;session.usedIndices=[];
+session.sessionMissions=0;session.sessionCorrect=0;
+session.sessionTricksters={rush:0,quitter:0,distractor:0,shortcut:0};
+nextMission();
+}
+
+function endSession(){
+if(session.missionIndex>0)showMissionReport();
+el('startScreen').style.display='block';
+el('gameScreen').style.display='none';
+renderStart();
+}
+
+function nextMission(){
+var m=pickMission();
+if(!m){endSession();return}
+session.current=m;
+session.missionIndex++;
+session.sessionMissions++;
+el('gameTitle').textContent='🎯 Mission #'+session.missionIndex;
+el('missionTypePill').textContent=MISSION_NAMES[m.type]||m.type;
+el('scenarioCard').textContent=m.text;
+el('feedbackBox').style.display='none';
+el('nextRow').style.display='none';
+
+el('choicePrompt').textContent=m.question;
+var opts=el('choiceOptions');opts.innerHTML='';
+var choices=m.type==='whoListened'?shuffle(m.choices):m.choices.slice();
+if(m.type!=='whoListened'&&m.type!=='suspiciousStep')choices=shuffle(choices);
+
+choices.forEach(function(c){
+var b=document.createElement('button');
+b.className='choice-btn';b.textContent=c;
+b.onclick=function(){pickChoice(c,b)};
+opts.appendChild(b);
+});
+el('stepChoices').style.display='block';
+
+el('sessionProgress').style.width=Math.min(100,session.missionIndex*8)+'%';
+el('xpCount').textContent=save.xp;
+el('missionNum').textContent=save.missionsCompleted;
+}
+
+function pickChoice(choice,btn){
+var m=session.current;if(!m)return;
+if(choice===m.answer){
+save.xp+=8;
+save.missionsCompleted++;
+save.trickstersDefeated++;
+save[m.trickster]++;
+session.sessionCorrect++;
+session.sessionTricksters[m.trickster]++;
+session.streak++;
+if(session.streak>save.bestStreak)save.bestStreak=session.streak;
+btn.classList.add('correct');
+var prefix=randFrom(turtleSuccess);
+el('feedbackBox').textContent=prefix+' '+m.feedback;
+el('feedbackBox').style.display='block';
+el('stepChoices').style.display='none';
+el('nextRow').style.display='flex';
+sparkle(['🐢','⭐','🎯']);
+} else {
+btn.classList.add('wrong');
+btn.disabled=true;
+session.streak=0;
+var coach=randFrom(turtleCoach);
+el('feedbackBox').textContent=coach;
+el('feedbackBox').style.display='block';
+}
+persist();
+el('xpCount').textContent=save.xp;
+el('missionNum').textContent=save.missionsCompleted;
+}
+
+function showMissionReport(){
+var body='🎯 Missions Completed: '+session.sessionMissions+'<br>';
+body+='✅ Correct First Try: '+session.sessionCorrect+'<br>';
+body+='🔥 Best Streak: '+save.bestStreak+'<br>';
+body+='⭐ Total XP: '+save.xp+'<br><br>';
+body+='<b>Tricksters Defeated This Session:</b><br>';
+body+='🏃 Rush: '+session.sessionTricksters.rush+'<br>';
+body+='🚪 Quitter: '+session.sessionTricksters.quitter+'<br>';
+body+='🌀 Distractor: '+session.sessionTricksters.distractor+'<br>';
+body+='✂️ Shortcut: '+session.sessionTricksters.shortcut;
+el('reportBody').innerHTML=body;
+var closings=[
+'🐢 Commander Turtle says: "You spotted the Trickster\'s tricks today. That takes real brain power."',
+'🐢 Commander Turtle says: "Every trick you spot makes you stronger. The Trickster is running out of ideas."',
+'🐢 Commander Turtle says: "One step at a time. That is how you outsmart the Trickster every time."',
+'🐢 Commander Turtle says: "Good work today. The Trickster tried, but you stayed smart."',
+];
+el('reportClosing').textContent=randFrom(closings);
+el('reportModal').classList.add('show');
+}
+
+loadSave();
+renderStart();
+</script>
+</body>
+</html>
