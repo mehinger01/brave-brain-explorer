@@ -86,6 +86,27 @@ h2{font-size:clamp(1.15rem,3vw,1.7rem);margin:0 0 8px}
 
 .back-link{color:#d9ecff;text-decoration:none;font-weight:900;font-size:.95rem}
 
+.trickster-intro{background:linear-gradient(135deg,#ffe0f0,#f0e0ff);border:4px solid #c77dff;border-radius:20px;padding:14px 18px;margin:10px 0;font-weight:900;font-size:1.05rem;text-align:center;line-height:1.4;display:flex;align-items:center;gap:12px;justify-content:center}
+.trickster-blob{display:inline-block;width:48px;height:56px;background:linear-gradient(180deg,#c77dff,#9147ff);border-radius:50% 50% 44% 44%;position:relative;flex-shrink:0;animation:tricksterBob 1.2s ease-in-out infinite}
+.trickster-blob::before{content:'';position:absolute;top:14px;left:8px;right:8px;height:14px;background:rgba(255,255,255,.85);border-radius:10px}
+.trickster-blob::after{content:'✨';position:absolute;top:-8px;right:-6px;font-size:.9rem;animation:tricksterSpark 1.5s ease-in-out infinite}
+.trickster-blob .brow{position:absolute;top:8px;right:10px;width:10px;height:3px;background:#4a0e8f;border-radius:2px;transform:rotate(-15deg)}
+.trickster-blob .foot{position:absolute;bottom:-6px;width:10px;height:8px;background:#7b2fff;border-radius:0 0 6px 6px}
+.trickster-blob .foot.l{left:10px}
+.trickster-blob .foot.r{right:10px}
+@keyframes tricksterBob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-4px) rotate(3deg)}}
+@keyframes tricksterSpark{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+@keyframes tricksterShrink{0%{transform:scale(1);opacity:1}100%{transform:scale(0) rotate(180deg);opacity:0}}
+.trickster-blob.defeated{animation:tricksterShrink .5s ease-in forwards}
+
+.reframe-card{background:#f5f0ff;border:3px solid #c77dff;border-radius:18px;padding:16px;margin:10px 0;font-weight:900;font-size:1.1rem;text-align:center;line-height:1.5}
+.reframe-label{color:#9147ff;font-size:.85rem;margin-bottom:6px}
+
+.reflect-options{display:grid;gap:8px;margin:10px 0}
+.reflect-btn{border:0;border-radius:16px;padding:14px;font-weight:900;font-size:1rem;cursor:pointer;background:#f0e8ff;color:#10233a;box-shadow:0 4px 0 #b49cff;text-align:center;touch-action:manipulation}
+.reflect-btn:active{transform:translateY(3px)}
+.reflect-btn.chosen{background:#c77dff;color:#fff;box-shadow:0 4px 0 #7b2fff}
+
 @media(max-width:620px){
 .meter-row{grid-template-columns:1fr}
 .top{display:block}
@@ -152,7 +173,30 @@ h2{font-size:clamp(1.15rem,3vw,1.7rem);margin:0 0 8px}
 <span id="levelPill" style="background:#efe7ff;color:#10233a;border-radius:999px;padding:6px 12px;font-weight:900;font-size:.85rem">Level 1</span>
 </div>
 
+<div id="tricksterIntro" class="trickster-intro" style="display:none">
+<div class="trickster-blob" id="tricksterBlob"><div class="brow"></div><div class="foot l"></div><div class="foot r"></div></div>
+<span id="tricksterLine"></span>
+</div>
+
 <div id="scenarioCard" class="scenario-card"></div>
+
+<div id="stepReframe" style="display:none">
+<div class="reframe-card">
+<div class="reframe-label">🎭 The Trickster says:</div>
+<div id="tricksterThought" style="font-size:1.2rem;color:#9147ff"></div>
+</div>
+<p style="font-weight:900;text-align:center">What is the better detective thought?</p>
+<div id="reframeOptions" class="clue-grid"></div>
+</div>
+
+<div id="stepReflect" style="display:none">
+<p id="reflectQuestion" style="font-weight:900;text-align:center;font-size:1.05rem"></p>
+<div id="reflectOptions" class="reflect-options"></div>
+<div id="reflectFollowup" style="display:none">
+<p style="font-weight:900;text-align:center;margin-top:12px">What could help?</p>
+<div id="reflectActions" class="clue-grid"></div>
+</div>
+</div>
 
 <div id="stepMeter" style="display:none">
 <p style="font-weight:900;text-align:center">What color is this brain?</p>
@@ -310,6 +354,31 @@ var SCENARIOS = [
 {level:5,cat:'action',text:'You are in Yellow and you want to throw your work in the trash. What is one small step?',answer:'Put the pencil down and count to five',actions:['Put the pencil down and count to five','Throw it in the trash','Keep pushing through anyway','Scream'],feedback:'Putting the pencil down is a micro-reset. It breaks the frustration cycle without needing a full reset.'},
 {level:5,cat:'action',text:'You finished something hard after feeling frustrated. What should you do?',answer:'Celebrate — that was a comeback',actions:['Celebrate — that was a comeback','Pretend it was easy','Feel bad you got frustrated','Do not tell anyone'],feedback:'Finishing something hard after frustration IS the win. That is comeback power. Celebrate it.'},
 {level:5,cat:'action',text:'You are in Green and a classmate near you is in Red. What could you do?',answer:'Give them space and be quiet nearby',actions:['Give them space and be quiet nearby','Tell them to calm down','Laugh at them','Ignore them completely'],feedback:'Giving someone in Red quiet space is detective-level empathy. You read the clues and responded wisely.'},
+
+// --- LEVEL 6: Spot the Trickster Trap ---
+{level:6,cat:'trickster',tricksterLine:'The Trickster whispers: "Just quit. This is too hard."',text:'You are working on a puzzle and one piece will not fit.',question:'What should the detective do?',answer:'Take a turtle reset and try one more piece',actions:['Slam the tablet shut','Take a turtle reset and try one more piece','Say "This is stupid" and walk away'],feedback:'You spotted the Trickster\'s trap! A reset and one more try is the smart move.'},
+{level:6,cat:'trickster',tricksterLine:'The Trickster says: "Rush through it! Who cares if it is messy!"',text:'Your teacher gives you a new writing assignment.',question:'What should the detective do?',answer:'Read the directions first and take it one step at a time',actions:['Scribble something fast and turn it in','Read the directions first and take it one step at a time','Skip it and hope nobody notices'],feedback:'The Trickster wanted you to rush. You slowed down like Commander Turtle. That is detective thinking.'},
+{level:6,cat:'trickster',tricksterLine:'The Trickster says: "You will never get this right. Give up now."',text:'You are learning something new and it does not make sense yet.',question:'What should the detective do?',answer:'Ask for help or try one more step',actions:['Put your head down and stop trying','Ask for help or try one more step','Say "I am bad at everything"'],feedback:'The Trickster tried to make you quit. But asking for help is brave AND smart.'},
+{level:6,cat:'trickster',tricksterLine:'The Trickster says: "Look at that toy over there! Way more fun than this!"',text:'You are supposed to finish your reading assignment.',question:'What should the detective do?',answer:'Finish reading first, then play',actions:['Go play with the toy right now','Finish reading first, then play','Pretend to read but think about the toy'],feedback:'The Trickster tried to distract you. Finishing first and THEN playing is the detective move.'},
+{level:6,cat:'trickster',tricksterLine:'The Trickster says: "Just copy the answer. Nobody will know."',text:'You are stuck on a hard math problem.',question:'What should the detective do?',answer:'Try to figure it out or ask the teacher for a hint',actions:['Copy from someone else','Try to figure it out or ask the teacher for a hint','Write a random number'],feedback:'The Trickster loves shortcuts that skip learning. Your brain grows when you work through hard things.'},
+{level:6,cat:'trickster',tricksterLine:'The Trickster says: "Yell at them! They deserve it!"',text:'Your partner accidentally knocks over your block tower.',question:'What should the detective do?',answer:'Take a breath and say "That was an accident"',actions:['Yell at your partner','Take a breath and say "That was an accident"','Knock over their stuff too'],feedback:'The Trickster wanted an explosion. But you used detective calm. Accidents happen and you handled it.'},
+{level:6,cat:'trickster',tricksterLine:'The Trickster says: "Do not even try. You already know you will fail."',text:'There is a hard challenge coming up and you feel nervous.',question:'What should the detective do?',answer:'Try the first step and see what happens',actions:['Do not try at all','Try the first step and see what happens','Tell everyone you cannot do it'],feedback:'The Trickster tried to stop you before you started. One small step is all it takes to prove the Trickster wrong.'},
+{level:6,cat:'trickster',tricksterLine:'The Trickster says: "If it is not perfect, it is garbage."',text:'You are drawing a picture and one part does not look right.',question:'What should the detective do?',answer:'Keep going — it does not have to be perfect to be good',actions:['Rip it up and start over','Keep going — it does not have to be perfect to be good','Crumple it and throw it away'],feedback:'The Trickster wants you to believe only perfect counts. But detectives know that trying IS the win.'},
+
+// --- LEVEL 7: Fix the Trickster Thought ---
+{level:7,cat:'reframe',tricksterThought:'"I can\'t do this."',text:'You are stuck on a hard problem and the Trickster puts a thought in your brain.',question:'What is the better detective thought?',answer:'This is hard, but I can try one small step.',reframes:['This is hard, but I can try one small step.','I really can\'t do anything right.','I should just give up forever.'],feedback:'You turned a Trickster thought into a detective thought. That is how you take your brain power back.'},
+{level:7,cat:'reframe',tricksterThought:'"This is stupid."',text:'The assignment feels boring and your brain wants to check out.',question:'What is the better detective thought?',answer:'This is not my favorite, but I can get through it.',reframes:['This is not my favorite, but I can get through it.','Everything I have to do is stupid.','Only fun things are worth doing.'],feedback:'Turning "stupid" into "not my favorite but doable" is a power move. The Trickster lost that round.'},
+{level:7,cat:'reframe',tricksterThought:'"Everyone else gets it except me."',text:'Other kids seem to understand the directions faster than you.',question:'What is the better detective thought?',answer:'Everyone learns at different speeds. I can ask for help.',reframes:['Everyone learns at different speeds. I can ask for help.','I must be the worst student in class.','If I do not get it fast, I should quit.'],feedback:'Comparing yourself to others is a Trickster trap. Your speed is YOUR speed, and asking for help is strong.'},
+{level:7,cat:'reframe',tricksterThought:'"If I make a mistake, everyone will laugh."',text:'You are about to try something in front of the class.',question:'What is the better detective thought?',answer:'Mistakes are how brains learn. It is okay.',reframes:['Mistakes are how brains learn. It is okay.','I better not try because I might mess up.','Only kids who never make mistakes are smart.'],feedback:'The Trickster uses fear of mistakes. But detectives know: every mistake teaches your brain something new.'},
+{level:7,cat:'reframe',tricksterThought:'"I should already know this."',text:'You are learning something new and it feels confusing.',question:'What is the better detective thought?',answer:'It is new, so it makes sense that I am still learning.',reframes:['It is new, so it makes sense that I am still learning.','Something is wrong with my brain.','I should have learned this yesterday.'],feedback:'New things feel confusing at first — that is normal! You reframed the Trickster thought perfectly.'},
+{level:7,cat:'reframe',tricksterThought:'"I quit. I do not care anymore."',text:'You failed at something twice and the Trickster wants you to stop caring.',question:'What is the better detective thought?',answer:'I am frustrated, but I can take a reset and try again.',reframes:['I am frustrated, but I can take a reset and try again.','Quitting is the best option every time.','If I failed twice, I will fail forever.'],feedback:'Quitting feels easy in the moment, but the Trickster wins when you stop trying. A reset puts YOU back in charge.'},
+
+// --- LEVEL 8: Real-Life Connection ---
+{level:8,cat:'reflect',text:'Think about a time you felt frustrated during a challenge.',reflectQuestion:'Have you ever felt frustrated when something was hard?',reflectOptions:['Yes','Not sure','No'],followupQuestion:'What could help next time?',followupActions:['Take a turtle reset','Ask for a hint','Try one more step','Take a slow breath'],feedback:'Thinking about real moments makes you a stronger detective. Now you have a plan for next time.'},
+{level:8,cat:'reflect',text:'Think about a time you wanted to quit something.',reflectQuestion:'Have you ever wanted to quit when it got hard?',reflectOptions:['Yes','Not sure','No'],followupQuestion:'What could help you keep going?',followupActions:['Try one small step','Ask someone for help','Take a turtle breath','Remember a time you did not quit and it worked out'],feedback:'Wanting to quit is normal. Having a plan for what to do instead is what makes you a detective.'},
+{level:8,cat:'reflect',text:'Think about a time you got distracted during something important.',reflectQuestion:'Have you ever gotten distracted when you were supposed to focus?',reflectOptions:['Yes','Not sure','No'],followupQuestion:'What could help you focus next time?',followupActions:['Move to a quieter spot','Put distractions away first','Take a focus breath','Ask an adult for help staying on track'],feedback:'Everyone gets distracted sometimes. Having a focus plan means the Trickster has less power over you.'},
+{level:8,cat:'reflect',text:'Think about a time you rushed through something and it did not turn out well.',reflectQuestion:'Have you ever rushed and wished you had slowed down?',reflectOptions:['Yes','Not sure','No'],followupQuestion:'What could help you slow down?',followupActions:['Read directions twice','Take a breath before starting','Do one step at a time','Check your work before saying done'],feedback:'Rushing is one of the Trickster\'s favorite tricks. Now you have a slow-down plan. Commander Turtle is proud.'},
+{level:8,cat:'reflect',text:'Think about your body clues when you start feeling frustrated.',reflectQuestion:'Do you notice body clues when frustration starts?',reflectOptions:['Yes','Sometimes','Not yet'],followupQuestion:'Which body clue do you notice most?',followupActions:['Tight hands or fists','Hot face','Fast heartbeat','Loud voice or wanting to yell'],feedback:'Knowing YOUR body clues is top-level detective skill. Now you know what to watch for.'},
 ];
 
 var BADGES = [
@@ -321,12 +390,16 @@ var BADGES = [
 {id:'comebackKid',name:'Comeback Kid',icon:'💪',desc:'Use a reset then finish a case',need:1,stat:'comebackWins'},
 {id:'bodyReader',name:'Body Reader',icon:'🧠',desc:'Solve 5 body-clue cases',need:5,stat:'bodyCases'},
 {id:'checkinChamp',name:'Check-In Champ',icon:'🔔',desc:'Complete 3 check-ins',need:3,stat:'checkinsCompleted'},
+{id:'trapSpotter',name:'Trap Spotter',icon:'🎭',desc:'Spot 5 Trickster traps',need:5,stat:'trapsSpotted'},
+{id:'mindShifter',name:'Mind Shifter',icon:'💡',desc:'Fix 3 Trickster thoughts',need:3,stat:'thoughtsReframed'},
+{id:'selfDetective',name:'Self Detective',icon:'🪞',desc:'Complete 3 real-life reflections',need:3,stat:'reflectionsCompleted'},
 ];
 
 var save = {
 xp:0,casesSolved:0,cluesSpotted:0,resetsUsed:0,yellowsCaught:0,resetChoices:0,comebackWins:0,bodyCases:0,checkinsCompleted:0,
+trapsSpotted:0,thoughtsReframed:0,reflectionsCompleted:0,
 badges:[],ownClues:[],bestStreak:0,lastSession:null,
-catMisses:{other:0,self:0,body:0,action:0},catAttempts:{other:0,self:0,body:0,action:0},
+catMisses:{other:0,self:0,body:0,action:0,trickster:0,reframe:0,reflect:0},catAttempts:{other:0,self:0,body:0,action:0,trickster:0,reframe:0,reflect:0},
 tricksterCheckIns:[]
 };
 
@@ -387,8 +460,8 @@ el('caseNum').textContent=save.casesSolved;
 function renderLevelTabs(){
 var box=el('levelTabs');
 box.innerHTML='';
-var names=['Level 1: Easy Clues','Level 2: Yellow Signals','Level 3: Red Signals','Level 4: Mixed Clues','Level 5: Next Move'];
-for(var i=1;i<=5;i++){
+var names=['Level 1: Easy Clues','Level 2: Yellow Signals','Level 3: Red Signals','Level 4: Mixed Clues','Level 5: Next Move','Level 6: Spot the Trap','Level 7: Fix the Thought','Level 8: Real-Life'];
+for(var i=1;i<=8;i++){
 var b=document.createElement('button');
 b.className='level-tab'+(session.level===i?' active':'');
 b.textContent=names[i-1];
@@ -410,7 +483,7 @@ box.appendChild(div);
 
 function renderStats(){
 var box=el('statsGrid');
-var items=[['Cases','casesSolved'],['Clues','cluesSpotted'],['Resets','resetsUsed'],['Streak','bestStreak'],['XP','xp'],['Check-Ins','checkinsCompleted']];
+var items=[['Cases','casesSolved'],['Clues','cluesSpotted'],['Resets','resetsUsed'],['Streak','bestStreak'],['XP','xp'],['Check-Ins','checkinsCompleted'],['Traps','trapsSpotted'],['Reframes','thoughtsReframed']];
 box.innerHTML=items.map(function(p){return '<div class="stat-box">'+p[0]+'<br><b style="font-size:1.4rem">'+save[p[1]]+'</b></div>'}).join('');
 }
 
@@ -429,7 +502,7 @@ function removeOwnClue(i){save.ownClues.splice(i,1);persist();renderOwnClues()}
 
 function pickScenario(){
 // Auto-advance: after 3 correct in a row, bump level
-if(session.streak>0&&session.streak%3===0&&session.level<5){
+if(session.streak>0&&session.streak%3===0&&session.level<8){
 session.level++;
 renderLevelTabs();
 }
@@ -438,9 +511,9 @@ var levels=[];
 var r=Math.random();
 if(r<0.60){levels=[session.level]}
 else if(r<0.85){levels=[Math.max(1,session.level-1)]}
-else{levels=[Math.min(5,session.level+1)]}
+else{levels=[Math.min(8,session.level+1)]}
 // Fallback: if chosen level has no unused scenarios, widen to all unlocked
-var maxLevel=Math.min(5,session.level+1);
+var maxLevel=Math.min(8,session.level+1);
 var pool=SCENARIOS.filter(function(s){return levels.indexOf(s.level)>=0});
 if(pool.length===0)pool=SCENARIOS.filter(function(s){return s.level<=maxLevel});
 var weighted=[];
@@ -493,8 +566,34 @@ el('feedbackBox').style.display='none';
 el('nextRow').style.display='none';
 el('stepClue').style.display='none';
 el('stepAction').style.display='none';
+el('stepReframe').style.display='none';
+el('stepReflect').style.display='none';
 
-if(s.level===5){
+// Show Trickster intro if scenario has one
+if(s.tricksterLine){
+el('tricksterLine').textContent=s.tricksterLine;
+el('tricksterIntro').style.display='flex';
+var blob=el('tricksterBlob');
+blob.classList.remove('defeated');
+blob.style.animation='none';
+blob.offsetHeight;
+blob.style.animation='';
+} else {
+el('tricksterIntro').style.display='none';
+}
+
+if(s.level===6){
+el('stepMeter').style.display='none';
+showTricksterTrapStep();
+} else if(s.level===7){
+el('stepMeter').style.display='none';
+el('scenarioCard').textContent=s.text;
+showReframeStep();
+} else if(s.level===8){
+el('stepMeter').style.display='none';
+el('scenarioCard').textContent=s.text;
+showReflectStep();
+} else if(s.level===5){
 el('stepMeter').style.display='none';
 showActionStep();
 } else {
@@ -590,6 +689,111 @@ btn.disabled=true;
 persist();
 }
 
+function showTricksterTrapStep(){
+var s=session.current;
+el('stepAction').style.display='block';
+el('actionOptions').parentElement.querySelector('p').textContent=s.question;
+var opts=el('actionOptions');opts.innerHTML='';
+shuffle(s.actions).forEach(function(a){
+var b=document.createElement('button');
+b.className='clue-btn';b.textContent=a;
+b.onclick=function(){pickTricksterTrap(a,b)};
+opts.appendChild(b);
+});
+}
+
+function pickTricksterTrap(choice,btn){
+var s=session.current;
+save.catAttempts['trickster']=(save.catAttempts['trickster']||0)+1;
+if(choice===s.answer){
+save.xp+=10;
+save.trapsSpotted++;
+save.resetChoices++;
+btn.classList.add('correct');
+el('tricksterBlob').classList.add('defeated');
+showFeedbackAndFinish(s.feedback);
+} else {
+save.catMisses['trickster']=(save.catMisses['trickster']||0)+1;
+session.streak=0;
+btn.classList.add('wrong');
+btn.disabled=true;
+el('feedbackBox').textContent='🎭 That was one of the Trickster\'s traps. Let\'s slow down and find the choice that helps your brain.';
+el('feedbackBox').style.display='block';
+}
+persist();
+}
+
+function showReframeStep(){
+var s=session.current;
+el('stepReframe').style.display='block';
+el('tricksterThought').textContent=s.tricksterThought;
+var opts=el('reframeOptions');opts.innerHTML='';
+shuffle(s.reframes).forEach(function(r){
+var b=document.createElement('button');
+b.className='clue-btn';b.textContent=r;
+b.onclick=function(){pickReframe(r,b)};
+opts.appendChild(b);
+});
+}
+
+function pickReframe(choice,btn){
+var s=session.current;
+save.catAttempts['reframe']=(save.catAttempts['reframe']||0)+1;
+if(choice===s.answer){
+save.xp+=10;
+save.thoughtsReframed++;
+btn.classList.add('correct');
+el('stepReframe').style.display='none';
+showFeedbackAndFinish(s.feedback);
+} else {
+save.catMisses['reframe']=(save.catMisses['reframe']||0)+1;
+session.streak=0;
+btn.classList.add('wrong');
+btn.disabled=true;
+el('feedbackBox').textContent='🐢 Commander Turtle says: "That still sounds like the Trickster talking. Look for the thought that helps your brain."';
+el('feedbackBox').style.display='block';
+}
+persist();
+}
+
+function showReflectStep(){
+var s=session.current;
+el('stepReflect').style.display='block';
+el('reflectQuestion').textContent=s.reflectQuestion;
+el('reflectFollowup').style.display='none';
+var opts=el('reflectOptions');opts.innerHTML='';
+s.reflectOptions.forEach(function(o){
+var b=document.createElement('button');
+b.className='reflect-btn';b.textContent=o;
+b.onclick=function(){pickReflect(o,b)};
+opts.appendChild(b);
+});
+}
+
+function pickReflect(choice,btn){
+document.querySelectorAll('.reflect-btn').forEach(function(b){b.classList.remove('chosen')});
+btn.classList.add('chosen');
+var s=session.current;
+el('reflectFollowup').style.display='block';
+var acts=el('reflectActions');acts.innerHTML='';
+s.followupActions.forEach(function(a){
+var b=document.createElement('button');
+b.className='clue-btn';b.textContent=a;
+b.onclick=function(){finishReflect(a,b)};
+acts.appendChild(b);
+});
+}
+
+function finishReflect(choice,btn){
+var s=session.current;
+save.xp+=8;
+save.reflectionsCompleted++;
+btn.classList.add('correct');
+el('stepReflect').style.display='none';
+showFeedbackAndFinish(s.feedback);
+persist();
+}
+
 function showFeedbackAndFinish(text){
 save.casesSolved++;
 session.streak++;
@@ -597,10 +801,17 @@ if(session.streak>save.bestStreak)save.bestStreak=session.streak;
 if(session.usedReset){save.comebackWins++;session.usedReset=false}
 el('stepClue').style.display='none';
 el('stepAction').style.display='none';
+el('stepReframe').style.display='none';
+el('stepReflect').style.display='none';
+var s=session.current;
+if(s&&s.level>=6){
+el('feedbackBox').textContent='🎭 '+text;
+} else {
 el('feedbackBox').textContent=turtleFeedback(text);
+}
 el('feedbackBox').style.display='block';
 el('nextRow').style.display='flex';
-sparkle(['🔍','⭐','🐢']);
+sparkle(s&&s.level>=6?['🎭','⭐','🐢']:['🔍','⭐','🐢']);
 checkBadges();
 persist();
 el('xpCount').textContent=save.xp;
@@ -673,6 +884,8 @@ var body='📁 Cases Solved: '+save.casesSolved+'<br>';
 body+='🔍 Frustration Clues Spotted: '+save.cluesSpotted+'<br>';
 body+='🐢 Reset Choices Practiced: '+save.resetChoices+'<br>';
 body+='🔔 Check-Ins Completed: '+save.checkinsCompleted+'<br>';
+body+='🎭 Trickster Traps Spotted: '+save.trapsSpotted+'<br>';
+body+='💡 Thoughts Reframed: '+save.thoughtsReframed+'<br>';
 body+='🔥 Best Streak: '+save.bestStreak+'<br>';
 body+='⭐ Total XP: '+save.xp;
 el('reportBody').innerHTML=body;
