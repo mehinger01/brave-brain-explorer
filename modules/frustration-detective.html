@@ -487,10 +487,11 @@ var items=[['Cases','casesSolved'],['Clues','cluesSpotted'],['Resets','resetsUse
 box.innerHTML=items.map(function(p){return '<div class="stat-box">'+p[0]+'<br><b style="font-size:1.4rem">'+save[p[1]]+'</b></div>'}).join('');
 }
 
+function escHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function renderOwnClues(){
 var box=el('ownClueChips');
 box.innerHTML=save.ownClues.map(function(c,i){
-return '<span class="clue-chip">'+c+' <button onclick="removeOwnClue('+i+')">×</button></span>';
+return '<span class="clue-chip">'+escHtml(c)+' <button onclick="removeOwnClue('+i+')">×</button></span>';
 }).join('');
 }
 function addOwnClue(){
@@ -662,6 +663,7 @@ persist();
 function showActionStep(){
 var s=session.current;
 el('stepAction').style.display='block';
+el('actionOptions').parentElement.querySelector('p').textContent='What should happen next?';
 var opts=el('actionOptions');opts.innerHTML='';
 s.actions.forEach(function(a){
 var b=document.createElement('button');
@@ -791,7 +793,6 @@ save.reflectionsCompleted++;
 btn.classList.add('correct');
 el('stepReflect').style.display='none';
 showFeedbackAndFinish(s.feedback);
-persist();
 }
 
 function showFeedbackAndFinish(text){
