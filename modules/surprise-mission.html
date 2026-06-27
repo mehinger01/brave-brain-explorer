@@ -7,7 +7,7 @@
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:"Arial Rounded MT Bold","Comic Sans MS",system-ui,sans-serif;background:radial-gradient(circle at 10% 0,#3a1b6b,#1a0a3e 42%,#0d0520);color:#fff;min-height:100vh;overflow-x:hidden;display:flex;align-items:center;justify-content:center}
-.wrap{max-width:520px;width:100%;padding:18px;text-align:center}
+.wrap{max-width:540px;width:100%;padding:18px;text-align:center}
 
 .card{background:#fff;color:#10233a;border-radius:32px;padding:28px 22px;border:8px solid #ffd166;box-shadow:0 14px 0 #c79224;overflow:hidden}
 
@@ -16,32 +16,68 @@ h2{font-size:clamp(1.1rem,3vw,1.6rem);margin:0 0 10px}
 p{font-size:1.1rem;font-weight:900;line-height:1.5;margin:8px 0}
 
 .big-icon{font-size:4rem;margin:10px 0;display:block}
+.sub-text{font-size:.95rem;color:#5a7a96;font-weight:900}
 
-.btn{border:0;border-radius:22px;padding:18px 32px;font-weight:900;cursor:pointer;font-size:1.15rem;touch-action:manipulation;min-height:60px;width:100%;max-width:340px;margin:8px auto;display:block}
+.btn{border:0;border-radius:22px;padding:18px 32px;font-weight:900;cursor:pointer;font-size:1.15rem;touch-action:manipulation;min-height:60px;width:100%;max-width:360px;margin:8px auto;display:block}
 .btn:active{transform:translateY(4px)}
 .btn-go{background:linear-gradient(180deg,#e2ffe9,#68ff9c);color:#063817;box-shadow:0 6px 0 #25a74f;font-size:1.3rem}
 .btn-choice{background:linear-gradient(180deg,#f0e8ff,#d4c4ff);color:#1a0a3e;box-shadow:0 5px 0 #725fd1;font-size:1.05rem;text-align:center}
 .btn-choice.chosen{background:linear-gradient(180deg,#e2ffe9,#68ff9c);color:#063817;box-shadow:0 5px 0 #25a74f}
 .btn-blue{background:linear-gradient(180deg,#ddf4ff,#5ee4ff);color:#052334;box-shadow:0 6px 0 #2391ad}
 .btn-warm{background:linear-gradient(180deg,#fff8d8,#ffd166);color:#302000;box-shadow:0 6px 0 #c79224}
+.btn-purple{background:linear-gradient(180deg,#f0e8ff,#b49cff);color:#1a0a3e;box-shadow:0 6px 0 #725fd1}
+.btn-red{background:linear-gradient(180deg,#ffe2e2,#ff8a8a);color:#3a0808;box-shadow:0 5px 0 #bd4343}
+.btn-small{padding:12px 20px;font-size:.95rem;min-height:44px;width:auto;display:inline-block;margin:4px}
 
 .choice-grid{display:grid;gap:10px;margin:14px 0}
+.choice-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0}
 
 .mission-box{background:#f5f0ff;border:4px solid #c77dff;border-radius:22px;padding:18px;margin:14px 0;font-weight:900;font-size:1.15rem;line-height:1.5}
-
 .weekly{background:#fff8d8;border:4px solid #ffd166;border-radius:22px;padding:16px;margin:14px 0;font-weight:900;font-size:1.1rem;line-height:1.5}
+.prompt-box{background:#eaf8ff;border:4px solid #5ee4ff;border-radius:22px;padding:20px;margin:14px 0;font-weight:900;font-size:1.3rem;line-height:1.5}
+.strategy-box{background:#e2ffe9;border:3px solid #68ff9c;border-radius:16px;padding:12px;margin:10px 0;font-weight:900;font-size:.95rem}
+.coach-box{background:#fff0e0;border:3px solid #ffb347;border-radius:16px;padding:12px;margin:12px 0;font-weight:900;font-size:1rem}
+
+/* Timer */
+.timer-wrap{margin:16px 0}
+.timer-bar{height:28px;border-radius:999px;background:#e8e8e8;overflow:hidden;position:relative;border:3px solid #c79224}
+.timer-fill{height:100%;background:linear-gradient(90deg,#68ff9c,#ffd166,#ff8a8a);border-radius:999px;transition:width .25s linear}
+.timer-turtle{position:absolute;top:-8px;font-size:2rem;transition:left .25s linear;z-index:2}
+.timer-num{font-size:2rem;font-weight:900;margin:6px 0}
+.timer-options{display:flex;gap:6px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+.timer-opt{border:3px solid #c79224;border-radius:14px;padding:8px 14px;font-weight:900;font-size:.95rem;cursor:pointer;background:#fff8d8;color:#302000;touch-action:manipulation}
+.timer-opt:active{transform:translateY(2px)}
+.timer-opt.active{background:#ffd166;border-color:#302000}
+
+/* Beat display */
+.beat-display{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.beat-icon{font-size:2.2rem;padding:6px;border-radius:14px;background:#f0f4ff;min-width:48px;text-align:center}
+
+/* Memory flash */
+.flash-grid{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.flash-item{font-size:2.8rem;padding:8px;border-radius:16px;background:#f0f4ff;min-width:56px;text-align:center}
+.flash-item.hidden-item{background:#d4c4ff;color:#d4c4ff}
+
+/* Find-it grid */
+.find-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px auto;max-width:280px}
+.find-cell{font-size:1.8rem;padding:8px;border-radius:12px;background:#f0f4ff;text-align:center;min-height:48px;display:flex;align-items:center;justify-content:center}
+
+/* Freeze */
+.freeze-btn{min-height:100px;font-size:1.6rem;border-radius:28px;transition:background .3s,transform .3s}
+.freeze-waiting{background:linear-gradient(180deg,#ffe2e2,#ff8a8a)!important;box-shadow:0 6px 0 #bd4343!important;color:#3a0808!important}
+.freeze-go{background:linear-gradient(180deg,#e2ffe9,#68ff9c)!important;box-shadow:0 6px 0 #25a74f!important;color:#063817!important;animation:pulse .4s ease-in-out 3}
 
 .celebrate{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:40}
 .confetti{position:absolute;font-size:2.4rem;animation:fall 1.6s linear forwards}
 @keyframes fall{from{transform:translateY(-80px) rotate(0)}to{transform:translateY(110vh) rotate(360deg);opacity:.2}}
-
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 .pulse{animation:pulse 1.5s ease-in-out infinite}
 
 .hide{display:none}
 
 @media(max-width:620px){
-.card{padding:20px 16px;border-width:6px}
+.card{padding:20px 14px;border-width:6px}
+.find-grid{grid-template-columns:repeat(3,1fr)}
 }
 </style>
 </head>
@@ -49,46 +85,52 @@ p{font-size:1.1rem;font-weight:900;line-height:1.5;margin:8px 0}
 <div id="celebrate" class="celebrate"></div>
 <div class="wrap">
 
-<!-- SCREEN 1: Intro -->
+<!-- INTRO -->
 <div id="introScreen" class="card">
 <span class="big-icon pulse">🎁</span>
 <h1>Surprise Mission!</h1>
-<p>🐢 Commander Turtle says:</p>
-<p>"Ready for a mystery challenge? I picked a special mission just for you."</p>
-<button class="btn btn-go" onclick="launchMission()">Open the Surprise!</button>
+<p>🐢 Commander Turtle has a surprise mission!</p>
+<p>Try your best. Use one helpful strategy.</p>
+<button class="btn btn-go" onclick="revealMission()">Show My Mission</button>
 <div style="margin-top:14px">
 <a href="../index.html" style="color:#725fd1;font-weight:900;font-size:.95rem">🚀 Back to Mission Control</a>
 </div>
 </div>
 
-<!-- SCREEN 2: Reveal -->
+<!-- REVEAL -->
 <div id="revealScreen" class="card hide">
-<span class="big-icon" id="revealIcon">🔍</span>
-<h2 id="revealTitle">Your mission is...</h2>
+<span class="big-icon" id="revealIcon">🎁</span>
+<h2 id="revealTitle"></h2>
 <div class="mission-box" id="revealDesc"></div>
-<button class="btn btn-go" id="goBtn" onclick="goToMission()">Let's Go!</button>
+<button class="btn btn-go" id="revealBtn">Let's Go!</button>
 </div>
 
-<!-- SCREEN 3: Reflection (shown on return via URL param) -->
+<!-- ACTIVITY SCREEN (reused for all challenge types) -->
+<div id="activityScreen" class="card hide">
+<span class="big-icon" id="actIcon"></span>
+<h2 id="actTitle"></h2>
+<div id="actBody"></div>
+</div>
+
+<!-- REFLECTION -->
 <div id="reflectScreen" class="card hide">
 <span class="big-icon">🐢</span>
-<h2>What helped today?</h2>
+<h2>Mission Complete!</h2>
+<p>What helped today?</p>
 <div class="choice-grid" id="reflectChoices">
 <button class="btn btn-choice" onclick="pickReflect(this)">🐢 Turtle Reset</button>
-<button class="btn btn-choice" onclick="pickReflect(this)">🐌 Slow Down</button>
-<button class="btn btn-choice" onclick="pickReflect(this)">🔄 Try Again</button>
+<button class="btn btn-choice" onclick="pickReflect(this)">👀 Slow Down</button>
+<button class="btn btn-choice" onclick="pickReflect(this)">💪 Try Again</button>
 <button class="btn btn-choice" onclick="pickReflect(this)">🙋 Ask for Help</button>
 </div>
 <button class="btn btn-warm hide" id="reflectNext" onclick="showWeekly()">Next</button>
 </div>
 
-<!-- SCREEN 4: Weekly Mission -->
+<!-- WEEKLY -->
 <div id="weeklyScreen" class="card hide">
 <span class="big-icon">⭐</span>
 <h2>This Week's Mission</h2>
-<div class="weekly">
-🐢 Try one more step before quitting.
-</div>
+<div class="weekly">🐢 Try one more step before quitting.</div>
 <p>Commander Turtle says:</p>
 <p>"One more step is all it takes. You got this."</p>
 <div style="margin-top:18px">
@@ -99,49 +141,419 @@ p{font-size:1.1rem;font-weight:900;line-height:1.5;margin:8px 0}
 </div>
 
 <script>
-var missions = [
-{name:'Detective Agency',icon:'🔍🧠',desc:'Spot frustration clues and find the smart move!',url:'frustration-detective.html'},
-{name:'Turtle Station',icon:'🐢🎭',desc:'Spot the Trickster and outsmart the tricks!',url:'turtle-station.html'}
+/* ===== UTILITIES ===== */
+function el(id){return document.getElementById(id)}
+function show(id){document.querySelectorAll('.card').forEach(function(c){c.classList.add('hide')});el(id).classList.remove('hide')}
+function randFrom(a){return a[Math.floor(Math.random()*a.length)]}
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5})}
+function sparkle(items){
+var box=el('celebrate');
+for(var i=0;i<20;i++){var s=document.createElement('div');s.className='confetti';s.textContent=items[Math.floor(Math.random()*items.length)];s.style.left=Math.random()*100+'vw';s.style.animationDelay=(Math.random()*.4)+'s';box.appendChild(s);setTimeout(function(x){return function(){x.remove()}}(s),1800)}
+}
+
+/* ===== CHALLENGE DATA ===== */
+var quickDrawPrompts=[
+{prompt:'Draw a turtle!',bonus:'Add a tiny hat.'},
+{prompt:'Draw a rocket!',bonus:'Add a star.'},
+{prompt:'Draw a robot!',bonus:'Add a smile.'},
+{prompt:'Draw a dinosaur!',bonus:'Add a cloud.'},
+{prompt:'Draw a puppy!',bonus:'Add a flag.'},
+{prompt:'Draw a shark!',bonus:'Add a tiny turtle.'},
+{prompt:'Draw a castle!',bonus:'Add a flag on top.'},
+{prompt:'Draw a monster!',bonus:'Add a hat.'},
+{prompt:'Draw a treasure chest!',bonus:'Add a star.'},
+{prompt:'Draw an alien!',bonus:'Add a tiny spaceship.'},
+{prompt:'Draw a dragon!',bonus:'Add a cloud.'},
+{prompt:'Draw an ice cream cone!',bonus:'Add sprinkles.'},
 ];
 
-var chosen = null;
+var beatPatterns=[
+{display:['👏','👏','⏸','👏'],text:'Clap, clap, pause, clap.'},
+{display:['👋','⏸','👋','👋'],text:'Tap, pause, tap, tap.'},
+{display:['👏','🦶','👏'],text:'Clap, stomp, clap.'},
+{display:['👋','👋','👋','🧊'],text:'Tap three times, then freeze.'},
+{display:['👏','⏸','👏','⏸','👏'],text:'Clap, pause, clap, pause, clap.'},
+{display:['🦶','🦶','👏','👏'],text:'Stomp, stomp, clap, clap.'},
+{display:['👋','👋','⏸','🦶'],text:'Tap, tap, pause, stomp.'},
+];
 
-function show(id){
-document.querySelectorAll('.card').forEach(function(c){c.classList.add('hide')});
-document.getElementById(id).classList.remove('hide');
-}
+var iSpyPrompts=[
+'Find something blue!','Find something round!','Find something soft!',
+'Find something tiny!','Find something that starts with B!','Find something with wheels!',
+'Find something you can draw!','Find something that makes sound!',
+'Find something green!','Find something shiny!',
+];
 
-function sparkle(items){
-var box=document.getElementById('celebrate');
-for(var i=0;i<20;i++){
-var s=document.createElement('div');
-s.className='confetti';
-s.textContent=items[Math.floor(Math.random()*items.length)];
-s.style.left=Math.random()*100+'vw';
-s.style.animationDelay=(Math.random()*.4)+'s';
-box.appendChild(s);
-setTimeout(function(x){return function(){x.remove()}}(s),1800);
-}
-}
+var movementPrompts=[
+{text:'Stand like a flamingo for 10 seconds!',icon:'🦩'},
+{text:'Stretch like a turtle!',icon:'🐢'},
+{text:'Freeze like a statue!',icon:'🧊'},
+{text:'Do 5 slow shoulder rolls!',icon:'💪'},
+{text:'Touch your head, shoulders, knees, and toes!',icon:'🤸'},
+{text:'Take 3 slow turtle breaths!',icon:'🐢'},
+{text:'Pretend to move in slow motion!',icon:'🐌'},
+{text:'Wiggle your fingers for 5 seconds, then freeze!',icon:'🖐️'},
+];
 
-function launchMission(){
-chosen=missions[Math.floor(Math.random()*missions.length)];
-document.getElementById('revealIcon').textContent=chosen.icon;
-document.getElementById('revealTitle').textContent='Your mission is...';
-document.getElementById('revealDesc').textContent=chosen.name+'! '+chosen.desc;
+var memoryFlashSets=[
+{show:['🐢','🚀','⭐','🍎'],ask:'Which one was there?',choices:['🐢','🦖','🏀'],answer:'🐢'},
+{show:['🎁','🌈','🐙','🔍'],ask:'Which one was there?',choices:['🔍','🎯','🐸'],answer:'🔍'},
+{show:['⚡','🐢','🎨','🦊'],ask:'Which one was there?',choices:['🐢','🦁','🌀'],answer:'🐢'},
+{show:['🍕','🎵','🦎','⭐'],ask:'Which one was there?',choices:['🎵','🐔','🥾'],answer:'🎵'},
+{show:['🚀','🎭','🦫','🌟'],ask:'Which one was there?',choices:['🏈','🦫','🐍'],answer:'🦫'},
+{show:['🐸','🎯','🧩','🌈','🐢'],ask:'Which one was there?',choices:['🐸','🦊','🎲'],answer:'🐸'},
+{show:['⭐','🎨','🚗','🐙','🔔'],ask:'Which one was there?',choices:['🎨','🐶','⚾'],answer:'🎨'},
+];
+
+var findItSets=[
+{grid:['🐢','⭐','🚀','🐢','⭐','🐢','🦖','⭐','🚀','⭐','🐢','🎁'],target:'🐢',count:4,prompt:'How many turtles?'},
+{grid:['⭐','⭐','🚀','🎁','⭐','🐢','🦖','⭐','🚀','⭐','🎁','⭐'],target:'⭐',count:6,prompt:'How many stars?'},
+{grid:['🚀','⭐','🚀','🐢','🎁','🚀','🦖','⭐','🚀','⭐','🐢','🎁'],target:'🚀',count:4,prompt:'How many rockets?'},
+{grid:['🎁','⭐','🐢','🎁','⭐','🐢','🎁','⭐','🚀','⭐','🎁','🚀'],target:'🎁',count:4,prompt:'How many presents?'},
+];
+
+var sillyPrompts=[
+{text:'Make your silliest turtle face!',icon:'🐢'},
+{text:'Say "Commander Turtle" in a robot voice!',icon:'🤖'},
+{text:'Pretend the Trickster slipped on a banana peel!',icon:'🍌'},
+{text:'Invent a name for a space turtle!',icon:'🚀'},
+{text:'Make up a 3-second victory dance!',icon:'💃'},
+{text:'Do your best slow-motion high five!',icon:'🖐️'},
+{text:'Make a sound effect for a rocket launch!',icon:'🚀'},
+];
+
+var coachPrompts=[
+'Tell your coach: What did you try?',
+'Show your coach your drawing!',
+'Tell your coach which strategy helped.',
+'Tell your coach one thing you practiced.',
+'Show your coach your silliest face!',
+];
+
+/* ===== MISSION POOL ===== */
+var missionTypes=[
+{type:'detective',title:'Detective Agency',icon:'🔍🧠',desc:'Spot frustration clues and find the smart move!'},
+{type:'turtleStation',title:'Turtle Station',icon:'🐢🎭',desc:'Spot the Trickster and outsmart the tricks!'},
+{type:'quickDraw',title:'Quick Draw',icon:'🎨',desc:'Draw something fun before the timer runs out!'},
+{type:'copyBeat',title:'Copy My Beat',icon:'🎵',desc:'Copy a rhythm pattern!'},
+{type:'iSpy',title:'I Spy Mission',icon:'👀',desc:'Find something in the room!'},
+{type:'movement',title:'Movement Mission',icon:'🤸',desc:'Move your body!'},
+{type:'memoryFlash',title:'Memory Flash',icon:'🧠',desc:'Remember what you saw!'},
+{type:'findIt',title:'Find It',icon:'🔎',desc:'Spot the target!'},
+{type:'freeze',title:'Freeze Challenge',icon:'🧊',desc:'Wait... then click!'},
+{type:'silly',title:'Silly Surprise',icon:'😜',desc:'Fun reset time!'},
+];
+
+var chosenMission=null;
+var timerInterval=null;
+var timerDuration=30;
+
+/* ===== INTRO & REVEAL ===== */
+function revealMission(){
+chosenMission=randFrom(missionTypes);
+el('revealIcon').textContent=chosenMission.icon;
+el('revealTitle').textContent='Your mission is...';
+el('revealDesc').textContent=chosenMission.title+'! '+chosenMission.desc;
+el('revealBtn').onclick=startActivity;
 show('revealScreen');
 sparkle(['🎁','⭐','🐢','🎉']);
 }
 
-function goToMission(){
+/* ===== ACTIVITY ROUTER ===== */
+function startActivity(){
+if(chosenMission.type==='detective'){
 sessionStorage.setItem('surprise_return','1');
-window.location.href=chosen.url;
+window.location.href='frustration-detective.html';
+return;
+}
+if(chosenMission.type==='turtleStation'){
+sessionStorage.setItem('surprise_return','1');
+window.location.href='turtle-station.html';
+return;
+}
+show('activityScreen');
+el('actIcon').textContent=chosenMission.icon;
+el('actTitle').textContent=chosenMission.title;
+var body=el('actBody');
+body.innerHTML='';
+switch(chosenMission.type){
+case 'quickDraw':buildQuickDraw(body);break;
+case 'copyBeat':buildCopyBeat(body);break;
+case 'iSpy':buildISpy(body);break;
+case 'movement':buildMovement(body);break;
+case 'memoryFlash':buildMemoryFlash(body);break;
+case 'findIt':buildFindIt(body);break;
+case 'freeze':buildFreeze(body);break;
+case 'silly':buildSilly(body);break;
+}
+}
+
+/* ===== QUICK DRAW ===== */
+function buildQuickDraw(box){
+var qd=randFrom(quickDrawPrompts);
+timerDuration=30;
+box.innerHTML='<p>🎨 Draw this before Commander Turtle reaches the finish line!</p>'+
+'<div class="prompt-box" id="qdPrompt">'+qd.prompt+'</div>'+
+'<div class="strategy-box">🐢 Try one step at a time.</div>'+
+'<p style="font-size:.9rem;color:#5a7a96">Pick your time:</p>'+
+'<div class="timer-options" id="timerOpts"></div>'+
+'<button class="btn btn-go" id="qdStart" onclick="startDrawTimer()">Start Timer</button>'+
+'<div id="qdTimer" class="hide">'+
+'<div class="timer-wrap"><div class="timer-bar"><div class="timer-fill" id="timerFill" style="width:100%"></div><div class="timer-turtle" id="timerTurtle" style="left:calc(100% - 28px)">🐢</div></div></div>'+
+'<div class="timer-num" id="timerNum">30</div>'+
+'<p id="qdEncourage" style="font-weight:900">Keep going!</p>'+
+'</div>'+
+'<div id="qdDone" class="hide"></div>';
+var opts=el('timerOpts');
+[20,30,45,60].forEach(function(t){
+var b=document.createElement('button');
+b.className='timer-opt'+(t===30?' active':'');
+b.textContent=t+'s';
+b.onclick=function(){
+timerDuration=t;
+document.querySelectorAll('.timer-opt').forEach(function(x){x.classList.remove('active')});
+b.classList.add('active');
+};
+opts.appendChild(b);
+});
+window._qdBonus=qd.bonus;
+}
+
+function startDrawTimer(){
+el('qdStart').classList.add('hide');
+el('timerOpts').classList.add('hide');
+el('qdTimer').classList.remove('hide');
+var remaining=timerDuration;
+el('timerNum').textContent=remaining;
+var encourages=['Keep going!','You got this!','One step at a time!','Almost there!','Nice work!'];
+timerInterval=setInterval(function(){
+remaining--;
+if(remaining<=0){
+clearInterval(timerInterval);
+finishDraw();
+return;
+}
+el('timerNum').textContent=remaining;
+var pct=(remaining/timerDuration)*100;
+el('timerFill').style.width=pct+'%';
+el('timerTurtle').style.left='calc('+pct+'% - 28px)';
+if(remaining%8===0)el('qdEncourage').textContent=randFrom(encourages);
+},1000);
+}
+
+function finishDraw(){
+el('qdTimer').classList.add('hide');
+sparkle(['🎨','⭐','🐢']);
+var html='<p style="font-size:1.3rem">⏰ Time\'s up!</p>'+
+'<p>Great practice! Artists practice one step at a time.</p>';
+if(Math.random()<0.5&&window._qdBonus){
+html+='<div class="prompt-box" style="border-color:#ffd166">⭐ Bonus! '+window._qdBonus+'</div>'+
+'<button class="btn btn-warm" onclick="finishBonusDraw()">Done!</button>';
+} else {
+html+=maybeCoachPrompt();
+html+='<button class="btn btn-go" onclick="endActivity()">Next</button>';
+}
+el('qdDone').innerHTML=html;
+el('qdDone').classList.remove('hide');
+}
+
+function finishBonusDraw(){
+el('qdDone').innerHTML='<p>Nice detail! Commander Turtle is proud.</p>'+
+maybeCoachPrompt()+
+'<button class="btn btn-go" onclick="endActivity()">Next</button>';
+sparkle(['⭐','🎨']);
+}
+
+/* ===== COPY MY BEAT ===== */
+function buildCopyBeat(box){
+var beat=randFrom(beatPatterns);
+box.innerHTML='<p>🎵 Look at the pattern. Then copy it!</p>'+
+'<div class="beat-display">'+beat.display.map(function(b){return '<div class="beat-icon">'+b+'</div>'}).join('')+'</div>'+
+'<p style="font-size:1rem;color:#5a7a96">'+beat.text+'</p>'+
+'<div class="strategy-box">🐢 Go slow. One beat at a time.</div>'+
+'<div class="choice-row">'+
+'<button class="btn btn-go btn-small" onclick="beatDone()">I did it!</button>'+
+'<button class="btn btn-purple btn-small" onclick="buildCopyBeat(el(\'actBody\'))">Try another</button>'+
+'</div>';
+}
+
+function beatDone(){
+sparkle(['🎵','⭐','🐢']);
+el('actBody').innerHTML='<p style="font-size:1.3rem">🎵 Nice rhythm!</p>'+
+'<p>Commander Turtle says: "You listened and copied. Strong focus."</p>'+
+maybeCoachPrompt()+
+'<button class="btn btn-go" onclick="endActivity()">Next</button>';
+}
+
+/* ===== I SPY ===== */
+function buildISpy(box){
+var prompt=randFrom(iSpyPrompts);
+box.innerHTML='<p>👀 I Spy Mission</p>'+
+'<div class="prompt-box">'+prompt+'</div>'+
+'<div class="strategy-box">🐢 Look carefully. No rush.</div>'+
+'<button class="btn btn-go" onclick="iSpyFound()">Found it!</button>';
+}
+
+function iSpyFound(){
+sparkle(['👀','⭐','🐢']);
+el('actBody').innerHTML='<p style="font-size:1.3rem">👀 Nice spotting!</p>'+
+'<p>Commander Turtle says: "Good eyes. Detectives notice details."</p>'+
+'<div class="coach-box">Show your coach what you found!</div>'+
+'<button class="btn btn-go" onclick="endActivity()">Next</button>';
+}
+
+/* ===== MOVEMENT MISSION ===== */
+function buildMovement(box){
+var m=randFrom(movementPrompts);
+el('actIcon').textContent=m.icon;
+box.innerHTML='<p>'+m.icon+' Movement Mission</p>'+
+'<div class="prompt-box">'+m.text+'</div>'+
+'<div class="strategy-box">🐢 Resets help your brain refocus.</div>'+
+'<button class="btn btn-go" onclick="movementDone()">Done!</button>';
+}
+
+function movementDone(){
+sparkle(['🤸','⭐','🐢']);
+el('actBody').innerHTML='<p style="font-size:1.3rem">🤸 Nice reset!</p>'+
+'<p>Commander Turtle says: "Moving your body helps your brain. Smart strategy."</p>'+
+maybeCoachPrompt()+
+'<button class="btn btn-go" onclick="endActivity()">Next</button>';
+}
+
+/* ===== MEMORY FLASH ===== */
+function buildMemoryFlash(box){
+var mf=randFrom(memoryFlashSets);
+window._mfAnswer=mf.answer;
+window._mfChoices=shuffle(mf.choices);
+window._mfAsk=mf.ask;
+box.innerHTML='<p>🧠 Look carefully! Remember these:</p>'+
+'<div class="flash-grid" id="flashGrid">'+mf.show.map(function(e){return '<div class="flash-item">'+e+'</div>'}).join('')+'</div>'+
+'<div class="strategy-box">🐢 Slow down and look at each one.</div>'+
+'<p class="sub-text">They will hide in 5 seconds...</p>';
+setTimeout(function(){showMemoryQuestion(box)},5000);
+}
+
+function showMemoryQuestion(box){
+box.innerHTML='<p>🧠 '+window._mfAsk+'</p>'+
+'<div class="flash-grid">'+window._mfChoices.map(function(c){
+return '<button class="flash-item" style="cursor:pointer;border:3px solid #b49cff" onclick="memoryPick(\''+c+'\',this)">'+c+'</button>';
+}).join('')+'</div>';
+}
+
+function memoryPick(choice,btn){
+if(choice===window._mfAnswer){
+sparkle(['🧠','⭐','🐢']);
+btn.style.background='#68ff9c';
+btn.style.borderColor='#25a74f';
+setTimeout(function(){
+el('actBody').innerHTML='<p style="font-size:1.3rem">🧠 Nice memory!</p>'+
+'<p>Commander Turtle says: "You remembered! That takes focus."</p>'+
+maybeCoachPrompt()+
+'<button class="btn btn-go" onclick="endActivity()">Next</button>';
+},600);
+} else {
+btn.style.background='#ffb2b2';
+btn.style.borderColor='#bd4343';
+btn.disabled=true;
+el('actBody').insertAdjacentHTML('beforeend','<p style="font-weight:900;color:#725fd1">Good try! Look carefully and try another.</p>');
+}
+}
+
+/* ===== FIND IT ===== */
+function buildFindIt(box){
+var fi=randFrom(findItSets);
+window._fiAnswer=fi.count;
+box.innerHTML='<p>🔎 '+fi.prompt+'</p>'+
+'<div class="find-grid">'+fi.grid.map(function(e){return '<div class="find-cell">'+e+'</div>'}).join('')+'</div>'+
+'<div class="strategy-box">🐢 Go slow. Check each one.</div>'+
+'<p style="font-weight:900">How many?</p>'+
+'<div class="choice-row">'+[fi.count-1,fi.count,fi.count+1].sort().map(function(n){
+return '<button class="btn btn-purple btn-small" onclick="findItPick('+n+',this)">'+n+'</button>';
+}).join('')+'</div>';
+}
+
+function findItPick(n,btn){
+if(n===window._fiAnswer){
+sparkle(['🔎','⭐','🐢']);
+btn.style.background='#68ff9c';
+setTimeout(function(){
+el('actBody').innerHTML='<p style="font-size:1.3rem">🔎 You found them all!</p>'+
+'<p>Commander Turtle says: "Careful scanning is a detective skill."</p>'+
+maybeCoachPrompt()+
+'<button class="btn btn-go" onclick="endActivity()">Next</button>';
+},600);
+} else {
+btn.style.background='#ffb2b2';
+btn.disabled=true;
+el('actBody').insertAdjacentHTML('beforeend','<p style="font-weight:900;color:#725fd1">Close! Try counting again slowly.</p>');
+}
+}
+
+/* ===== FREEZE CHALLENGE ===== */
+function buildFreeze(box){
+window._freezeReady=false;
+box.innerHTML='<p>🧊 Wait for the signal!</p>'+
+'<p class="sub-text">The Trickster wants you to click too early.</p>'+
+'<div class="strategy-box">🐢 Wait... wait... NOW!</div>'+
+'<button class="btn freeze-btn freeze-waiting" id="freezeBtn" onclick="freezeClick()">Wait...</button>';
+var delay=2000+Math.floor(Math.random()*3000);
+setTimeout(function(){
+window._freezeReady=true;
+var btn=el('freezeBtn');
+if(btn){btn.textContent='Click NOW!';btn.className='btn freeze-btn freeze-go'}
+},delay);
+}
+
+function freezeClick(){
+if(window._freezeReady){
+sparkle(['🧊','⭐','🐢']);
+el('actBody').innerHTML='<p style="font-size:1.3rem">🧊 Great waiting!</p>'+
+'<p>Commander Turtle says: "You waited for the right moment. The Trickster lost!"</p>'+
+maybeCoachPrompt()+
+'<button class="btn btn-go" onclick="endActivity()">Next</button>';
+} else {
+el('actBody').innerHTML='<p style="font-size:1.1rem">🎭 The Trickster tried to make you rush!</p>'+
+'<p>No worries. Let\'s try again.</p>'+
+'<button class="btn btn-warm" onclick="buildFreeze(el(\'actBody\'))">Try Again</button>';
+}
+}
+
+/* ===== SILLY SURPRISE ===== */
+function buildSilly(box){
+var s=randFrom(sillyPrompts);
+el('actIcon').textContent=s.icon;
+box.innerHTML='<p>😜 Silly Surprise!</p>'+
+'<div class="prompt-box">'+s.text+'</div>'+
+'<div class="strategy-box">🐢 Fun resets help your brain too!</div>'+
+'<button class="btn btn-go" onclick="sillyDone()">Done!</button>';
+}
+
+function sillyDone(){
+sparkle(['😜','⭐','🎉']);
+el('actBody').innerHTML='<p style="font-size:1.3rem">😜 Ha! Nice one!</p>'+
+'<p>Commander Turtle says: "Laughing is a brain reset too."</p>'+
+'<div class="coach-box">Show your coach your silliest face!</div>'+
+'<button class="btn btn-go" onclick="endActivity()">Next</button>';
+}
+
+/* ===== COACH PROMPTS ===== */
+function maybeCoachPrompt(){
+if(Math.random()<0.4){
+return '<div class="coach-box">'+randFrom(coachPrompts)+'</div>';
+}
+return '';
+}
+
+/* ===== END ACTIVITY ===== */
+function endActivity(){
+show('reflectScreen');
+sparkle(['🐢','⭐','💪']);
 }
 
 function pickReflect(btn){
 document.querySelectorAll('#reflectChoices .btn-choice').forEach(function(b){b.classList.remove('chosen')});
 btn.classList.add('chosen');
-document.getElementById('reflectNext').classList.remove('hide');
+el('reflectNext').classList.remove('hide');
 }
 
 function showWeekly(){
@@ -149,7 +561,7 @@ show('weeklyScreen');
 sparkle(['⭐','🐢','💪']);
 }
 
-// Check if returning from a mission
+/* ===== INIT ===== */
 if(sessionStorage.getItem('surprise_return')==='1'){
 sessionStorage.removeItem('surprise_return');
 show('reflectScreen');
