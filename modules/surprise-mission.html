@@ -130,9 +130,9 @@ p{font-size:1.1rem;font-weight:900;line-height:1.5;margin:8px 0}
 <div id="weeklyScreen" class="card hide">
 <span class="big-icon">⭐</span>
 <h2>This Week's Mission</h2>
-<div class="weekly">🐢 Try one more step before quitting.</div>
+<div class="weekly" id="weeklyMsg">🐢 Try one more step before quitting.</div>
 <p>Commander Turtle says:</p>
-<p>"One more step is all it takes. You got this."</p>
+<p id="weeklyQuote">"One more step is all it takes. You got this."</p>
 <div style="margin-top:18px">
 <a href="../index.html" class="btn btn-blue" style="text-decoration:none;display:inline-block">🚀 Back to Mission Control</a>
 </div>
@@ -150,6 +150,17 @@ function sparkle(items){
 var box=el('celebrate');
 for(var i=0;i<20;i++){var s=document.createElement('div');s.className='confetti';s.textContent=items[Math.floor(Math.random()*items.length)];s.style.left=Math.random()*100+'vw';s.style.animationDelay=(Math.random()*.4)+'s';box.appendChild(s);setTimeout(function(x){return function(){x.remove()}}(s),1800)}
 }
+
+/* ===== RECENT HISTORY ===== */
+var SM_KEY='sm_history';
+var smH={lastCat:null,prompts:[],lastWeekly:-1};
+function smLoad(){try{var d=JSON.parse(localStorage.getItem(SM_KEY)||'null');if(d&&typeof d==='object'){smH.lastCat=d.lastCat||null;smH.prompts=Array.isArray(d.prompts)?d.prompts.slice(0,8):[];smH.lastWeekly=typeof d.lastWeekly==='number'?d.lastWeekly:-1}}catch(e){smH={lastCat:null,prompts:[],lastWeekly:-1}}}
+function smSave(){try{localStorage.setItem(SM_KEY,JSON.stringify(smH))}catch(e){}}
+function smRecordCat(cat){smH.lastCat=cat;smSave()}
+function smRecordPrompt(key){smH.prompts=([key].concat(smH.prompts)).slice(0,8);smSave()}
+function smSeen(key){return smH.prompts.indexOf(key)>=0}
+function smPickStr(arr){var f=arr.filter(function(x){return !smSeen(x)});var item=randFrom(f.length?f:arr);smRecordPrompt(item);return item}
+function smPickObj(arr,kf){var f=arr.filter(function(x){return !smSeen(kf(x))});var item=randFrom(f.length?f:arr);smRecordPrompt(kf(item));return item}
 
 /* ===== CHALLENGE DATA ===== */
 var quickDrawPrompts=[
@@ -244,13 +255,29 @@ var missionTypes=[
 {type:'silly',title:'Silly Surprise',icon:'😜',desc:'Fun reset time!'},
 ];
 
+var weeklyMissions=[
+{msg:'Try one more step before quitting.',quote:'"One more step is all it takes. You got this."'},
+{msg:'Notice when frustration starts — that is the clue!',quote:'"Spotting it early is the detective move."'},
+{msg:'Use a reset before you are asked to.',quote:'"Turtles know when to slow down. You can too."'},
+{msg:'Slow down right before the hard part.',quote:'"Going slow is going smart."'},
+{msg:'Ask for help when you notice you are stuck.',quote:'"Smart explorers know when to ask for a guide."'},
+{msg:'Come back to something after a mistake.',quote:'"A mistake is just the first try. Come back."'},
+{msg:'Try the hard one first, then something easier.',quote:'"Brave brains start with the tricky stuff."'},
+{msg:'Notice your zone before a grown-up does.',quote:'"You are the expert on your own brain."'},
+{msg:'Take one turtle breath before starting something new.',quote:'"One breath, then one step. That is enough."'},
+{msg:'Tell yourself one kind thing when something feels hard.',quote:'"Being a good teammate to yourself matters."'},
+];
+
 var chosenMission=null;
 var timerInterval=null;
 var timerDuration=30;
 
 /* ===== INTRO & REVEAL ===== */
 function revealMission(){
-chosenMission=randFrom(missionTypes);
+var available=missionTypes.filter(function(m){return m.type!==smH.lastCat});
+if(!available.length)available=missionTypes;
+chosenMission=randFrom(available);
+smRecordCat(chosenMission.type);
 el('revealIcon').textContent=chosenMission.icon;
 el('revealTitle').textContent='Your mission is...';
 el('revealDesc').textContent=chosenMission.title+'! '+chosenMission.desc;
@@ -290,7 +317,7 @@ case 'silly':buildSilly(body);break;
 
 /* ===== QUICK DRAW ===== */
 function buildQuickDraw(box){
-var qd=randFrom(quickDrawPrompts);
+var qd=smPickObj(quickDrawPrompts,function(x){return x.prompt});
 timerDuration=30;
 box.innerHTML='<p>🎨 Draw this before Commander Turtle reaches the finish line!</p>'+
 '<div class="prompt-box" id="qdPrompt">'+qd.prompt+'</div>'+
@@ -366,7 +393,7 @@ sparkle(['⭐','🎨']);
 
 /* ===== COPY MY BEAT ===== */
 function buildCopyBeat(box){
-var beat=randFrom(beatPatterns);
+var beat=smPickObj(beatPatterns,function(x){return x.text});
 box.innerHTML='<p>🎵 Look at the pattern. Then copy it!</p>'+
 '<div class="beat-display">'+beat.display.map(function(b){return '<div class="beat-icon">'+b+'</div>'}).join('')+'</div>'+
 '<p style="font-size:1rem;color:#5a7a96">'+beat.text+'</p>'+
@@ -387,7 +414,7 @@ maybeCoachPrompt()+
 
 /* ===== I SPY ===== */
 function buildISpy(box){
-var prompt=randFrom(iSpyPrompts);
+var prompt=smPickStr(iSpyPrompts);
 box.innerHTML='<p>👀 I Spy Mission</p>'+
 '<div class="prompt-box">'+prompt+'</div>'+
 '<div class="strategy-box">🐢 Look carefully. No rush.</div>'+
@@ -404,7 +431,7 @@ el('actBody').innerHTML='<p style="font-size:1.3rem">👀 Nice spotting!</p>'+
 
 /* ===== MOVEMENT MISSION ===== */
 function buildMovement(box){
-var m=randFrom(movementPrompts);
+var m=smPickObj(movementPrompts,function(x){return x.text});
 el('actIcon').textContent=m.icon;
 box.innerHTML='<p>'+m.icon+' Movement Mission</p>'+
 '<div class="prompt-box">'+m.text+'</div>'+
@@ -422,7 +449,7 @@ maybeCoachPrompt()+
 
 /* ===== MEMORY FLASH ===== */
 function buildMemoryFlash(box){
-var mf=randFrom(memoryFlashSets);
+var mf=smPickObj(memoryFlashSets,function(x){return x.answer+x.show.join('')});
 window._mfAnswer=mf.answer;
 window._mfChoices=shuffle(mf.choices);
 window._mfAsk=mf.ask;
@@ -461,7 +488,7 @@ el('actBody').insertAdjacentHTML('beforeend','<p style="font-weight:900;color:#7
 
 /* ===== FIND IT ===== */
 function buildFindIt(box){
-var fi=randFrom(findItSets);
+var fi=smPickObj(findItSets,function(x){return x.prompt+x.count});
 window._fiAnswer=fi.count;
 box.innerHTML='<p>🔎 '+fi.prompt+'</p>'+
 '<div class="find-grid">'+fi.grid.map(function(e){return '<div class="find-cell">'+e+'</div>'}).join('')+'</div>'+
@@ -520,7 +547,7 @@ el('actBody').innerHTML='<p style="font-size:1.1rem">🎭 The Trickster tried to
 
 /* ===== SILLY SURPRISE ===== */
 function buildSilly(box){
-var s=randFrom(sillyPrompts);
+var s=smPickObj(sillyPrompts,function(x){return x.text});
 el('actIcon').textContent=s.icon;
 box.innerHTML='<p>😜 Silly Surprise!</p>'+
 '<div class="prompt-box">'+s.text+'</div>'+
@@ -558,10 +585,19 @@ el('reflectNext').classList.remove('hide');
 
 function showWeekly(){
 show('weeklyScreen');
+var avail=weeklyMissions.map(function(_,i){return i}).filter(function(i){return i!==smH.lastWeekly});
+if(!avail.length)avail=weeklyMissions.map(function(_,i){return i});
+var idx=avail[Math.floor(Math.random()*avail.length)];
+smH.lastWeekly=idx;
+smSave();
+var w=weeklyMissions[idx];
+el('weeklyMsg').textContent='🐢 '+w.msg;
+el('weeklyQuote').textContent='Commander Turtle says: '+w.quote;
 sparkle(['⭐','🐢','💪']);
 }
 
 /* ===== INIT ===== */
+smLoad();
 if(sessionStorage.getItem('surprise_return')==='1'){
 sessionStorage.removeItem('surprise_return');
 show('reflectScreen');
