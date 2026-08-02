@@ -5,109 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Maze Mission | Brave Brain Explorer</title>
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Arial Rounded MT Bold","Comic Sans MS",system-ui,sans-serif;background:radial-gradient(circle at 15% 0,#3155bd,#111a3c 48%,#071024);color:#fff}.wrap{width:min(1100px,100%);margin:auto;padding:12px}.top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.back,.btn{border:0;border-radius:16px;padding:11px 14px;font:inherit;font-weight:900;cursor:pointer;text-decoration:none;color:#09263a;background:#5ee4ff;box-shadow:0 5px 0 #2391ad}.back:active,.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #2391ad}h1{margin:5px 0;font-size:clamp(1.45rem,5vw,2.5rem)}.tag{background:#ffd166;color:#302000;border:2px solid #fff;border-radius:999px;padding:7px 11px;font-weight:900}.card{margin-top:12px;background:#fff;color:#10233a;border:7px solid #84f59a;border-radius:28px;padding:14px;box-shadow:0 12px 0 #35a84f}.status{display:grid;grid-template-columns:repeat(4,minmax(100px,1fr));gap:8px;margin-bottom:10px}.stat{background:#eaf8ff;border-radius:15px;padding:9px;text-align:center;font-weight:900}.stat b{display:block;font-size:1.25rem}.controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0}.btn.good{background:#68ff9c;box-shadow:0 5px 0 #25a74f}.btn.warn{background:#ffd166;box-shadow:0 5px 0 #bd831d}.btn.red{background:#ff9d9d;box-shadow:0 5px 0 #bd4343}.btn:disabled{opacity:.45;cursor:not-allowed}.mission{background:#fff8d8;border-radius:18px;padding:10px;text-align:center;font-weight:900;margin:8px 0}.boardShell{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:14px;align-items:start}.canvasWrap{display:flex;justify-content:center;align-items:center;min-height:360px;background:#dff7ff;border-radius:22px;padding:10px;overflow:hidden}.maze{display:grid;background:#10233a;border:5px solid #10233a;gap:1px;touch-action:none;user-select:none;width:min(72vh,100%);aspect-ratio:1}.cell{position:relative;background:#f8fbff}.cell.wallTop{border-top:4px solid #10233a}.cell.wallRight{border-right:4px solid #10233a}.cell.wallBottom{border-bottom:4px solid #10233a}.cell.wallLeft{border-left:4px solid #10233a}.cell.path::after{content:"";position:absolute;inset:34%;border-radius:50%;background:#ffd166}.cell.player::after{content:"🐢";position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(16px,3.6vw,31px);filter:drop-shadow(0 2px 1px rgba(0,0,0,.25))}.cell.goal::before{content:"⭐";position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(15px,3.3vw,29px)}.cell.hint::after{content:"";position:absolute;inset:24%;border-radius:50%;background:#68ff9c}.side{display:grid;gap:10px}.tip{background:#efe7ff;border-radius:18px;padding:12px;font-weight:900}.feedback{background:#fff8d8;border-radius:18px;padding:12px;text-align:center;font-weight:900;min-height:70px}.dpad{display:grid;grid-template-columns:repeat(3,62px);grid-template-rows:repeat(3,54px);justify-content:center;gap:5px}.move{border:0;border-radius:15px;background:#b49cff;color:#21175a;font-size:1.5rem;font-weight:900;box-shadow:0 4px 0 #725fd1;touch-action:manipulation}.move:active{transform:translateY(3px);box-shadow:0 1px 0 #725fd1}.up{grid-column:2}.left{grid-column:1;grid-row:2}.down{grid-column:2;grid-row:2}.right{grid-column:3;grid-row:2}.levelMap{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-top:10px}.levelDot{border:0;border-radius:12px;padding:8px 3px;font-weight:900;background:#d7ecf5;color:#10233a}.levelDot.done{background:#68ff9c}.levelDot.current{outline:4px solid #ffd166}.celebrate{position:fixed;inset:0;pointer-events:none;overflow:hidden}.confetti{position:absolute;font-size:2rem;animation:fall 1.5s linear forwards}@keyframes fall{from{transform:translateY(-60px) rotate(0)}to{transform:translateY(110vh) rotate(360deg);opacity:.25}}@media(max-width:760px){.boardShell{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.dpad{grid-column:1/-1}.status{grid-template-columns:repeat(2,1fr)}.maze{width:min(92vw,65vh)}}@media(max-width:470px){.side{grid-template-columns:1fr}.levelMap{grid-template-columns:repeat(5,1fr)}}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Arial Rounded MT Bold","Comic Sans MS",system-ui,sans-serif;background:radial-gradient(circle at 15% 0,#3155bd,#111a3c 48%,#071024);color:#fff}.wrap{width:min(1100px,100%);margin:auto;padding:12px}.top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.back,.btn{border:0;border-radius:16px;padding:11px 14px;font:inherit;font-weight:900;cursor:pointer;text-decoration:none;color:#09263a;background:#5ee4ff;box-shadow:0 5px 0 #2391ad}.back:active,.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #2391ad}h1{margin:5px 0;font-size:clamp(1.45rem,5vw,2.5rem)}.tag{background:#ffd166;color:#302000;border:2px solid #fff;border-radius:999px;padding:7px 11px;font-weight:900}.card{margin-top:12px;background:#fff;color:#10233a;border:7px solid #84f59a;border-radius:28px;padding:14px;box-shadow:0 12px 0 #35a84f}.status{display:grid;grid-template-columns:repeat(4,minmax(100px,1fr));gap:8px;margin-bottom:10px}.stat{background:#eaf8ff;border-radius:15px;padding:9px;text-align:center;font-weight:900}.stat b{display:block;font-size:1.25rem}.controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0}.btn.good{background:#68ff9c;box-shadow:0 5px 0 #25a74f}.btn.warn{background:#ffd166;box-shadow:0 5px 0 #bd831d}.btn.red{background:#ff9d9d;box-shadow:0 5px 0 #bd4343}.btn:disabled{opacity:.45;cursor:not-allowed}.mission{background:#fff8d8;border-radius:18px;padding:10px;text-align:center;font-weight:900;margin:8px 0}.boardShell{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:14px;align-items:start}.canvasWrap{display:flex;justify-content:center;align-items:center;min-height:360px;background:#dff7ff;border-radius:22px;padding:10px;overflow:hidden}.maze{display:grid;background:#10233a;border:5px solid #10233a;gap:1px;touch-action:none;user-select:none;width:min(72vh,100%);aspect-ratio:1}.cell{position:relative;background:#f8fbff}.cell.wallTop{border-top:4px solid #10233a}.cell.wallRight{border-right:4px solid #10233a}.cell.wallBottom{border-bottom:4px solid #10233a}.cell.wallLeft{border-left:4px solid #10233a}.cell.path::after{content:"";position:absolute;inset:34%;border-radius:50%;background:#ffd166}.cell.player::after{content:"🐢";position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(13px,3.6vw,31px)}.cell.goal::before{content:"⭐";position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(12px,3.3vw,29px)}.cell.hint::after{content:"";position:absolute;inset:24%;border-radius:50%;background:#68ff9c}.side{display:grid;gap:10px}.tip{background:#efe7ff;border-radius:18px;padding:12px;font-weight:900}.feedback{background:#fff8d8;border-radius:18px;padding:12px;text-align:center;font-weight:900;min-height:70px}.dpad{display:grid;grid-template-columns:repeat(3,62px);grid-template-rows:repeat(3,54px);justify-content:center;gap:5px}.move{border:0;border-radius:15px;background:#b49cff;color:#21175a;font-size:1.5rem;font-weight:900;box-shadow:0 4px 0 #725fd1}.up{grid-column:2}.left{grid-column:1;grid-row:2}.down{grid-column:2;grid-row:2}.right{grid-column:3;grid-row:2}.levelMap{display:grid;grid-template-columns:repeat(14,1fr);gap:5px;margin-top:10px}.levelDot{border:0;border-radius:12px;padding:8px 3px;font-weight:900;background:#d7ecf5;color:#10233a}.levelDot.done{background:#68ff9c}.levelDot.current{outline:4px solid #ffd166}.levelDot.expert{background:#ffe0a3}.celebrate{position:fixed;inset:0;pointer-events:none;overflow:hidden}.confetti{position:absolute;font-size:2rem;animation:fall 1.5s linear forwards}@keyframes fall{from{transform:translateY(-60px)}to{transform:translateY(110vh) rotate(360deg);opacity:.25}}@media(max-width:760px){.boardShell{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.dpad{grid-column:1/-1}.status{grid-template-columns:repeat(2,1fr)}.maze{width:min(92vw,65vh)}.levelMap{grid-template-columns:repeat(7,1fr)}}@media(max-width:470px){.side{grid-template-columns:1fr}.levelMap{grid-template-columns:repeat(5,1fr)}}
 </style>
 </head>
 <body>
 <div id="celebrate" class="celebrate"></div>
 <div class="wrap">
-  <div class="top"><a class="back" href="../index.html">← Mission Control</a><div class="tag">🧠 Plan • Try • Adjust</div></div>
-  <h1>🗺️ Maze Mission</h1>
-  <div class="card">
-    <div class="status">
-      <div class="stat">LEVEL<b id="levelLabel">1</b></div>
-      <div class="stat">MOVES<b id="movesLabel">0</b></div>
-      <div class="stat">BEST<b id="bestLabel">—</b></div>
-      <div class="stat">COMPLETED<b id="doneLabel">0/10</b></div>
-    </div>
-    <div id="missionText" class="mission">Guide Commander Turtle to the star.</div>
-    <div class="controls">
-      <button id="easierBtn" class="btn warn" onclick="changeLevel(-1)">← Easier</button>
-      <button class="btn good" onclick="newMaze()">New Maze</button>
-      <button class="btn" onclick="showHint()">Show Hint</button>
-      <button class="btn red" onclick="resetMaze(true)">Start Over</button>
-      <button id="harderBtn" class="btn warn" onclick="changeLevel(1)">Harder →</button>
-    </div>
-    <div class="boardShell">
-      <div class="canvasWrap"><div id="maze" class="maze" aria-label="Interactive maze"></div></div>
-      <div class="side">
-        <div id="feedback" class="feedback">Look ahead, choose a path, and adjust when needed.</div>
-        <div class="tip">💡 Brave Brain Move<br><span id="brainTip">Pause at intersections before choosing.</span></div>
-        <div class="dpad" aria-label="Movement controls">
-          <button class="move up" onclick="move(-1,0)" aria-label="Move up">▲</button>
-          <button class="move left" onclick="move(0,-1)" aria-label="Move left">◀</button>
-          <button class="move down" onclick="move(1,0)" aria-label="Move down">▼</button>
-          <button class="move right" onclick="move(0,1)" aria-label="Move right">▶</button>
-        </div>
-      </div>
-    </div>
-    <div id="levelMap" class="levelMap"></div>
-  </div>
-</div>
+<div class="top"><a class="back" href="../index.html">← Mission Control</a><div class="tag">🧠 Plan • Try • Adjust</div></div>
+<h1>🗺️ Maze Mission</h1>
+<div class="card">
+<div class="status"><div class="stat">LEVEL<b id="levelLabel">1</b></div><div class="stat">MOVES<b id="movesLabel">0</b></div><div class="stat">BEST<b id="bestLabel">—</b></div><div class="stat">COMPLETED<b id="doneLabel">0/14</b></div></div>
+<div id="missionText" class="mission">Guide Commander Turtle to the star.</div>
+<div class="controls"><button id="easierBtn" class="btn warn" onclick="changeLevel(-1)">← Easier</button><button class="btn good" onclick="newMaze()">New Maze</button><button class="btn" onclick="showHint()">Show Hint</button><button class="btn red" onclick="resetMaze(true)">Start Over</button><button id="harderBtn" class="btn warn" onclick="changeLevel(1)">Harder →</button></div>
+<div class="boardShell"><div class="canvasWrap"><div id="maze" class="maze"></div></div><div class="side"><div id="feedback" class="feedback">Look ahead, choose a path, and adjust when needed.</div><div class="tip">💡 Brave Brain Move<br><span id="brainTip"></span></div><div class="dpad"><button class="move up" onclick="move(-1,0)">▲</button><button class="move left" onclick="move(0,-1)">◀</button><button class="move down" onclick="move(1,0)">▼</button><button class="move right" onclick="move(0,1)">▶</button></div></div></div>
+<div id="levelMap" class="levelMap"></div>
+</div></div>
 <script>
-const LEVELS=[5,6,7,8,9,10,11,12,14,16];
-const tips=[
-  'Pause at intersections before choosing.',
-  'Notice where you have already been.',
-  'A wrong turn gives you useful information.',
-  'Try looking two spaces ahead.',
-  'When stuck, return to the last intersection.',
-  'Slow is smooth; smooth becomes fast.',
-  'Use the maze edges as landmarks.',
-  'Plan a short section, not the whole maze.',
-  'Reset your brain before resetting the maze.',
-  'Hard mazes are solved one choice at a time.'
-];
-let level=Number(localStorage.getItem('maze_level')||1);
-let progress=JSON.parse(localStorage.getItem('maze_progress')||'{}');
+const LEVELS=[5,6,7,8,9,10,11,12,14,16,20,24,28,32],TOTAL=LEVELS.length;
+const tips=['Pause at intersections before choosing.','Notice where you have already been.','A wrong turn gives useful information.','Try looking two spaces ahead.','When stuck, return to the last intersection.','Slow is smooth; smooth becomes fast.','Use the maze edges as landmarks.','Plan a short section, not the whole maze.','Reset your brain before resetting the maze.','Hard mazes are solved one choice at a time.','Expert: choose landmarks before moving.','Expert: remember your last three intersections.','Expert: scan for long corridors first.','Master: pause, plan, move, and re-check.'];
+let level=Math.max(1,Math.min(TOTAL,Number(localStorage.getItem('maze_level')||1))),progress=JSON.parse(localStorage.getItem('maze_progress')||'{}');
 let grid=[],rows=5,cols=5,player={r:0,c:0},goal={r:0,c:0},moves=0,trail=[],solution=[];
 function cell(r,c){return grid[r][c]}
 function makeGrid(){grid=Array.from({length:rows},(_,r)=>Array.from({length:cols},(_,c)=>({r,c,visited:false,w:[true,true,true,true]})))}
-function generate(){
-  makeGrid(); const stack=[]; let cur=cell(0,0); cur.visited=true; let visited=1;
-  while(visited<rows*cols){
-    const n=[]; const dirs=[[-1,0,0,2],[0,1,1,3],[1,0,2,0],[0,-1,3,1]];
-    for(const [dr,dc,a,b] of dirs){const nr=cur.r+dr,nc=cur.c+dc;if(nr>=0&&nr<rows&&nc>=0&&nc<cols&&!cell(nr,nc).visited)n.push([cell(nr,nc),a,b])}
-    if(n.length){const pick=n[Math.floor(Math.random()*n.length)];stack.push(cur);cur.w[pick[1]]=false;pick[0].w[pick[2]]=false;cur=pick[0];cur.visited=true;visited++}else cur=stack.pop();
-  }
-  player={r:0,c:0}; goal={r:rows-1,c:cols-1}; moves=0; trail=['0,0']; solution=findSolution();
-}
-function findSolution(){
-  const q=[[0,0]],prev={'0,0':null}; const dirs=[[-1,0,0],[0,1,1],[1,0,2],[0,-1,3]];
-  while(q.length){const [r,c]=q.shift();if(r===goal.r&&c===goal.c)break;for(const [dr,dc,w] of dirs){const nr=r+dr,nc=c+dc,k=nr+','+nc;if(nr>=0&&nr<rows&&nc>=0&&nc<cols&&!cell(r,c).w[w]&&!(k in prev)){prev[k]=r+','+c;q.push([nr,nc])}}}
-  let k=goal.r+','+goal.c,out=[];while(k){out.unshift(k);k=prev[k]}return out;
-}
-function render(hint=false){
-  const maze=document.getElementById('maze');maze.innerHTML='';maze.style.gridTemplateColumns=`repeat(${cols},1fr)`;maze.style.gridTemplateRows=`repeat(${rows},1fr)`;
-  const hintSet=new Set(hint?solution:[]),trailSet=new Set(trail);
-  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
-    const d=document.createElement('div'),x=cell(r,c),k=r+','+c;d.className='cell';
-    if(x.w[0])d.classList.add('wallTop');if(x.w[1])d.classList.add('wallRight');if(x.w[2])d.classList.add('wallBottom');if(x.w[3])d.classList.add('wallLeft');
-    if(trailSet.has(k))d.classList.add('path');if(hintSet.has(k))d.classList.add('hint');if(r===goal.r&&c===goal.c)d.classList.add('goal');if(r===player.r&&c===player.c)d.classList.add('player');maze.appendChild(d);
-  }
-  document.getElementById('movesLabel').textContent=moves;document.getElementById('levelLabel').textContent=level;document.getElementById('doneLabel').textContent=Object.keys(progress).length+'/10';document.getElementById('bestLabel').textContent=progress[level]||'—';document.getElementById('brainTip').textContent=tips[level-1];
-  document.getElementById('easierBtn').disabled=level===1;document.getElementById('harderBtn').disabled=level===10;renderMap();
-}
-function move(dr,dc){
-  const wi=dr===-1?0:dc===1?1:dr===1?2:3;if(cell(player.r,player.c).w[wi]){feedback('That path is blocked. Good noticing—try another direction.');return}
-  player={r:player.r+dr,c:player.c+dc};moves++;trail.push(player.r+','+player.c);render();
-  if(player.r===goal.r&&player.c===goal.c)win();else if(moves%6===0)feedback('You are gathering clues. Pause and check your route.');else feedback('Keep going—one choice at a time.');
-}
-function win(){
-  const old=progress[level];if(!old||moves<old)progress[level]=moves;localStorage.setItem('maze_progress',JSON.stringify(progress));
-  feedback(`Mission complete in ${moves} moves! ${old&&moves>=old?'You stayed with it.':'New best route!'}`);confetti();render();
-  if(level<10)setTimeout(()=>{document.getElementById('missionText').textContent='Ready for the next challenge? Choose Harder when your brain is ready.'},350);
-}
+function carveMaze(){makeGrid();const stack=[];let cur=cell(0,0),visited=1;cur.visited=true;while(visited<rows*cols){const n=[],dirs=[[-1,0,0,2],[0,1,1,3],[1,0,2,0],[0,-1,3,1]];for(const [dr,dc,a,b] of dirs){const nr=cur.r+dr,nc=cur.c+dc;if(nr>=0&&nr<rows&&nc>=0&&nc<cols&&!cell(nr,nc).visited)n.push([cell(nr,nc),a,b])}if(n.length){const p=n[Math.floor(Math.random()*n.length)];stack.push(cur);cur.w[p[1]]=false;p[0].w[p[2]]=false;cur=p[0];cur.visited=true;visited++}else cur=stack.pop()}}
+function farthest(){const q=[[0,0]],dist={'0,0':0};let far=[0,0];const dirs=[[-1,0,0],[0,1,1],[1,0,2],[0,-1,3]];while(q.length){const [r,c]=q.shift(),key=r+','+c;if(dist[key]>dist[far[0]+','+far[1]])far=[r,c];for(const [dr,dc,w] of dirs){const nr=r+dr,nc=c+dc,k=nr+','+nc;if(nr>=0&&nr<rows&&nc>=0&&nc<cols&&!cell(r,c).w[w]&&!(k in dist)){dist[k]=dist[key]+1;q.push([nr,nc])}}}return far}
+function findSolution(){const q=[[0,0]],prev={'0,0':null},dirs=[[-1,0,0],[0,1,1],[1,0,2],[0,-1,3]];while(q.length){const [r,c]=q.shift();if(r===goal.r&&c===goal.c)break;for(const [dr,dc,w] of dirs){const nr=r+dr,nc=c+dc,k=nr+','+nc;if(nr>=0&&nr<rows&&nc>=0&&nc<cols&&!cell(r,c).w[w]&&!(k in prev)){prev[k]=r+','+c;q.push([nr,nc])}}}let k=goal.r+','+goal.c,out=[];while(k){out.unshift(k);k=prev[k]}return out}
+function generate(){const attempts=level>=11?7:level>=8?3:1;let best=null,bestSol=[],bestGoal=null;for(let i=0;i<attempts;i++){carveMaze();const f=level>=8?farthest():[rows-1,cols-1];goal={r:f[0],c:f[1]};const s=findSolution();if(s.length>bestSol.length){best=grid.map(row=>row.map(x=>({...x,w:[...x.w]})));bestSol=s;bestGoal={...goal}}}grid=best;solution=bestSol;goal=bestGoal;player={r:0,c:0};moves=0;trail=['0,0']}
+function render(hint=false){const maze=document.getElementById('maze');maze.innerHTML='';maze.style.gridTemplateColumns=`repeat(${cols},1fr)`;maze.style.gridTemplateRows=`repeat(${rows},1fr)`;const hintSet=new Set(hint?solution:[]),trailSet=new Set(trail);for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const d=document.createElement('div'),x=cell(r,c),k=r+','+c;d.className='cell';if(x.w[0])d.classList.add('wallTop');if(x.w[1])d.classList.add('wallRight');if(x.w[2])d.classList.add('wallBottom');if(x.w[3])d.classList.add('wallLeft');if(trailSet.has(k))d.classList.add('path');if(hintSet.has(k))d.classList.add('hint');if(r===goal.r&&c===goal.c)d.classList.add('goal');if(r===player.r&&c===player.c)d.classList.add('player');maze.appendChild(d)}document.getElementById('movesLabel').textContent=moves;document.getElementById('levelLabel').textContent=level;document.getElementById('doneLabel').textContent=Object.keys(progress).length+'/'+TOTAL;document.getElementById('bestLabel').textContent=progress[level]||'—';document.getElementById('brainTip').textContent=tips[level-1];document.getElementById('easierBtn').disabled=level===1;document.getElementById('harderBtn').disabled=level===TOTAL;renderMap()}
+function move(dr,dc){const wi=dr===-1?0:dc===1?1:dr===1?2:3;if(cell(player.r,player.c).w[wi]){feedback('That path is blocked. Good noticing—try another direction.');return}player={r:player.r+dr,c:player.c+dc};moves++;trail.push(player.r+','+player.c);render();if(player.r===goal.r&&player.c===goal.c)win();else feedback(moves%8===0?'Pause and check your landmarks before the next turn.':'Keep going—one choice at a time.')}
+function win(){const old=progress[level];if(!old||moves<old)progress[level]=moves;localStorage.setItem('maze_progress',JSON.stringify(progress));feedback(`Mission complete in ${moves} moves! ${old&&moves>=old?'You stayed with it.':'New best route!'}`);confetti();render()}
 function feedback(t){document.getElementById('feedback').textContent=t}
-function newMaze(){rows=cols=LEVELS[level-1];generate();document.getElementById('missionText').textContent=`Level ${level}: Navigate a ${rows} × ${cols} maze.`;feedback('New route ready. Look first, then move.');render()}
+function newMaze(){rows=cols=LEVELS[level-1];generate();document.getElementById('missionText').textContent=`Level ${level}${level>=11?' EXPERT':''}: ${rows} × ${cols} maze · ${solution.length-1}-step solution.`;feedback(level>=11?'Expert route ready. Study the maze before your first move.':'New route ready. Look first, then move.');render()}
 function resetMaze(count){player={r:0,c:0};moves=0;trail=['0,0'];feedback(count?'Starting over is a strategy, not a failure.':'Route reset.');render()}
-function changeLevel(d){level=Math.max(1,Math.min(10,level+d));localStorage.setItem('maze_level',level);newMaze()}
-function showHint(){feedback('Green dots show the solution briefly. Study the route, then try it yourself.');render(true);setTimeout(()=>render(false),1800)}
-function renderMap(){const m=document.getElementById('levelMap');m.innerHTML='';for(let i=1;i<=10;i++){const b=document.createElement('button');b.className='levelDot'+(progress[i]?' done':'')+(i===level?' current':'');b.textContent=i;b.onclick=()=>{level=i;localStorage.setItem('maze_level',level);newMaze()};m.appendChild(b)}}
-function confetti(){const box=document.getElementById('celebrate'),icons=['⭐','🐢','🚀','✨'];for(let i=0;i<24;i++){const s=document.createElement('span');s.className='confetti';s.textContent=icons[i%icons.length];s.style.left=Math.random()*100+'vw';s.style.animationDelay=Math.random()*.45+'s';box.appendChild(s);setTimeout(()=>s.remove(),2100)}}
-window.addEventListener('keydown',e=>{const k={ArrowUp:[-1,0],w:[-1,0],ArrowRight:[0,1],d:[0,1],ArrowDown:[1,0],s:[1,0],ArrowLeft:[0,-1],a:[0,-1]}[e.key];if(k){e.preventDefault();move(...k)}});
-let sx=0,sy=0;document.getElementById('maze').addEventListener('pointerdown',e=>{sx=e.clientX;sy=e.clientY});document.getElementById('maze').addEventListener('pointerup',e=>{const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.max(Math.abs(dx),Math.abs(dy))<18)return;Math.abs(dx)>Math.abs(dy)?move(0,dx>0?1:-1):move(dy>0?1:-1,0)});
-newMaze();
+function changeLevel(d){level=Math.max(1,Math.min(TOTAL,level+d));localStorage.setItem('maze_level',level);newMaze()}
+function showHint(){feedback('Green dots show the solution briefly. Study the route.');render(true);setTimeout(()=>render(false),level>=11?1100:1800)}
+function renderMap(){const m=document.getElementById('levelMap');m.innerHTML='';for(let i=1;i<=TOTAL;i++){const b=document.createElement('button');b.className='levelDot'+(progress[i]?' done':'')+(i===level?' current':'')+(i>=11?' expert':'');b.textContent=i;b.onclick=()=>{level=i;localStorage.setItem('maze_level',level);newMaze()};m.appendChild(b)}}
+function confetti(){const box=document.getElementById('celebrate'),icons=['⭐','🐢','🚀','✨'];for(let i=0;i<24;i++){const s=document.createElement('span');s.className='confetti';s.textContent=icons[i%4];s.style.left=Math.random()*100+'vw';box.appendChild(s);setTimeout(()=>s.remove(),1900)}}
+window.addEventListener('keydown',e=>{const k={ArrowUp:[-1,0],w:[-1,0],ArrowRight:[0,1],d:[0,1],ArrowDown:[1,0],s:[1,0],ArrowLeft:[0,-1],a:[0,-1]}[e.key];if(k){e.preventDefault();move(...k)}});let sx=0,sy=0;document.getElementById('maze').addEventListener('pointerdown',e=>{sx=e.clientX;sy=e.clientY});document.getElementById('maze').addEventListener('pointerup',e=>{const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.max(Math.abs(dx),Math.abs(dy))<18)return;Math.abs(dx)>Math.abs(dy)?move(0,dx>0?1:-1):move(dy>0?1:-1,0)});newMaze();
 </script>
 </body>
 </html>
