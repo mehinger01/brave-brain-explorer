@@ -50,7 +50,7 @@ jobs:
           fi
 
           # Copy common static asset folders if they exist.
-          for dir in assets public images css js; do
+          for dir in assets public images css js modules; do
             if [ -d "$dir" ]; then
               cp -R "$dir" site/
             fi

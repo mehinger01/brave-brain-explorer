@@ -123,3 +123,18 @@ Fonts: [Fredoka](https://fonts.google.com/specimen/Fredoka) (headings) + [Nunito
 ## License
 
 MIT
+
+
+## GitHub Pages: Bonus Island
+
+The published Pages site uses the static `index.html` and `modules/`, independently
+of the React app. Bonus Island opens from Mission Control and has three activities,
+each with six immediately selectable levels: Rescue Route, Track Detective, and
+Signal Repair. Earn a clue in each to resolve the turtle-survey case. New puzzles,
+same-puzzle retries, hints, a pause/reset prompt, and browser-local progress support
+repeated coaching sessions. No account or network request is required to play.
+
+Run `node scripts/verify-bonus-island.mjs` to check randomized puzzle validity,
+unique evidence solutions, completion/retry flows, storage fallback, and deployment
+inclusion. These checks simulate DOM handlers; they do not verify browser layout.
+The Pages workflow copies `modules/` alongside the homepage.
