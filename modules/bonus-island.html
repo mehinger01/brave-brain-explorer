@@ -21,7 +21,7 @@
 <script>
 'use strict';
 const $=id=>document.getElementById(id),names={route:'🐢 Rescue Route',tracks:'🔎 Track Detective',signal:'📡 Signal Repair'};
-const clues={route:'The trail leads to the sheltered cove.',tracks:'The tracks belong to the green-shell turtle.',signal:'The ranger reports: the turtles are safe at the cove.'};
+const clues={route:'The trail leads to the sheltered cove.',tracks:'The matching survey record points to the sheltered cove.',signal:'The ranger reports: the turtles are safe at the cove.'};
 const icons=['🌿','🌼','🐚','🍄','🪶','🪨','🌊','🍃'];
 const rand=n=>Math.floor(Math.random()*n);
 function shuffle(items){const a=[...items];for(let i=a.length-1;i>0;i--){const j=rand(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
