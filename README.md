@@ -138,3 +138,16 @@ Run `node scripts/verify-bonus-island.mjs` to check randomized puzzle validity,
 unique evidence solutions, completion/retry flows, storage fallback, and deployment
 inclusion. These checks simulate DOM handlers; they do not verify browser layout.
 The Pages workflow copies `modules/` alongside the homepage.
+
+## GitHub Pages: Speed Round
+
+`modules/speed-round.html` adds eight-puzzle rounds in Rule Switch (logical
+predicates), Turn & Match (rotation and reflection), and Trail Code (directional
+reasoning with conditional reversal). Each has six levels; the menu starts at
+level 3 and defaults to untimed play. Optional 60/120-second clocks count active
+puzzle time and pause after correct answers, on a manual reset, or when the tab
+is hidden. Answers never advance automatically. Hints, new puzzles, skips, a
+round summary, and browser-local records support coaching without penalties.
+
+Run `node scripts/verify-speed-round.mjs` for 1,800 generated puzzle checks and
+all six levels of game lifecycle, scoring, pause/timer and storage handling.
