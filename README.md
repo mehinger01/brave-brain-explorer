@@ -151,3 +151,10 @@ round summary, and browser-local records support coaching without penalties.
 
 Run `node scripts/verify-speed-round.mjs` for 1,800 generated puzzle checks and
 all six levels of game lifecycle, scoring, pause/timer and storage handling.
+
+Trail Code now defaults to Walk the Code: a highlighted card advances only after
+one correct neighboring-square tap, and the turtle visibly moves. A fixed,
+untimed three-step practice earns no score and leads into a real round. Opposite
+cards have contextual feedback; hints outline the next square; Restart Same Code
+keeps the route. Predict the Finish preserves the original endpoint-only mental
+challenge as an explicitly labeled optional style.

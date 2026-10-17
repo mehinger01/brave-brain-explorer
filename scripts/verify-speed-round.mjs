@@ -41,10 +41,26 @@ for(const m of ['rules','rotate','trail'])for(let l=1;l<=6;l++){
  $('hintBtn').onclick();if(hints!==1)throw Error('hint');
  const first=index;$('replaceBtn').onclick();if(index!==first||correct)throw Error('new puzzle scores');
  setPause(true);choose(puzzle.correct);if(correct)throw Error('answered during pause');setPause(false);
- for(let j=0;j<ROUND;j++){choose(puzzle.correct);const count=correct;choose(puzzle.correct);if(correct!==count)throw Error('double score');$('nextBtn').onclick()}
+ for(let j=0;j<ROUND;j++){if(mode==='trail'&&trailStyle==='walk'){const ordered=puzzle.backwards?[...puzzle.commands].reverse():puzzle.commands;let position=puzzle.start;for(const cmd of ordered){const d=dirs[(cmd.arrow+(cmd.reverse?2:0))%4];position+=d[0]*puzzle.n+d[1];choose(position)}if(puzzle.walkPos!==puzzle.correct||puzzle.walkIndex!==puzzle.commands.length)throw Error('walk incomplete')}else choose(puzzle.correct);const count=correct;choose(puzzle.correct);if(correct!==count)throw Error('double score');$('nextBtn').onclick()}
  if(running||correct!==ROUND||records[testMode]!==testLevel)throw Error('round completion');}
  `);
 }
+// Guided movement, reverse-card order, restarting, prediction, and a deterministic tutorial.
+for(let l=1;l<=6;l++){
+ ctx.testLevel=l;
+ run(`{
+ $('level').value=testLevel;trailStyle='walk';start('trail');
+ const original=puzzle,origin=puzzle.start,first=commandIndex();
+ choose(origin);if(puzzle.walkIndex!==0||puzzle.walkPos!==origin)throw Error('stationary tap advances');
+ $('hintBtn').onclick();if(!document.querySelector('[data-answer="'+nextTrailSquare()+'"]').classes.has('hintCell'))throw Error('hint wrong square');
+ const expected=nextTrailSquare();choose(expected);if(puzzle.walkPos!==expected||puzzle.walkIndex!==1||correct)throw Error('intermediate step scores');
+ setPause(true);choose(nextTrailSquare());if(puzzle.walkIndex!==1)throw Error('paused movement');setPause(false);
+ restartTrail();if(puzzle!==original||puzzle.walkIndex||puzzle.walkPos!==origin||commandIndex()!==first)throw Error('restart changes code');
+ trailStyle='predict';restartTrail();choose(puzzle.correct);if(!answered||correct!==1||puzzle.walkIndex)throw Error('prediction');
+ trailStyle='walk';
+ }`);
+}
+run(`startPractice();if(!practice||clockLimit||correct)throw Error('practice setup');choose(5);if(puzzle.walkPos!==5||puzzle.walkIndex!==1||answered)throw Error('practice right');choose(8);if(puzzle.walkPos!==8||puzzle.walkIndex!==2||answered)throw Error('practice down');choose(7);if(!answered||correct!==0||puzzle.walkPos!==7)throw Error('practice end');$('nextBtn').onclick();if(practice||index!==1||correct||answered||mode!=='trail')throw Error('practice transition');`);
 run(`$('clock').value=60;start('rules');`);now+=1000;run('tick();');assert.equal(run('remaining'),59);
 run('setPause(true)');now+=5000;run('tick()');assert.equal(run('remaining'),59);
 run('setPause(false);choose(puzzle.correct)');now+=5000;run('tick()');assert.equal(run('remaining'),59);
@@ -53,4 +69,4 @@ doc.hidden=true;listeners.get('visibilitychange')();assert.equal(run('paused'),t
 run('setPause(false)');now+=58000;run('tick()');assert.equal(run('running'),false);assert.match(elements.get('summaryTitle').textContent,/reflect/);
 run("$('clock').value=0;start('trail');$('skipBtn').onclick();if(index!==2||skipped!==1||correct)throw Error('skip');menu();if(running)throw Error('menu clock');localStorage.getItem=()=>'{bad';if(Object.values(readRecords()).some(Boolean))throw Error('corrupt save');localStorage.getItem=()=>{throw Error('blocked')};if(Object.values(readRecords()).some(Boolean))throw Error('blocked save');localStorage.setItem=()=>{throw Error('blocked')};start('rules');for(let j=0;j<ROUND;j++){choose(puzzle.correct);$('nextBtn').onclick()};if(running)throw Error('blocked storage completion');");
 assert.match(readFileSync(new URL('../index.html',import.meta.url),'utf8'),/href='modules\/speed-round.html'/);
-console.log('PASS: 1,800 generated puzzles; unique rules/rotation answers, independent trail simulation; all three modes at six levels; scoring, skips, hints, pause/resume, timer expiry, hidden tab, duplicate answers, storage fallback, launcher.');
+console.log('PASS: 1,800 generated puzzles; unique rules/rotation answers, independent trail simulation; all three modes at six levels; scoring, skips, hints, pause/resume, timer expiry, hidden tab, duplicate answers, guided turtle movement, restart, opposite/reversed steps, prediction mode, no-score tutorial, storage fallback, launcher.');
