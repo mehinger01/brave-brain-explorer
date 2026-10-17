@@ -158,3 +158,17 @@ untimed three-step practice earns no score and leads into a real round. Opposite
 cards have contextual feedback; hints outline the next square; Restart Same Code
 keeps the route. Predict the Finish preserves the original endpoint-only mental
 challenge as an explicitly labeled optional style.
+
+## GitHub Pages: Map Quest
+
+`modules/map-quest.html` offers ten immediately available maze levels (5×5 to
+31×31). Larger expeditions add up to three ordered key/gate pairs and six rescue
+stops. Every generated maze is a connected tree; keys are placed in the region
+reachable before their own gate, with later keys beyond previous gates.
+
+Arrow keys, WASD, on-screen direction buttons, or neighboring-cell taps move the
+turtle. Zoom, automatic viewport tracking, a visible/hidden exploration trail,
+undo, same-maze restart, a new-maze control, and one-step hints support coaching.
+There is no timer. Completion saves on the current browser when storage works.
+Run `node scripts/verify-map-quest.mjs` for randomized maze checks, independent
+route validation, and full gameplay across all ten levels.
