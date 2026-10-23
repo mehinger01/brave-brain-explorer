@@ -172,3 +172,21 @@ undo, same-maze restart, a new-maze control, and one-step hints support coaching
 There is no timer. Completion saves on the current browser when storage works.
 Run `node scripts/verify-map-quest.mjs` for randomized maze checks, independent
 route validation, and full gameplay across all ten levels.
+
+## GitHub Pages: Science Dock and Dino Dig
+
+Science Dock (`modules/science-dock.html`) is Waterworks Lab: rotate two-ended
+pipes to connect a fixed source and greenhouse through every checkpoint. Six
+levels grow from 3×3 to 8×8. Water tests reveal the connected route and first
+broken connection; undo, same-puzzle restart and one-pipe hints support retries.
+
+Dino Dig (`modules/dino-dig.html`) is Fossil Fit: choose connected tile pieces,
+rotate them, and tap a board square to position the gold anchor. Six levels grow
+from a 3×3 frame with three pieces to 6×6 with eight pieces; levels 4–6 add flips.
+Pieces can be picked up, placements undone, and a guide shown for the selected
+piece. Complete alternative tilings are accepted. These are themed spatial
+puzzles, with coaching guidance in each page and no timer.
+
+Both use `modules/puzzle-lab.css`, save completed levels locally, and are linked
+from Mission Control. Run `node scripts/verify-new-labs.mjs` for 960 generated
+puzzles plus full solution, hint, undo, bounds and storage fallback checks.
